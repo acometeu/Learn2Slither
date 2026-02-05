@@ -1,0 +1,2 @@
+-make a better random generator for the map objects placement
+-faire gaffe au erreur de placement a l'initialisation (chamger pour quelque chose de plus robuste)
