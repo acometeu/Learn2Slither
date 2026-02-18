@@ -1,2 +1,9 @@
 -make a better random generator for the map objects placement
--faire gaffe au erreur de placement a l'initialisation (chamger pour quelque chose de plus robuste)
+-faire gaffe au erreur de placement a l'initialisation (changer pour quelque chose de plus robuste)
+-gerer les cas de figures ou le serpent commence avec 0 mouvement possible ex:
+WWWWW
+WSSHW
+WS0SW
+WSSSW
+WWWWW
+(si il commence a 3 de size ya pas de risques)

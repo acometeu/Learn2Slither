@@ -1,5 +1,4 @@
-
-SRC = main.cpp Board.cpp Snake.cpp
+SRC = main.cpp Board.cpp Snake.cpp utils.cpp
 
 OBJ	= ${SRC:.cpp=.o}
 
@@ -7,7 +6,7 @@ NAME = Learn2Slither
 
 CXX = c++
 
-CFLAGS = -std=c++20 -Wall -Werror -Wextra
+CFLAGS = -std=c++20 -Wall -Werror -Wextra -g
 
 RM = rm -rf
 

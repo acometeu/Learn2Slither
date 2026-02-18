@@ -1,6 +1,8 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <vector>
+
 typedef struct s_coor
 {
     int x;

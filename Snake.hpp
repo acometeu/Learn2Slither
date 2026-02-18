@@ -1,7 +1,7 @@
 #ifndef SNAKE_HPP
 #define SNAKE_HPP
 
-#include <list>
+#include <deque>
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
@@ -9,7 +9,6 @@
 #include "utils.hpp"
 
 class   Board; 
-// t_coor;
 
 
 class Snake
@@ -18,12 +17,19 @@ public:
     Snake(Board &board);
     ~Snake();
 
+    // variables
+    Board &board;
 
 
-    private:
-    std::list<t_coor>   _position;
-    int initialize_head(Board &board);
-    int initialize_body(Board &board, int snake_size, int actual_size);
+private:
+    std::deque<t_coor>   _position;
+
+
+    //private func
+    int initialize_head(Board &board, int snake_size);
+    int initialize_body(Board &board, int snake_size, int actual_size, t_coor &last_body_part);
+    int choose_random_direction_initialisation(std::vector<int> &all_directions);
+    int get_position_after_movement(Board &board, t_coor last_body, int direction, t_coor &body);
 
 
 };

@@ -5,6 +5,13 @@
 #include <vector>
 class   Snake;
 #include "Snake.hpp"
+#include "utils.hpp"
+
+
+#define HEAD 'H'
+#define SNAKE 'S'
+#define EMPTY '0'
+#define WALL 'W'
 
 
 class Board
@@ -24,15 +31,17 @@ public:
 
     // functions
     void    print_board(void);
+    bool    map_coor_is_empty(t_coor &coor);
+    void    set_map_coor(t_coor &coor, char object);
 
 
 private:
     int     _board_size;
-    Snake   *_snake;
 
 
     // functions
     void    inizialize_board();
+    void    fill_wall();
 
 
 
