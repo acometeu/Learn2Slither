@@ -20,6 +20,9 @@ public:
     // variables
     Board &board;
 
+    // functions
+    // int move(int direction);
+
 
 private:
     std::deque<t_coor>   _position;
@@ -29,7 +32,7 @@ private:
     int initialize_head(Board &board, int snake_size);
     int initialize_body(Board &board, int snake_size, int actual_size, t_coor &last_body_part);
     int choose_random_direction_initialisation(std::vector<int> &all_directions);
-    int get_position_after_movement(Board &board, t_coor last_body, int direction, t_coor &body);
+    t_coor  get_position_after_movement(t_coor last_body, int direction, t_coor &body);
 
 
 };

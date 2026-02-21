@@ -3,7 +3,7 @@ SRC = main.cpp Board.cpp Snake.cpp utils.cpp
 OBJDIR = OBJ
 OBJ	= ${addprefix ${OBJDIR}/,  ${SRC:.cpp=.o}}
 
-DEPENDS = ${SRC:.cpp=.d}
+DEPENDS = ${addprefix ${OBJDIR}/, ${SRC:.cpp=.d}}
 
 NAME = Learn2Slither
 
@@ -32,6 +32,6 @@ ${OBJDIR}:
 -include $(DEPENDS)
 
 ${OBJDIR}/%.o : %.cpp Makefile | ${OBJDIR}
-	${CXX} ${CXXLAGS} -MD -MP -c $< -o $@ 
+	${CXX} ${CXXLAGS} -MMD -MP -c $< -o $@ 
 
 .PHONY:	all clean fclean re		#.PHONY means these rules get executed even if files of those names exist.

@@ -10,6 +10,8 @@ WS0SW       WHS0W
 WSSSW       WSS0W
 WWWWW       WWWWW
 
+-ne pas mettre les wall 'W' dans la map (et changer tout ce qui contient les trucs en rapports au tailles du coup)
+
 
 
 

@@ -1,4 +1,4 @@
-#include "include/Board.hpp"
+#include "include/Snake.hpp"
 
 
 int main(int argc, char* argv[]) {

@@ -22,6 +22,13 @@ void    Board::set_map_coor(t_coor &coor, char object){
     map[coor.y][coor.x] = object;
 }
 
+char    Board::get_map_char(t_coor &coor){
+    if (coor.y <= 0 || coor.x <= 0 || coor.y > _board_size - 2 || coor.x > _board_size - 2)
+        return(NAN);
+    return (map[coor.y][coor.x]);
+}
+
+
 
 
 void    Board::inizialize_board(){

@@ -46,8 +46,8 @@ int Snake::initialize_body(Board &board, int snake_size, int actual_size, t_coor
         int direction = choose_random_direction_initialisation(all_directions);
         all_directions.pop_back();
 
-        t_coor  new_body;
-        if (get_position_after_movement(board, last_body, direction, new_body))
+        t_coor  new_body = get_position_after_movement(last_body, direction, new_body);
+        if (board.get_map_char(new_body) != '0')
             continue;
         
         //  body initialisation success
@@ -74,7 +74,13 @@ int Snake::choose_random_direction_initialisation(std::vector<int> &all_directio
         return (all_directions[all_directions.size() - 1]);
 }
 
-int  Snake::get_position_after_movement(Board &board, t_coor last_body, int direction, t_coor &body){
+
+// int Snake::move(int direction){
+    
+// }
+
+
+t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_coor &body){
     switch (direction)
     {
     case UP:
@@ -94,9 +100,9 @@ int  Snake::get_position_after_movement(Board &board, t_coor last_body, int dire
         body.y = last_body.y;
         break;
     default:
-        return(1);
+        body.x = -1;
+        body.y = -1;
+        return(body);
     }
-    if (board.map[body.y][body.x] != '0')
-        return(1);
-    return(0);
+    return(body);
 }
