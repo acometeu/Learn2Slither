@@ -1,14 +1,14 @@
-#include "Snake.hpp"
+#include "include/Snake.hpp"
 
-Snake::Snake(Board  &board) : board(board){
+Snake::Snake(Board  &board, int &snake_size) : board(board){
     // generate a pseudo random number generator
     srand(time(NULL));
-    int snake_size = 15;
+    // int snake_size = 3;
     initialize_head(board, snake_size);
 }
 
 Snake::~Snake(){
-    
+    return;    
 }
 
 int Snake::initialize_head(Board &board, int snake_size){
@@ -27,7 +27,6 @@ int Snake::initialize_head(Board &board, int snake_size){
         {
             _position.pop_back();
             board.set_map_coor(head, '0');
-            std::cout << "Snake body 1 initialisation fail" << std::endl;
             continue;
         }
         break;

@@ -14,7 +14,7 @@ class   Board;
 class Snake
 {
 public:
-    Snake(Board &board);
+    Snake(Board &board, int &snake_size);
     ~Snake();
 
     // variables

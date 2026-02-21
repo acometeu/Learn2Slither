@@ -1,9 +1,27 @@
+
+
+
+TO DO ❌
 -make a better random generator for the map objects placement
--faire gaffe au erreur de placement a l'initialisation (changer pour quelque chose de plus robuste)
--gerer les cas de figures ou le serpent commence avec 0 mouvement possible ex:
-WWWWW
-WSSHW
-WS0SW
-WSSSW
-WWWWW
-(si il commence a 3 de size ya pas de risques)
+-gerer les cas de figures ou le serpent commence bloque (pas besoin si tu peux pas changer la taille de base du serpent):
+WWWWW       WWWWW
+WSSHW       WSS0W
+WS0SW       WHS0W
+WSSSW       WSS0W
+WWWWW       WWWWW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HANDLE ✅

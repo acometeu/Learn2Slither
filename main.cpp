@@ -1,11 +1,16 @@
-#include <iostream>
-#include "Board.hpp"
+#include "include/Board.hpp"
 
-int main(void) {
-    // std::cout << "Trop fort" << std::endl; 
-    Board board(4);
-    Snake snake(board);
+
+int main(int argc, char* argv[]) {
+    auto args = argparse::parse<MyArgs>(argc, argv);
+
+    if (args.verbose)
+        args.print();
+
+    Board board(args.board_size);
+    Snake snake(board, args.snake_size);
     board.print_board();
     
-    return (0);
+
+    return 0;
 }
