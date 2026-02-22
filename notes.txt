@@ -12,6 +12,8 @@ WWWWW       WWWWW
 
 -ne pas mettre les wall 'W' dans la map (et changer tout ce qui contient les trucs en rapports au tailles du coup)
 
+-gerer quand les arguments passes sont des valeurs imposibles (mettre les tailles en unsigned)
+
 
 
 

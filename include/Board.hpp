@@ -43,7 +43,8 @@ private:
 
     // functions
     void    inizialize_board();
-    void    fill_wall();
+    void    print_wall_line(void);
+
 
 
 

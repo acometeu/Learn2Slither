@@ -1,11 +1,11 @@
 #include "include/Board.hpp"
 
 
-Board::Board() : _board_size(12){
+Board::Board() : _board_size(10){
     inizialize_board();
 }
 
-Board::Board(int board_size) : _board_size(board_size + 2){
+Board::Board(int board_size) : _board_size(board_size){
     inizialize_board();
 }
 
@@ -23,7 +23,7 @@ void    Board::set_map_coor(t_coor &coor, char object){
 }
 
 char    Board::get_map_char(t_coor &coor){
-    if (coor.y <= 0 || coor.x <= 0 || coor.y > _board_size - 2 || coor.x > _board_size - 2)
+    if (coor.y < 0 || coor.x < 0 || coor.y >= _board_size || coor.x >= _board_size)
         return(NAN);
     return (map[coor.y][coor.x]);
 }
@@ -37,32 +37,26 @@ void    Board::inizialize_board(){
         std::vector<char> initialize(_board_size, EMPTY);
         map.push_back(initialize);
     }
-    fill_wall();
-}
-
-void    Board::fill_wall(){
-    for (int y = 0; y  < _board_size; y++)
-    {
-        if (y == 0 || y == _board_size - 1)
-        {
-            for (int x = 0; x < _board_size; x++)
-                map[y][x] = WALL;
-        }
-        else
-        {
-            map[y][0] = WALL;
-            map[y][_board_size - 1] = WALL;
-        }
-    }
 }
 
 void    Board::print_board(void){
+
+    print_wall_line();
     for (int y = 0; y < _board_size; y++)
     {
+        std::cout << WALL;
         for (int x = 0; x < _board_size; x++)
             std::cout << map[y][x];
+        std::cout << WALL;
         std::cout << std::endl;
     }
+    print_wall_line();
+}
+
+void    Board::print_wall_line(void){
+    for (int x = 0; x < _board_size + 2; x++)
+        std::cout << WALL;
+    std::cout << std::endl;
 }
 
 bool    Board::map_coor_is_empty(t_coor &coor){
