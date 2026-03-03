@@ -29,8 +29,6 @@ char    Board::get_map_char(t_coor &coor){
 }
 
 
-
-
 void    Board::inizialize_board(){
     for (int y = 0; y < _board_size; y++)
     {

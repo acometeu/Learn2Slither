@@ -3,7 +3,6 @@
 Snake::Snake(Board  &board, int &snake_size) : board(board){
     // generate a pseudo random number generator
     srand(time(NULL));
-    // int snake_size = 3;
     initialize_head(board, snake_size);
 }
 
@@ -75,9 +74,10 @@ int Snake::choose_random_direction_initialisation(std::vector<int> &all_directio
 }
 
 
-// int Snake::move(int direction){
-    
-// }
+int Snake::move(int direction){
+    (void)direction;
+    return (1);
+}
 
 
 t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_coor &body){

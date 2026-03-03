@@ -23,6 +23,7 @@ struct MyArgs : public argparse::Args {
     // float &alpha           = kwarg("a,alpha", "An optional float value").set_default(0.5f);
     int &snake_size         = kwarg("s,snake_size", "Determine the initial size of the snake").set_default(3);
     int &board_size         = kwarg("b,board_size", "Determine the board size without the walls").set_default(10);
+    bool &visual           = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
 };
 

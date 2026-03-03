@@ -21,7 +21,7 @@ public:
     Board &board;
 
     // functions
-    // int move(int direction);
+    int move(int direction);
 
 
 private:

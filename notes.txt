@@ -14,6 +14,11 @@ WWWWW       WWWWW
 
 -gerer quand les arguments passes sont des valeurs imposibles (mettre les tailles en unsigned)
 
+-choose to either work with wayland : "SDL_VIDEODRIVER=wayland valgrind ./Learn2Slither -V" (window not showing)
+or work with x11 native but leaking hard
+(finally both are leaking)
+
+-fully understand why all steps are needed to make SFML works
 
 
 
