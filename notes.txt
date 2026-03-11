@@ -17,6 +17,8 @@ WWWWW       WWWWW
 
 -choose to either comeback latency or wait for the user machine (freeze and accelerate or freeze stop game)
 
+-verifier les leaks
+
 
 
 

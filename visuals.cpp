@@ -1,5 +1,23 @@
 #include "include/visuals.hpp"
 
+void    sdl_draw_snake_color(SDL_state &state, Snake &snake, SDL_FRect &sdl_snake, t_rgb color, size_t pos){
+    t_coor  snake_pos;
+    snake_pos = snake._position[pos];
+    sdl_snake.x = snake_pos.x * sdl_snake.w;
+    sdl_snake.y = snake_pos.y * sdl_snake.h;
+    SDL_SetRenderDrawColor(state.renderer, color.red, color.green, color.blue, color.transparancy);
+    SDL_RenderFillRect(state.renderer, &sdl_snake);
+}
+
+void    sdl_draw_snake(SDL_state &state, Snake &snake, SDL_FRect &sdl_snake){
+
+    if (snake._position.size())
+        sdl_draw_snake_color(state, snake, sdl_snake, SNAKE_HEAD_COLOR, 0);
+    for (size_t i = 1; i < snake._position.size(); i++)
+        sdl_draw_snake_color(state, snake, sdl_snake, SNAKE_BODY_COLOR, i);
+}
+
+
 void    cleanup(SDL_state &state){
     SDL_DestroyRenderer(state.renderer);
     SDL_DestroyWindow(state.window);
@@ -67,25 +85,6 @@ int    initialize(SDL_state &state){
     return(0);
 }
 
-void    snake_step(Snake &snake, SDL_FRect &sdl_snake){
-
-    switch (snake.dir)
-    {
-    case RIGHT:
-        sdl_snake.x += sdl_snake.w;
-        break;
-    case LEFT:
-        sdl_snake.x -= sdl_snake.w;
-        break;
-    case DOWN:
-        sdl_snake.y += sdl_snake.h;
-        break;
-    case UP:
-        sdl_snake.y -= sdl_snake.h;
-        break;
-    }
-}
-
 int run_SDL(Board &board, Snake &snake){
 
     SDL_state   state;
@@ -100,11 +99,7 @@ int run_SDL(Board &board, Snake &snake){
 
     // declare objects
     SDL_FRect sdl_snake;
-    t_coor  snake_pos = snake.get_head_position();
     sdl_snake.w = sdl_snake.h = ((WINDOW_WIDTH > WINDOW_HEIGHT) ? WINDOW_HEIGHT : WINDOW_WIDTH) / board.get_board_size();
-    sdl_snake.x = snake_pos.x * sdl_snake.w;
-    sdl_snake.y = snake_pos.y * sdl_snake.h;
-    int oui = 8;
     std::vector< std::array<SDL_FPoint, 2> >  board_lines = initialize_board_line(board, sdl_snake);
 
     // start the game loop
@@ -117,7 +112,8 @@ int run_SDL(Board &board, Snake &snake){
         // update snake pos
         if (delta_time >= STEP_RATE_MILISECOND)
         {
-            snake_step(snake, sdl_snake);
+            // snake_step(snake, sdl_snake);
+            snake.move(snake.dir);
             prev_time += STEP_RATE_MILISECOND;
         }
 
@@ -183,9 +179,9 @@ int run_SDL(Board &board, Snake &snake){
         for (int i = 0; i < board_lines.size() - 1; i++)
             SDL_RenderLine(state.renderer, board_lines[i][0].x, board_lines[i][0].y, board_lines[i][1].x, board_lines[i][1].y);
 
-        // draw head
-        SDL_SetRenderDrawColor(state.renderer, 255, 255, 0, 255);
-        SDL_RenderFillRect(state.renderer, &sdl_snake);
+        // draw snake
+        sdl_draw_snake(state, snake, sdl_snake);
+
         
         // swap buffers and present
         SDL_SetRenderDrawColor(state.renderer, 255, 0, 0, 255);

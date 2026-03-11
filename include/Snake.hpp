@@ -19,6 +19,7 @@ public:
 
     // variables
     Board   &board;
+    std::deque<t_coor>   _position;
     int     dir;
 
     // functions
@@ -27,7 +28,6 @@ public:
 
 
 private:
-    std::deque<t_coor>   _position;
 
 
     //private func

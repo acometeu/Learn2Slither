@@ -6,12 +6,16 @@
 #include <array>
 #include <vector>
 #include "Snake.hpp"
+#include "utils.hpp"
 
 
 #define WINDOW_WIDTH 1400
 #define WINDOW_HEIGHT 1200
 #define STEP_RATE_MILISECOND 500
 // #define SNAKE_SQUARE_PIXELS 60
+
+constexpr t_rgb SNAKE_HEAD_COLOR {255, 255, 0, 0};
+constexpr t_rgb SNAKE_BODY_COLOR {0, 255, 0, 0};
 
 
 struct SDL_state

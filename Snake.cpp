@@ -81,7 +81,24 @@ t_coor  Snake::get_head_position(void){
 
 
 int Snake::move(int direction){
-    (void)direction;
+    t_coor  new_head = _position[0];
+    switch (direction)
+    {
+    case RIGHT:
+        new_head.x += 1;
+        break;
+    case LEFT:
+        new_head.x -= 1;
+        break;
+    case DOWN:
+        new_head.y += 1;
+        break;
+    case UP:
+        new_head.y -= 1;
+        break;
+    }
+    _position.emplace_front(new_head);
+    _position.pop_back();
     return (1);
 }
 

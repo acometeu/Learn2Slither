@@ -17,7 +17,13 @@ typedef enum
     UP,
     LEFT,
     DOWN
-} T_direction;
+}   T_direction;
+
+
+typedef struct s_rgb
+{
+    uint8_t red, green, blue, transparancy;
+}   t_rgb;
 
 
 struct MyArgs : public argparse::Args {
