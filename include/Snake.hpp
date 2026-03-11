@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
-#include "Board.hpp"
 #include "utils.hpp"
+#include "Board.hpp"
 
 class   Board; 
 
@@ -18,9 +18,11 @@ public:
     ~Snake();
 
     // variables
-    Board &board;
+    Board   &board;
+    int     dir;
 
     // functions
+    t_coor  get_head_position(void);
     int move(int direction);
 
 

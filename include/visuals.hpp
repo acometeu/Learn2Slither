@@ -1,0 +1,29 @@
+#ifndef VISUALS_HPP
+#define VISUALS_HPP
+
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <array>
+#include <vector>
+#include "Snake.hpp"
+
+
+#define WINDOW_WIDTH 1400
+#define WINDOW_HEIGHT 1200
+#define STEP_RATE_MILISECOND 500
+// #define SNAKE_SQUARE_PIXELS 60
+
+
+struct SDL_state
+{
+    SDL_Window      *window;
+    SDL_Renderer    *renderer;
+    int width, height, logW, logH;
+    // int snake_width, snake_height;
+};
+
+
+// Visual function declarations
+int run_SDL(Board &board, Snake &snake);
+
+#endif

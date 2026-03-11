@@ -3,6 +3,7 @@
 Snake::Snake(Board  &board, int &snake_size) : board(board){
     // generate a pseudo random number generator
     srand(time(NULL));
+    dir = rand() % 4;
     initialize_head(board, snake_size);
 }
 
@@ -71,6 +72,11 @@ int Snake::choose_random_direction_initialisation(std::vector<int> &all_directio
         if (random_index != all_directions.size() - 1)
             std::swap(all_directions[random_index], all_directions[all_directions.size() - 1]);
         return (all_directions[all_directions.size() - 1]);
+}
+
+t_coor  Snake::get_head_position(void){
+
+    return(_position[0]);
 }
 
 

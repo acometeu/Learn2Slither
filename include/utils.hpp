@@ -11,10 +11,14 @@ typedef struct s_coor
     int y;
 }   t_coor;
 
-#define UP 0
-#define LEFT 1
-#define RIGHT 2
-#define DOWN 3
+typedef enum
+{
+    RIGHT,
+    UP,
+    LEFT,
+    DOWN
+} T_direction;
+
 
 struct MyArgs : public argparse::Args {
     // std::string &anonymous = arg("an anonymous positional string argument");
@@ -26,6 +30,7 @@ struct MyArgs : public argparse::Args {
     bool &visual           = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
 };
+
 
 
 #endif
