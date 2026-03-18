@@ -1,10 +1,6 @@
 #ifndef SNAKE_HPP
 #define SNAKE_HPP
 
-#include <deque>
-#include <stdlib.h>
-#include <time.h>
-#include <iostream>
 #include "utils.hpp"
 #include "Board.hpp"
 

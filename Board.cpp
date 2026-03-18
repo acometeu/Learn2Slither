@@ -3,6 +3,7 @@
 
 Board::Board() : _board_size(10){
     inizialize_board();
+    inizialize_fruits();
 }
 
 Board::Board(int board_size) : _board_size(board_size){
@@ -35,6 +36,29 @@ void    Board::inizialize_board(){
         std::vector<char> initialize(_board_size, EMPTY);
         map.push_back(initialize);
     }
+}
+
+void    Board::inizialize_fruits(){
+
+    srand(time(NULL));
+    for (size_t i = 0; i < green_apple.size(); i++)
+    {
+        while (true)
+        {
+            green_apple[i].x = rand() % (get_board_size());
+            green_apple[i].y = rand() % (get_board_size());   
+            if (map_coor_is_empty(green_apple[i]) == true)
+                break;
+        }
+    }
+    while (true)
+    {
+        red_apple.x = rand() % (get_board_size());
+        red_apple.y = rand() % (get_board_size());
+        if (map_coor_is_empty(red_apple) == true)
+            break;
+    }
+    std::cout << "1green_apple[0] : " << green_apple[0] << std::endl;
 }
 
 void    Board::print_board(void){

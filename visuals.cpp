@@ -1,5 +1,23 @@
 #include "include/visuals.hpp"
 
+void    sdl_draw_fruits(SDL_state &state, Board &board, SDL_FRect &sdl_snake){
+
+    std::cout << "green_apple [0] = " << board.green_apple[0].x << ", " << board.green_apple[0].y << std::endl;
+    SDL_FRect  fruit_pos;
+    SDL_SetRenderDrawColor(state.renderer, GREEN_APPLE.red, GREEN_APPLE.green, GREEN_APPLE.blue, GREEN_APPLE.transparancy);
+    for (size_t i = 0; i < board.green_apple.size(); i++)
+    {
+        fruit_pos.x = board.green_apple[i].x * sdl_snake.w;
+        fruit_pos.y = board.green_apple[i].y * sdl_snake.h;
+        SDL_RenderFillRect(state.renderer, &fruit_pos);
+    }
+    SDL_SetRenderDrawColor(state.renderer, RED_APPLE.red, RED_APPLE.green, RED_APPLE.blue, RED_APPLE.transparancy);
+    fruit_pos.x = board.red_apple.x * sdl_snake.w;
+    fruit_pos.y = board.red_apple.y * sdl_snake.h;
+    SDL_RenderFillRect(state.renderer, &fruit_pos);
+
+}
+
 void    sdl_draw_snake_color(SDL_state &state, Snake &snake, SDL_FRect &sdl_snake, t_rgb color, size_t pos){
     t_coor  snake_pos;
     snake_pos = snake._position[pos];
@@ -170,21 +188,21 @@ int run_SDL(Board &board, Snake &snake){
 
 
 
-        // perform drawing commands
-        SDL_SetRenderDrawColor(state.renderer, 150, 150, 150, 255);
+        // draw background
+        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_COLOR.red, BACKGROUND_COLOR.green, BACKGROUND_COLOR.blue, BACKGROUND_COLOR.transparancy);
         SDL_RenderClear(state.renderer);
         
-        // draw board
-        SDL_SetRenderDrawColor(state.renderer, 200, 200, 200, 200);
+        // draw board lines
+        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_LINES_COLOR.red, BACKGROUND_LINES_COLOR.green, BACKGROUND_LINES_COLOR.blue, BACKGROUND_LINES_COLOR.transparancy);
         for (int i = 0; i < board_lines.size() - 1; i++)
             SDL_RenderLine(state.renderer, board_lines[i][0].x, board_lines[i][0].y, board_lines[i][1].x, board_lines[i][1].y);
 
-        // draw snake
+        // sdl_draw_fruits
         sdl_draw_snake(state, snake, sdl_snake);
+        sdl_draw_fruits(state, board, sdl_snake);
 
         
         // swap buffers and present
-        SDL_SetRenderDrawColor(state.renderer, 255, 0, 0, 255);
         SDL_RenderPresent(state.renderer);
     }
     cleanup(state);

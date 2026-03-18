@@ -1,8 +1,6 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include <iostream>
-#include <vector>
 // class   Snake;
 // #include "Snake.hpp"
 #include "utils.hpp"
@@ -28,6 +26,8 @@ public:
 
     // values
     std::vector< std::vector<char> > map;
+    std::array<t_coor, 2>  green_apple;
+    t_coor              red_apple;
 
 
     // functions
@@ -43,6 +43,7 @@ private:
 
     // functions
     void    inizialize_board();
+    void    inizialize_fruits();
     void    print_wall_line(void);
 
 

@@ -1,7 +1,12 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
 #include <vector>
+#include <array>
+#include <deque>
 #include "argparse/include/argparse/argparse.hpp"
 
 
@@ -9,6 +14,12 @@ typedef struct s_coor
 {
     int x;
     int y;
+
+    friend std::ostream& operator<<(std::ostream &cout, const s_coor &coor)
+    {
+        cout << coor.x << "; " << coor.y;
+        return cout;
+    }
 }   t_coor;
 
 typedef enum
