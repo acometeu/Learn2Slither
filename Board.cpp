@@ -8,6 +8,7 @@ Board::Board() : _board_size(10){
 
 Board::Board(int board_size) : _board_size(board_size){
     inizialize_board();
+    inizialize_fruits();
 }
 
 
@@ -40,6 +41,7 @@ void    Board::inizialize_board(){
 
 void    Board::inizialize_fruits(){
 
+    std::cout << "test" << std::endl;
     srand(time(NULL));
     for (size_t i = 0; i < green_apple.size(); i++)
     {

@@ -1,73 +1,117 @@
 #include "include/visuals.hpp"
 
-void    sdl_draw_fruits(SDL_state &state, Board &board, SDL_FRect &sdl_snake){
-
-    std::cout << "green_apple [0] = " << board.green_apple[0].x << ", " << board.green_apple[0].y << std::endl;
-    SDL_FRect  fruit_pos;
-    SDL_SetRenderDrawColor(state.renderer, GREEN_APPLE.red, GREEN_APPLE.green, GREEN_APPLE.blue, GREEN_APPLE.transparancy);
-    for (size_t i = 0; i < board.green_apple.size(); i++)
-    {
-        fruit_pos.x = board.green_apple[i].x * sdl_snake.w;
-        fruit_pos.y = board.green_apple[i].y * sdl_snake.h;
-        SDL_RenderFillRect(state.renderer, &fruit_pos);
-    }
-    SDL_SetRenderDrawColor(state.renderer, RED_APPLE.red, RED_APPLE.green, RED_APPLE.blue, RED_APPLE.transparancy);
-    fruit_pos.x = board.red_apple.x * sdl_snake.w;
-    fruit_pos.y = board.red_apple.y * sdl_snake.h;
-    SDL_RenderFillRect(state.renderer, &fruit_pos);
-
-}
-
-void    sdl_draw_snake_color(SDL_state &state, Snake &snake, SDL_FRect &sdl_snake, t_rgb color, size_t pos){
-    t_coor  snake_pos;
-    snake_pos = snake._position[pos];
-    sdl_snake.x = snake_pos.x * sdl_snake.w;
-    sdl_snake.y = snake_pos.y * sdl_snake.h;
-    SDL_SetRenderDrawColor(state.renderer, color.red, color.green, color.blue, color.transparancy);
-    SDL_RenderFillRect(state.renderer, &sdl_snake);
-}
-
-void    sdl_draw_snake(SDL_state &state, Snake &snake, SDL_FRect &sdl_snake){
-
-    if (snake._position.size())
-        sdl_draw_snake_color(state, snake, sdl_snake, SNAKE_HEAD_COLOR, 0);
-    for (size_t i = 1; i < snake._position.size(); i++)
-        sdl_draw_snake_color(state, snake, sdl_snake, SNAKE_BODY_COLOR, i);
-}
-
-
-void    cleanup(SDL_state &state){
-    SDL_DestroyRenderer(state.renderer);
-    SDL_DestroyWindow(state.window);
-    SDL_Quit();
-}
-
-std::vector< std::array<SDL_FPoint, 2> >    initialize_board_line(Board &board, SDL_FRect &sdl_snake){
-
-    std::vector< std::array<SDL_FPoint, 2> >    board_lines;
-    float pixel_limit = board.get_board_size() * sdl_snake.w;
-
-
-    // initialize vertical lines
-    for (float x = sdl_snake.w; x <= pixel_limit; x += sdl_snake.w)
-    {
-        SDL_FPoint   points[2] = {{x, 0}, {x, pixel_limit}};
-        std::array<SDL_FPoint, 2>   line = {points[0], points[1]};
-        board_lines.push_back(line);
-    }
+int run_SDL(Board &board, Snake &snake){
     
-    // initialize horizontal lines
-    for (float y = sdl_snake.h; y <= pixel_limit; y += sdl_snake.h)
+    SDL_state   state;
+    
+    if (initialize(state))
+    return(1);
+    
+    
+    // load game datas
+    // const bool *keys = SDL_GetKeyboardState(nullptr);
+    state.prev_time = SDL_GetTicks();
+    // uint64_t    prev_time = SDL_GetTicks();
+    
+    initialize_objects(board, state);
+    
+    // start the game loop
+    bool running = true;
+    while (running)
     {
-        SDL_FPoint   points[2] = {{0, y}, {pixel_limit, y}};
-        std::array<SDL_FPoint, 2>   line = {points[0], points[1]};
-        board_lines.push_back(line);
-    }
+        uint64_t    now_time = SDL_GetTicks();
+        float       delta_time = now_time - state.prev_time;
+        
+        // update snake pos
+        if (delta_time >= STEP_RATE_MILISECOND)
+        {
+            // snake_step(snake, sdl_snake);
+            snake.move(snake.dir);
+            state.prev_time += STEP_RATE_MILISECOND;
+        }
+        
+        SDL_Event   event = { 0 };
+        while (SDL_PollEvent(&event))
+        {
+            // std::cout << "READING..." << std::endl;
+            switch (event.type)
+            {
+                case SDL_EVENT_QUIT:
+                {
+                    running = false;
+                    break;
+                }
+                case SDL_EVENT_WINDOW_RESIZED:
+                {
+                    state.width = event.window.data1;
+                    state.height = event.window.data2;
+                    break;
+                }
+                case SDL_EVENT_KEY_DOWN:
+                {
+                    switch (event.key.scancode)
+                    {
+                        case SDL_SCANCODE_ESCAPE:
+                        running = false;
+                        break;
 
-    return (board_lines);
+                        // handle movements
+                        case SDL_SCANCODE_D:
+                        snake.dir = RIGHT;
+                        break;
+                        case SDL_SCANCODE_A:
+                        snake.dir = LEFT;
+                        break;
+                        case SDL_SCANCODE_W:
+                        snake.dir = UP;
+                        break;
+                        case SDL_SCANCODE_S:
+                        snake.dir = DOWN;
+                        break;
+                        default :
+                        break;
+                    }
+                    break;
+                }
+                default:
+                {
+                    // SDL_Log("Unhandled Event!");
+                    break;
+                }
+            }
+        }
+
+        
+
+        
+        
+        // draw background
+        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_COLOR.red, BACKGROUND_COLOR.green, BACKGROUND_COLOR.blue, BACKGROUND_COLOR.transparancy);
+        SDL_RenderClear(state.renderer);
+        
+        // draw grid
+        SDL_SetRenderDrawColor(state.renderer, GRID.red, GRID.green, GRID.blue, GRID.transparancy);
+        for (int i = 0; i < state.grid.size(); i++)
+        SDL_RenderLine(state.renderer, state.grid[i][0].x, state.grid[i][0].y, state.grid[i][1].x, state.grid[i][1].y);
+        
+        // draw walls
+        SDL_SetRenderDrawColor(state.renderer, WALLS.red, WALLS.green, WALLS.blue, WALLS.transparancy);
+        for (int i = 0; i < state.walls.size(); i++)
+        SDL_RenderFillRect(state.renderer, &state.walls[i]);
+        
+        // sdl_draw_fruits
+        sdl_draw_fruits(state, board);
+        sdl_draw_snake(state, snake);
+        
+        
+        // swap buffers and present
+        SDL_RenderPresent(state.renderer);
+    }
+    cleanup(state);
+    return(0);
 }
 
-int    initialize(SDL_state &state){
+int     initialize(SDL_state &state){
 
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
@@ -103,108 +147,101 @@ int    initialize(SDL_state &state){
     return(0);
 }
 
-int run_SDL(Board &board, Snake &snake){
+void    initialize_objects(Board board, SDL_state &state){
 
-    SDL_state   state;
+    int wall_nbr = 2;
+    state.pixel.height = state.pixel.width = ((WINDOW_WIDTH > WINDOW_HEIGHT) ? WINDOW_HEIGHT : WINDOW_WIDTH) / (board.get_board_size() + wall_nbr);
+    state.snake.h = state.pixel.height;
+    state.snake.w = state.pixel.width;
+    state.grid = initialize_grid(board, state);
+    state.walls = initialize_walls(board, state);
+}
 
-    if (initialize(state))
-        return(1);
+std::vector<SDL_FRect>    initialize_walls(Board &board, SDL_state &state){
+
+    std::vector<SDL_FRect>    walls;
+    float wall_size = state.pixel.width;
+    float pixel_limit = board.get_board_size() * state.pixel.width + (wall_size * 2);
 
 
-    // load game datas
-    // const bool *keys = SDL_GetKeyboardState(nullptr);
-    uint64_t    prev_time = SDL_GetTicks();
+    SDL_FRect   top_wall = {0, 0, pixel_limit, wall_size};
+    walls.push_back(top_wall);
 
-    // declare objects
-    SDL_FRect sdl_snake;
-    sdl_snake.w = sdl_snake.h = ((WINDOW_WIDTH > WINDOW_HEIGHT) ? WINDOW_HEIGHT : WINDOW_WIDTH) / board.get_board_size();
-    std::vector< std::array<SDL_FPoint, 2> >  board_lines = initialize_board_line(board, sdl_snake);
+    SDL_FRect  bottom_wall = {0, pixel_limit - wall_size, pixel_limit, wall_size};
+    walls.push_back(bottom_wall);
 
-    // start the game loop
-    bool running = true;
-    while (running)
+    SDL_FRect  left_wall = {0, wall_size, wall_size, pixel_limit - (wall_size * 2)};
+    walls.push_back(left_wall);
+
+    SDL_FRect  right_wall = {pixel_limit - wall_size, wall_size, wall_size, pixel_limit - (wall_size * 2)};
+    walls.push_back(right_wall);
+
+    return (walls);
+}
+
+std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, SDL_state &state){
+
+    std::vector< std::array<SDL_FPoint, 2> >    grid;
+    float wall_size = state.pixel.width;
+    float pixel_limit = board.get_board_size() * state.pixel.width + wall_size;
+
+
+    // initialize vertical lines
+    for (float x = state.pixel.width; x <= pixel_limit; x += state.pixel.width)
     {
-        uint64_t    now_time = SDL_GetTicks();
-        float       delta_time = now_time - prev_time;
-
-        // update snake pos
-        if (delta_time >= STEP_RATE_MILISECOND)
-        {
-            // snake_step(snake, sdl_snake);
-            snake.move(snake.dir);
-            prev_time += STEP_RATE_MILISECOND;
-        }
-
-        SDL_Event   event = { 0 };
-        while (SDL_PollEvent(&event))
-        {
-            std::cout << "READING..." << std::endl;
-            switch (event.type)
-            {
-                case SDL_EVENT_QUIT:
-                {
-                    running = false;
-                    break;
-                }
-                case SDL_EVENT_WINDOW_RESIZED:
-                {
-                    state.width = event.window.data1;
-                    state.height = event.window.data2;
-                    break;
-                }
-                case SDL_EVENT_KEY_DOWN:
-                {
-                    switch (event.key.scancode)
-                    {
-                        case SDL_SCANCODE_ESCAPE:
-                            running = false;
-                            break;
-
-                        // handle movements
-                        case SDL_SCANCODE_D:
-                            snake.dir = RIGHT;
-                            break;
-                        case SDL_SCANCODE_A:
-                            snake.dir = LEFT;
-                            break;
-                        case SDL_SCANCODE_W:
-                            snake.dir = UP;
-                            break;
-                        case SDL_SCANCODE_S:
-                            snake.dir = DOWN;
-                            break;
-                    }
-                    break;
-                }
-                default:
-                {
-                    SDL_Log("Unhandled Event!");
-                    break;
-                }
-            }
-        }
-
-        
-
-
-
-        // draw background
-        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_COLOR.red, BACKGROUND_COLOR.green, BACKGROUND_COLOR.blue, BACKGROUND_COLOR.transparancy);
-        SDL_RenderClear(state.renderer);
-        
-        // draw board lines
-        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_LINES_COLOR.red, BACKGROUND_LINES_COLOR.green, BACKGROUND_LINES_COLOR.blue, BACKGROUND_LINES_COLOR.transparancy);
-        for (int i = 0; i < board_lines.size() - 1; i++)
-            SDL_RenderLine(state.renderer, board_lines[i][0].x, board_lines[i][0].y, board_lines[i][1].x, board_lines[i][1].y);
-
-        // sdl_draw_fruits
-        sdl_draw_snake(state, snake, sdl_snake);
-        sdl_draw_fruits(state, board, sdl_snake);
-
-        
-        // swap buffers and present
-        SDL_RenderPresent(state.renderer);
+        SDL_FPoint   points[2] = {{x, wall_size}, {x, pixel_limit}};
+        std::array<SDL_FPoint, 2>   line = {points[0], points[1]};
+        grid.push_back(line);
     }
-    cleanup(state);
-    return(0);
+    
+    // initialize horizontal lines
+    for (float y = state.pixel.height; y <= pixel_limit; y += state.pixel.height)
+    {
+        SDL_FPoint   points[2] = {{wall_size, y}, {pixel_limit, y}};
+        std::array<SDL_FPoint, 2>   line = {points[0], points[1]};
+        grid.push_back(line);
+    }
+
+    return (grid);
+}
+
+void    cleanup(SDL_state &state){
+    SDL_DestroyRenderer(state.renderer);
+    SDL_DestroyWindow(state.window);
+    SDL_Quit();
+}
+
+void    sdl_draw_snake(SDL_state &state, Snake &snake){
+
+    if (snake._position.size())
+        sdl_draw_snake_color(state, snake, SNAKE_HEAD_COLOR, 0);
+    for (size_t i = 1; i < snake._position.size(); i++)
+        sdl_draw_snake_color(state, snake, SNAKE_BODY_COLOR, i);
+}
+
+void    sdl_draw_snake_color(SDL_state &state, Snake &snake, t_rgb color, size_t pos){
+    t_coor  snake_pos;
+    snake_pos = snake._position[pos];
+    state.snake.x = snake_pos.x * state.snake.w + state.pixel.width;
+    state.snake.y = snake_pos.y * state.snake.h + state.pixel.height;
+    SDL_SetRenderDrawColor(state.renderer, color.red, color.green, color.blue, color.transparancy);
+    SDL_RenderFillRect(state.renderer, &state.snake);
+}
+
+void    sdl_draw_fruits(SDL_state &state, Board &board){
+
+    SDL_FRect  fruit_pos;
+    fruit_pos.h = state.pixel.height;
+    fruit_pos.w = state.pixel.width;
+    SDL_SetRenderDrawColor(state.renderer, GREEN_APPLE.red, GREEN_APPLE.green, GREEN_APPLE.blue, GREEN_APPLE.transparancy);
+    for (size_t i = 0; i < board.green_apple.size(); i++)
+    {
+        fruit_pos.x = board.green_apple[i].x * state.snake.w + state.pixel.width;
+        fruit_pos.y = board.green_apple[i].y * state.snake.h + state.pixel.height;
+        SDL_RenderFillRect(state.renderer, &fruit_pos);
+    }
+    SDL_SetRenderDrawColor(state.renderer, RED_APPLE.red, RED_APPLE.green, RED_APPLE.blue, RED_APPLE.transparancy);
+    fruit_pos.x = board.red_apple.x * state.snake.w + state.pixel.width;
+    fruit_pos.y = board.red_apple.y * state.snake.h + state.pixel.height;
+    SDL_RenderFillRect(state.renderer, &fruit_pos);
 }
