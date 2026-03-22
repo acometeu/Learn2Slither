@@ -2,7 +2,8 @@
 
 
 TO DO ❌
--make a better random generator for the map objects placement
+-make a better random generator for the map objects placement et/ou verifier que les genrateur de random sont differents selons les instatnces 
+
 -gerer les cas de figures ou le serpent commence bloque (pas besoin si tu peux pas changer la taille de base du serpent):
 WWWWW       WWWWW
 WSSHW       WSS0W
@@ -18,6 +19,10 @@ WWWWW       WWWWW
 -choose to either comeback latency or wait for the user machine (freeze and accelerate or freeze stop game)
 
 -verifier les leaks
+
+-remplacer par des textures si envie
+
+-gerer quand ya plus de places sur le terrain
 
 
 
@@ -44,3 +49,16 @@ GAME BONUS
 HANDLE ✅
 
 -ne pas mettre les wall 'W' dans la map (et changer tout ce qui contient les trucs en rapports au tailles du coup)
+
+
+
+
+
+
+
+
+
+TESTs 🤔
+-serpent peut se manger la queue (demi-tour) et meurt ✅
+-serpent meurt si fruit rouge a 1 de longeur ✅
+-quand ya plus de places est-ce que ca finit 

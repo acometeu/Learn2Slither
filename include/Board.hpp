@@ -1,8 +1,6 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-// class   Snake;
-// #include "Snake.hpp"
 #include "utils.hpp"
 
 
@@ -10,6 +8,8 @@
 #define SNAKE 'S'
 #define EMPTY '0'
 #define WALL 'W'
+#define GREEN_APPLE 'G'
+#define RED_APPLE 'R'
 #define NAN 'N'
 
 
@@ -26,8 +26,8 @@ public:
 
     // values
     std::vector< std::vector<char> > map;
-    std::array<t_coor, 2>  green_apple;
-    t_coor              red_apple;
+    int green_apple;
+    int red_apple;
 
 
     // functions
@@ -35,6 +35,7 @@ public:
     bool    map_coor_is_empty(t_coor &coor);
     void    set_map_coor(t_coor &coor, char object);
     char    get_map_char(t_coor &coor);
+    int     spawn_object(char object);
 
 
 private:

@@ -15,21 +15,22 @@
 // #define SNAKE_SQUARE_PIXELS 60
 
 // game colors
-constexpr t_rgb BACKGROUND_COLOR {150, 150, 150, 255};
-constexpr t_rgb GRID {200, 200, 200, 200};
-constexpr t_rgb WALLS {50, 50, 50, 50};
+constexpr t_rgb BACKGROUND_COLOR {150, 150, 150, 0};
+constexpr t_rgb GRID_COLOR {200, 200, 200, 0};
+constexpr t_rgb WALLS_COLOR {50, 50, 50, 0};
 constexpr t_rgb SNAKE_HEAD_COLOR {255, 255, 0, 0};
 constexpr t_rgb SNAKE_BODY_COLOR {255, 0, 255, 0};
-constexpr t_rgb GREEN_APPLE {0, 255, 0, 0};
-constexpr t_rgb RED_APPLE {255, 0, 0, 0};
+constexpr t_rgb GREEN_APPLE_COLOR {0, 255, 0, 0};
+constexpr t_rgb RED_APPLE_COLOR {255, 0, 0, 0};
+constexpr t_rgb NAN_COLOR {0, 0, 255, 0};
 
-struct SDL_pixel
+struct sdl_pixel
 {
     float height;
     float width;
 };
 
-struct SDL_state
+struct sdl_state
 {
     // display settings
     SDL_Window      *window;
@@ -40,23 +41,26 @@ struct SDL_state
     uint64_t    prev_time;
 
     // game objects
-    SDL_pixel   pixel;
+    sdl_pixel   pixel;
     std::vector< std::array<SDL_FPoint, 2> >    grid;
     std::vector<SDL_FRect>  walls;
-    SDL_FRect   snake;
 };
 
 
 // Visual function declarations
 int     run_SDL(Board &board, Snake &snake);
-int     initialize(SDL_state &state);
-void    initialize_objects(Board board, SDL_state &state);
-std::vector<SDL_FRect>  initialize_walls(Board &board, SDL_state &state);
-std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, SDL_state &state);
-void    cleanup(SDL_state &state);
-void    sdl_draw_snake(SDL_state &state, Snake &snake);
-void    sdl_draw_snake_color(SDL_state &state, Snake &snake, t_rgb color, size_t pos);
-void    sdl_draw_fruits(SDL_state &state, Board &board);
+int     initialize(sdl_state &state);
+void    initialize_objects(Board board, sdl_state &state);
+std::vector<SDL_FRect>  initialize_walls(Board &board, sdl_state &state);
+std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_state &state);
+void    make_draw_command(sdl_state &state, Board &board, Snake &snake);
+void    cleanup(sdl_state &state);
+void    sdl_draw_background(sdl_state &state);
+void    sdl_draw_walls(sdl_state &state);
+void    sdl_draw_board_objects(sdl_state &state, Board &board);
+void    sdl_choose_box_color(sdl_state &state, Board &board, int y, int x);
+void    sdl_draw_grid(sdl_state &state);
+
 
 
 #endif

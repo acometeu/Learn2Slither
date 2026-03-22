@@ -1,12 +1,12 @@
 #include "include/Board.hpp"
 
 
-Board::Board() : _board_size(10){
+Board::Board() : _board_size(10), green_apple(2), red_apple(1){
     inizialize_board();
     inizialize_fruits();
 }
 
-Board::Board(int board_size) : _board_size(board_size){
+Board::Board(int board_size) : _board_size(board_size), green_apple(2), red_apple(1){
     inizialize_board();
     inizialize_fruits();
 }
@@ -26,7 +26,7 @@ void    Board::set_map_coor(t_coor &coor, char object){
 
 char    Board::get_map_char(t_coor &coor){
     if (coor.y < 0 || coor.x < 0 || coor.y >= _board_size || coor.x >= _board_size)
-        return(NAN);
+        return(WALL);
     return (map[coor.y][coor.x]);
 }
 
@@ -43,24 +43,31 @@ void    Board::inizialize_fruits(){
 
     std::cout << "test" << std::endl;
     srand(time(NULL));
-    for (size_t i = 0; i < green_apple.size(); i++)
+
+    t_coor  apple;
+    for (size_t i = 0; i < green_apple; i++)
     {
         while (true)
         {
-            green_apple[i].x = rand() % (get_board_size());
-            green_apple[i].y = rand() % (get_board_size());   
-            if (map_coor_is_empty(green_apple[i]) == true)
+            apple.x = rand() % (get_board_size());
+            apple.y = rand() % (get_board_size());
+            if (map_coor_is_empty(apple) == true)
+            {
+                map[apple.y][apple.x] = GREEN_APPLE; 
                 break;
+            }
         }
     }
     while (true)
     {
-        red_apple.x = rand() % (get_board_size());
-        red_apple.y = rand() % (get_board_size());
-        if (map_coor_is_empty(red_apple) == true)
+        apple.x = rand() % (get_board_size());
+        apple.y = rand() % (get_board_size());
+        if (map_coor_is_empty(apple) == true)
+        {
+            map[apple.y][apple.x] = RED_APPLE; 
             break;
+        }
     }
-    std::cout << "1green_apple[0] : " << green_apple[0] << std::endl;
 }
 
 void    Board::print_board(void){
@@ -89,3 +96,18 @@ bool    Board::map_coor_is_empty(t_coor &coor){
     return (false);
 }
 
+int     Board::spawn_object(char object){
+
+    t_coor  object_coor;
+    while (true)
+    {
+        object_coor.x = rand() % (get_board_size());
+        object_coor.y = rand() % (get_board_size());
+        if (map_coor_is_empty(object_coor) == true)
+        {
+            map[object_coor.y][object_coor.x] = object; 
+            break;
+        }
+    }
+    return(0);
+}

@@ -2,7 +2,7 @@
 
 int run_SDL(Board &board, Snake &snake){
     
-    SDL_state   state;
+    sdl_state   state;
     
     if (initialize(state))
     return(1);
@@ -11,8 +11,6 @@ int run_SDL(Board &board, Snake &snake){
     // load game datas
     // const bool *keys = SDL_GetKeyboardState(nullptr);
     state.prev_time = SDL_GetTicks();
-    // uint64_t    prev_time = SDL_GetTicks();
-    
     initialize_objects(board, state);
     
     // start the game loop
@@ -26,7 +24,8 @@ int run_SDL(Board &board, Snake &snake){
         if (delta_time >= STEP_RATE_MILISECOND)
         {
             // snake_step(snake, sdl_snake);
-            snake.move(snake.dir);
+            if (snake.move(snake.dir))
+                break;
             state.prev_time += STEP_RATE_MILISECOND;
         }
         
@@ -81,29 +80,7 @@ int run_SDL(Board &board, Snake &snake){
             }
         }
 
-        
-
-        
-        
-        // draw background
-        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_COLOR.red, BACKGROUND_COLOR.green, BACKGROUND_COLOR.blue, BACKGROUND_COLOR.transparancy);
-        SDL_RenderClear(state.renderer);
-        
-        // draw grid
-        SDL_SetRenderDrawColor(state.renderer, GRID.red, GRID.green, GRID.blue, GRID.transparancy);
-        for (int i = 0; i < state.grid.size(); i++)
-        SDL_RenderLine(state.renderer, state.grid[i][0].x, state.grid[i][0].y, state.grid[i][1].x, state.grid[i][1].y);
-        
-        // draw walls
-        SDL_SetRenderDrawColor(state.renderer, WALLS.red, WALLS.green, WALLS.blue, WALLS.transparancy);
-        for (int i = 0; i < state.walls.size(); i++)
-        SDL_RenderFillRect(state.renderer, &state.walls[i]);
-        
-        // sdl_draw_fruits
-        sdl_draw_fruits(state, board);
-        sdl_draw_snake(state, snake);
-        
-        
+        make_draw_command(state, board, snake);
         // swap buffers and present
         SDL_RenderPresent(state.renderer);
     }
@@ -111,7 +88,7 @@ int run_SDL(Board &board, Snake &snake){
     return(0);
 }
 
-int     initialize(SDL_state &state){
+int     initialize(sdl_state &state){
 
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
@@ -147,17 +124,15 @@ int     initialize(SDL_state &state){
     return(0);
 }
 
-void    initialize_objects(Board board, SDL_state &state){
+void    initialize_objects(Board board, sdl_state &state){
 
     int wall_nbr = 2;
     state.pixel.height = state.pixel.width = ((WINDOW_WIDTH > WINDOW_HEIGHT) ? WINDOW_HEIGHT : WINDOW_WIDTH) / (board.get_board_size() + wall_nbr);
-    state.snake.h = state.pixel.height;
-    state.snake.w = state.pixel.width;
     state.grid = initialize_grid(board, state);
     state.walls = initialize_walls(board, state);
 }
 
-std::vector<SDL_FRect>    initialize_walls(Board &board, SDL_state &state){
+std::vector<SDL_FRect>    initialize_walls(Board &board, sdl_state &state){
 
     std::vector<SDL_FRect>    walls;
     float wall_size = state.pixel.width;
@@ -179,7 +154,7 @@ std::vector<SDL_FRect>    initialize_walls(Board &board, SDL_state &state){
     return (walls);
 }
 
-std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, SDL_state &state){
+std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_state &state){
 
     std::vector< std::array<SDL_FPoint, 2> >    grid;
     float wall_size = state.pixel.width;
@@ -205,43 +180,83 @@ std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, SDL_st
     return (grid);
 }
 
-void    cleanup(SDL_state &state){
+void    make_draw_command(sdl_state &state, Board &board, Snake &snake){
+
+    sdl_draw_background(state);
+    sdl_draw_walls(state);
+
+    sdl_draw_board_objects(state, board);
+    // sdl draw entire board
+    sdl_draw_grid(state);
+
+        
+}
+
+void    sdl_draw_background(sdl_state &state){
+    
+    SDL_SetRenderDrawColor(state.renderer, BACKGROUND_COLOR.red, BACKGROUND_COLOR.green, BACKGROUND_COLOR.blue, BACKGROUND_COLOR.transparancy);
+    SDL_RenderClear(state.renderer);
+}
+
+
+void    sdl_draw_walls(sdl_state &state){
+
+    SDL_SetRenderDrawColor(state.renderer, WALLS_COLOR.red, WALLS_COLOR.green, WALLS_COLOR.blue, WALLS_COLOR.transparancy);
+    for (int i = 0; i < state.walls.size(); i++)
+        SDL_RenderFillRect(state.renderer, &state.walls[i]);
+}
+
+void    sdl_draw_board_objects(sdl_state &state, Board &board){
+
+    SDL_FRect   box = {0, 0, state.pixel.width, state.pixel.height};
+    int wall_size = state.pixel.width;
+    for (int y = 0; y < board.map.size(); y++)
+    {
+        box.y = y * box.h + wall_size;
+        for (int x = 0; x < board.map[y].size(); x++)
+        {
+            box.x = x * box.w + wall_size;
+            sdl_choose_box_color(state, board, y, x);
+            SDL_RenderFillRect(state.renderer, &box);
+        }
+    }
+}
+
+void    sdl_choose_box_color(sdl_state &state, Board &board, int y, int x){
+
+    switch (board.map[y][x])
+    {
+    case EMPTY :
+        SDL_SetRenderDrawColor(state.renderer, BACKGROUND_COLOR.red, BACKGROUND_COLOR.green, BACKGROUND_COLOR.blue, BACKGROUND_COLOR.transparancy);
+        break;
+    case HEAD :
+        SDL_SetRenderDrawColor(state.renderer, SNAKE_HEAD_COLOR.red, SNAKE_HEAD_COLOR.green, SNAKE_HEAD_COLOR.blue, SNAKE_HEAD_COLOR.transparancy);
+        break;
+    case SNAKE :
+        SDL_SetRenderDrawColor(state.renderer, SNAKE_BODY_COLOR.red, SNAKE_BODY_COLOR.green, SNAKE_BODY_COLOR.blue, SNAKE_BODY_COLOR.transparancy);
+        break;
+    case GREEN_APPLE :
+        SDL_SetRenderDrawColor(state.renderer, GREEN_APPLE_COLOR.red, GREEN_APPLE_COLOR.green, GREEN_APPLE_COLOR.blue, GREEN_APPLE_COLOR.transparancy);
+        break;
+    case RED_APPLE :
+        SDL_SetRenderDrawColor(state.renderer, RED_APPLE_COLOR.red, RED_APPLE_COLOR.green, RED_APPLE_COLOR.blue, RED_APPLE_COLOR.transparancy);
+        break;
+    default:
+        std::cout << "CASE WITH UNKNOWN CASE" << std::endl;
+        SDL_SetRenderDrawColor(state.renderer, NAN_COLOR.red, NAN_COLOR.green, NAN_COLOR.blue, NAN_COLOR.transparancy);
+        break;
+    }
+}
+
+void    sdl_draw_grid(sdl_state &state){
+
+    SDL_SetRenderDrawColor(state.renderer, GRID_COLOR.red, GRID_COLOR.green, GRID_COLOR.blue, GRID_COLOR.transparancy);
+    for (int i = 0; i < state.grid.size(); i++)
+        SDL_RenderLine(state.renderer, state.grid[i][0].x, state.grid[i][0].y, state.grid[i][1].x, state.grid[i][1].y);
+}
+
+void    cleanup(sdl_state &state){
     SDL_DestroyRenderer(state.renderer);
     SDL_DestroyWindow(state.window);
     SDL_Quit();
-}
-
-void    sdl_draw_snake(SDL_state &state, Snake &snake){
-
-    if (snake._position.size())
-        sdl_draw_snake_color(state, snake, SNAKE_HEAD_COLOR, 0);
-    for (size_t i = 1; i < snake._position.size(); i++)
-        sdl_draw_snake_color(state, snake, SNAKE_BODY_COLOR, i);
-}
-
-void    sdl_draw_snake_color(SDL_state &state, Snake &snake, t_rgb color, size_t pos){
-    t_coor  snake_pos;
-    snake_pos = snake._position[pos];
-    state.snake.x = snake_pos.x * state.snake.w + state.pixel.width;
-    state.snake.y = snake_pos.y * state.snake.h + state.pixel.height;
-    SDL_SetRenderDrawColor(state.renderer, color.red, color.green, color.blue, color.transparancy);
-    SDL_RenderFillRect(state.renderer, &state.snake);
-}
-
-void    sdl_draw_fruits(SDL_state &state, Board &board){
-
-    SDL_FRect  fruit_pos;
-    fruit_pos.h = state.pixel.height;
-    fruit_pos.w = state.pixel.width;
-    SDL_SetRenderDrawColor(state.renderer, GREEN_APPLE.red, GREEN_APPLE.green, GREEN_APPLE.blue, GREEN_APPLE.transparancy);
-    for (size_t i = 0; i < board.green_apple.size(); i++)
-    {
-        fruit_pos.x = board.green_apple[i].x * state.snake.w + state.pixel.width;
-        fruit_pos.y = board.green_apple[i].y * state.snake.h + state.pixel.height;
-        SDL_RenderFillRect(state.renderer, &fruit_pos);
-    }
-    SDL_SetRenderDrawColor(state.renderer, RED_APPLE.red, RED_APPLE.green, RED_APPLE.blue, RED_APPLE.transparancy);
-    fruit_pos.x = board.red_apple.x * state.snake.w + state.pixel.width;
-    fruit_pos.y = board.red_apple.y * state.snake.h + state.pixel.height;
-    SDL_RenderFillRect(state.renderer, &fruit_pos);
 }

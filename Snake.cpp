@@ -81,25 +81,56 @@ t_coor  Snake::get_head_position(void){
 
 
 int Snake::move(int direction){
-    t_coor  new_head = _position[0];
-    switch (direction)
-    {
-    case RIGHT:
-        new_head.x += 1;
-        break;
-    case LEFT:
-        new_head.x -= 1;
-        break;
-    case DOWN:
-        new_head.y += 1;
-        break;
-    case UP:
-        new_head.y -= 1;
-        break;
-    }
+    t_coor new_head = get_position_after_movement(_position[0], direction, new_head);
+    t_coor last_body = _position[_position.size() - 1];
+
+    // move snake and update board on last body part
     _position.emplace_front(new_head);
+    board.set_map_coor(_position[_position.size() - 1], EMPTY);
     _position.pop_back();
-    return (1);
+    
+    // analyse where head is and update board
+    switch (board.get_map_char(new_head))
+    {
+    case EMPTY :
+        // std::cout << "EMPTY" << std::endl;
+        board.set_map_coor(_position[0], HEAD);
+        if (_position.size() > 1)
+            board.set_map_coor(_position[1], SNAKE);
+        break;
+    case GREEN_APPLE :
+        // std::cout << "GREEN_APPLE" << std::endl;
+        _position.emplace_back(last_body);
+        board.set_map_coor(_position[0], HEAD);
+        board.set_map_coor(_position[1], SNAKE);
+        board.set_map_coor(_position[_position.size() - 1], SNAKE);
+        board.spawn_object(GREEN_APPLE);
+        break;
+    case RED_APPLE :
+        // std::cout << "RED_APPLE" << std::endl;
+        if (_position.size() <= 1)
+        {
+            std::cout << "RED APPLE DEAD" << std::endl;
+            return(1);
+        }
+        board.set_map_coor(_position[_position.size() - 1], EMPTY);
+        _position.pop_back();
+        board.set_map_coor(_position[0], HEAD);
+        if (_position.size() > 1)
+            board.set_map_coor(_position[1], SNAKE);
+        board.spawn_object(RED_APPLE);
+        break;
+    case WALL :
+        std::cout << "WALL DEAD" << std::endl;
+    case SNAKE :
+        std::cout << "SNAKE DEAD" << std::endl;
+    case HEAD :
+        std::cout << "HEAD DEAD" << std::endl;
+    default :
+        std::cout << "DEFAULT DEAD" << std::endl;
+        return (1);
+    }
+    return (0);
 }
 
 
