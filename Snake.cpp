@@ -67,8 +67,9 @@ int Snake::initialize_body(Board &board, int snake_size, int actual_size, t_coor
 }
 
 int Snake::choose_random_direction_initialisation(std::vector<int> &all_directions){
+
         size_t random_index = rand() % all_directions.size();
-        //  swap index with last element if index is not last element
+        //  swap random_index with last element if random_index is not last element
         if (random_index != all_directions.size() - 1)
             std::swap(all_directions[random_index], all_directions[all_directions.size() - 1]);
         return (all_directions[all_directions.size() - 1]);
@@ -81,6 +82,7 @@ t_coor  Snake::get_head_position(void){
 
 
 int Snake::move(int direction){
+
     t_coor new_head = get_position_after_movement(_position[0], direction, new_head);
     t_coor last_body = _position[_position.size() - 1];
 
@@ -93,21 +95,22 @@ int Snake::move(int direction){
     switch (board.get_map_char(new_head))
     {
     case EMPTY :
-        // std::cout << "EMPTY" << std::endl;
         board.set_map_coor(_position[0], HEAD);
         if (_position.size() > 1)
             board.set_map_coor(_position[1], SNAKE);
         break;
     case GREEN_APPLE :
-        // std::cout << "GREEN_APPLE" << std::endl;
         _position.emplace_back(last_body);
         board.set_map_coor(_position[0], HEAD);
         board.set_map_coor(_position[1], SNAKE);
         board.set_map_coor(_position[_position.size() - 1], SNAKE);
-        board.spawn_object(GREEN_APPLE);
+        if (board.spawn_object(GREEN_APPLE))
+        {
+            std::cout << "FINISH" << std::endl;
+            return (1);
+        }
         break;
     case RED_APPLE :
-        // std::cout << "RED_APPLE" << std::endl;
         if (_position.size() <= 1)
         {
             std::cout << "RED APPLE DEAD" << std::endl;
@@ -118,23 +121,20 @@ int Snake::move(int direction){
         board.set_map_coor(_position[0], HEAD);
         if (_position.size() > 1)
             board.set_map_coor(_position[1], SNAKE);
-        board.spawn_object(RED_APPLE);
+        if (board.spawn_object(RED_APPLE))
+            return (1);
         break;
     case WALL :
-        std::cout << "WALL DEAD" << std::endl;
     case SNAKE :
-        std::cout << "SNAKE DEAD" << std::endl;
     case HEAD :
-        std::cout << "HEAD DEAD" << std::endl;
     default :
-        std::cout << "DEFAULT DEAD" << std::endl;
         return (1);
     }
     return (0);
 }
 
-
 t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_coor &body){
+
     switch (direction)
     {
     case UP:

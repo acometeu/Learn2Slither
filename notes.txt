@@ -1,7 +1,15 @@
+TASK 📝
+-setting add a command line parameter to choose number of training session (ex -t XXX, --trainin_session XXX)
+-setting add speed setting with at least 1 human readeable speed (ex -speed XXX)
+-setting add step-by-step mode (ex -step, -step=true)
 
 
 
-TO DO ❌
+
+little things ❌
+
+-accept map provided setting 
+
 -make a better random generator for the map objects placement et/ou verifier que les genrateur de random sont differents selons les instatnces 
 
 -gerer les cas de figures ou le serpent commence bloque (pas besoin si tu peux pas changer la taille de base du serpent):
@@ -61,4 +69,5 @@ HANDLE ✅
 TESTs 🤔
 -serpent peut se manger la queue (demi-tour) et meurt ✅
 -serpent meurt si fruit rouge a 1 de longeur ✅
--quand ya plus de places est-ce que ca finit 
+-quand ya plus de places est-ce que ca finit ✅
+-quand ya pas de place a l'initialisation est-ce que ca throw une exception 

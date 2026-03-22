@@ -98,16 +98,43 @@ bool    Board::map_coor_is_empty(t_coor &coor){
 
 int     Board::spawn_object(char object){
 
-    t_coor  object_coor;
-    while (true)
+    int random_y = rand() % (get_board_size());
+    int random_x = rand() % (get_board_size());
+    t_coor  coor;
+
+    // check from random box until the end
+    coor.y = random_y;
+    coor.x = random_x;
+    while (coor.y < get_board_size())
     {
-        object_coor.x = rand() % (get_board_size());
-        object_coor.y = rand() % (get_board_size());
-        if (map_coor_is_empty(object_coor) == true)
+        while (coor.x < get_board_size())
         {
-            map[object_coor.y][object_coor.x] = object; 
-            break;
+            if (map_coor_is_empty(coor))
+            {
+                set_map_coor(coor, object);
+                return(0);
+            }
+            coor.x++;
         }
+        coor.x = 0;
+        coor.y++;
     }
-    return(0);
+
+    // check from beginning until the random box
+    coor.y = 0;
+    while (coor.y <= random_y)
+    {
+        coor.x = 0;
+        while(coor.x < get_board_size())
+        {
+            if (map_coor_is_empty(coor))
+            {
+                set_map_coor(coor, object);
+                return(0);
+            }
+            coor.x++;
+        }
+        coor.y++;
+    }
+    return(1);
 }
