@@ -62,5 +62,4 @@ void    sdl_choose_box_color(sdl_state &state, Board &board, int y, int x);
 void    sdl_draw_grid(sdl_state &state);
 
 
-
 #endif

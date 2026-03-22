@@ -7,7 +7,7 @@
 #include <vector>
 #include <array>
 #include <deque>
-#include "argparse/include/argparse/argparse.hpp"
+#include "argparse/argparse.hpp"
 
 
 typedef struct s_coor
