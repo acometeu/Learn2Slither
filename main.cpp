@@ -2,7 +2,7 @@
 
 
 int main(int argc, char* argv[]) {
-    auto args = argparse::parse<MyArgs>(argc, argv);
+    MyArgs args = argparse::parse<MyArgs>(argc, argv);
 
     if (args.verbose)
         args.print();
@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
     if (args.visual)
     {
-        if (run_SDL(board, snake))
+        if (run_SDL(board, snake, args))
             return (1);
     }
 

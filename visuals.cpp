@@ -1,6 +1,6 @@
 #include "include/visuals.hpp"
 
-int run_SDL(Board &board, Snake &snake){
+int run_SDL(Board &board, Snake &snake, MyArgs args){
     
     sdl_state   state;
     
@@ -21,12 +21,12 @@ int run_SDL(Board &board, Snake &snake){
         float       delta_time = now_time - state.prev_time;
         
         // update snake pos
-        if (delta_time >= STEP_RATE_MILISECOND)
+        if (delta_time >= args.snake_speed)
         {
             // snake_step(snake, sdl_snake);
             if (snake.move(snake.dir))
                 break;
-            state.prev_time += STEP_RATE_MILISECOND;
+            state.prev_time += args.snake_speed;
         }
         
         SDL_Event   event = { 0 };

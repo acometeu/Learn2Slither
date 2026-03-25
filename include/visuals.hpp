@@ -11,7 +11,7 @@
 
 #define WINDOW_WIDTH 1400
 #define WINDOW_HEIGHT 800
-#define STEP_RATE_MILISECOND 500
+// #define STEP_RATE_MILISECOND 500
 // #define SNAKE_SQUARE_PIXELS 60
 
 // game colors
@@ -48,7 +48,7 @@ struct sdl_state
 
 
 // Visual function declarations
-int     run_SDL(Board &board, Snake &snake);
+int     run_SDL(Board &board, Snake &snake, MyArgs args);
 int     initialize(sdl_state &state);
 void    initialize_objects(Board board, sdl_state &state);
 std::vector<SDL_FRect>  initialize_walls(Board &board, sdl_state &state);
