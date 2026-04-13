@@ -1,6 +1,5 @@
 TASK 📝
--setting add a command line parameter to choose number of training session (ex -t XXX, --trainin_session XXX)
--setting add speed setting with at least 1 human readeable speed (ex -speed XXX)
+-afficher la vision du snake dans le terminal a chaque frame
 -setting add step-by-step mode (ex -step, -step=true)
 
 
@@ -40,6 +39,7 @@ WWWWW       WWWWW
 
 GAME BONUS
 -being able to make a path in advance for the snake "↑ ↓ → → ↑ ← ↑"
+-1v1 snake and more (1v1v1v1v1v1v1...)
 
 
 

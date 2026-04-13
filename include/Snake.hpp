@@ -6,6 +6,8 @@
 
 class   Board; 
 
+#define ABSCISCA 0
+#define ORDINATE 1
 
 class Snake
 {
@@ -16,10 +18,13 @@ public:
     // variables
     Board   &board;
     std::deque<t_coor>   _position;
+    std::array< std::vector<char>, 2 >  vision;
     int     dir;
 
     // functions
     t_coor  get_head_position(void);
+    void    update_vision(void);
+    void    print_vision(void);
     int move(int direction);
 
 

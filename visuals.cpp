@@ -5,13 +5,16 @@ int run_SDL(Board &board, Snake &snake, MyArgs args){
     sdl_state   state;
     
     if (initialize(state))
-    return(1);
+        return(1);
     
     
     // load game datas
     // const bool *keys = SDL_GetKeyboardState(nullptr);
     state.prev_time = SDL_GetTicks();
     initialize_objects(board, state);
+    snake.update_vision();
+    snake.print_vision();
+
     
     // start the game loop
     bool running = true;
@@ -26,9 +29,11 @@ int run_SDL(Board &board, Snake &snake, MyArgs args){
             // snake_step(snake, sdl_snake);
             if (snake.move(snake.dir))
                 break;
+            snake.update_vision();
+            snake.print_vision();
             state.prev_time += args.snake_speed;
         }
-        
+
         SDL_Event   event = { 0 };
         while (SDL_PollEvent(&event))
         {

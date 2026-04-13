@@ -80,6 +80,52 @@ t_coor  Snake::get_head_position(void){
     return(_position[0]);
 }
 
+void    Snake::update_vision(void){
+    //  update vision with an array of abscissa and ordinate
+
+    // clear previous values
+    vision[0].clear();
+    vision[1].clear();
+
+    int abscissa = _position[0].x;
+    int ordinate = _position[0].y;
+
+    for (int i = 0; i < board.get_board_size(); i++)
+        vision[0].push_back(board.map[ordinate][i]);
+    for (int i = 0; i < board.get_board_size(); i++)
+        vision[1].push_back(board.map[i][abscissa]);
+}
+
+void    Snake::print_vision(void){
+
+    int abscissa = _position[0].x;
+    int ordinate = _position[0].y;
+    for (int i = 0; i < board.get_board_size(); i++)
+    {
+        if (ordinate == i)
+        {
+            print_vector(vision[ABSCISCA]);
+            std::cout << std::endl;
+            continue;
+        }
+
+        int j = 0;
+        while (j < abscissa)
+        {
+            std::cout << ' ';
+            j++;
+        }
+        std::cout << vision[ORDINATE][i];
+        while (j < board.get_board_size())
+        {
+            std::cout << ' ';
+            j++;
+        }
+
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+}
 
 int Snake::move(int direction){
 
