@@ -81,47 +81,66 @@ t_coor  Snake::get_head_position(void){
 }
 
 void    Snake::update_vision(void){
-    //  update vision with an array of abscissa and ordinate
+    //  update vision with an array for each direction LEFT, RIGHT, UP, DOWN
 
     // clear previous values
-    vision[0].clear();
-    vision[1].clear();
+    vision[LEFT].clear();
+    vision[RIGHT].clear();
+    vision[UP].clear();
+    vision[DOWN].clear();
 
-    int abscissa = _position[0].x;
-    int ordinate = _position[0].y;
+    t_coor  head;
+    head.x = _position[0].x;
+    head.y = _position[0].y;
 
-    for (int i = 0; i < board.get_board_size(); i++)
-        vision[0].push_back(board.map[ordinate][i]);
-    for (int i = 0; i < board.get_board_size(); i++)
-        vision[1].push_back(board.map[i][abscissa]);
+    //fill vision LEFT
+    for (int i = head.x - 1; i >= 0; i--)
+        vision[LEFT].push_back(board.map[head.y][i]);
+    //fill vision RIGHT
+    for (int i = head.x + 1; i < board.get_board_size(); i++)
+        vision[RIGHT].push_back(board.map[head.y][i]);
+    //fill vision UP
+    for (int i = head.y - 1; i >= 0; i--)
+        vision[UP].push_back(board.map[i][head.x]);
+    //fill vision DOWN
+    for (int i = head.y + 1; i < board.get_board_size(); i++)
+        vision[DOWN].push_back(board.map[i][head.x]);
+
 }
 
 void    Snake::print_vision(void){
 
-    int abscissa = _position[0].x;
-    int ordinate = _position[0].y;
-    for (int i = 0; i < board.get_board_size(); i++)
+    t_coor  head;
+    head.x = _position[0].x;
+    head.y = _position[0].y;
+
+    //Print vision UP
+    for (int i = 0; i < vision[UP].size(); i++)
     {
-        if (ordinate == i)
-        {
-            print_vector(vision[ABSCISCA]);
-            std::cout << std::endl;
-            continue;
-        }
-
-        int j = 0;
-        while (j < abscissa)
-        {
+        for (int j = 0; j < vision[LEFT].size(); j++)
             std::cout << ' ';
-            j++;
-        }
-        std::cout << vision[ORDINATE][i];
-        while (j < board.get_board_size())
-        {
+        std::cout << vision[UP][i];
+        for (int j = 0; j < vision[RIGHT].size(); j++)
             std::cout << ' ';
-            j++;
-        }
+        std::cout << std::endl;
+    }
 
+    //Print vision LEFT and RIGHT
+    for (int i = 0; i < vision[LEFT].size(); i++)
+        std::cout << vision[LEFT][i];
+    std::cout << HEAD;
+    for (int i = 0; i < vision[RIGHT].size(); i++)
+        std::cout << vision[RIGHT][i];
+    std::cout << std::endl;
+
+    //Print vision DOWN
+    for (int i = 0; i < vision[DOWN].size(); i++)
+    {
+        for (int j = 0; j < vision[LEFT].size(); j++)
+            std::cout << ' ';
+        std::cout << vision[DOWN][i];
+        for (int j = 0; j < vision[RIGHT].size(); j++)
+            std::cout << ' ';
         std::cout << std::endl;
     }
     std::cout << std::endl;

@@ -1,6 +1,13 @@
 TASK 📝
--afficher la vision du snake dans le terminal a chaque frame
+-ajouter la direction prise par le snake a chaque step
 -setting add step-by-step mode (ex -step, -step=true)
+-REWARD example :
+.nothing = -2
+.red apple = -20
+.death = -1000
+.green apple = +50
+.end = +1000
+.not known case = +1 (pour pousser a l'exploration)
 
 
 

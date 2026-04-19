@@ -11,9 +11,6 @@ int main(int argc, char* argv[]) {
     Board board(args.board_size);
     Snake snake(board, args.snake_size);
     board.print_board();
-
-    //test
-    snake.update_vision();
     snake.print_vision();
 
 

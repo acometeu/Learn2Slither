@@ -18,7 +18,7 @@ public:
     // variables
     Board   &board;
     std::deque<t_coor>   _position;
-    std::array< std::vector<char>, 2 >  vision;
+    std::array< std::vector<char>, 4 >  vision;
     int     dir;
 
     // functions

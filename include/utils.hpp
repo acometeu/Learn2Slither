@@ -24,9 +24,9 @@ typedef struct s_coor
 
 typedef enum
 {
+    LEFT,
     RIGHT,
     UP,
-    LEFT,
     DOWN
 }   T_direction;
 
