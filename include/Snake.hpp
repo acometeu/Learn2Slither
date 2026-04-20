@@ -23,6 +23,7 @@ public:
 
     // functions
     t_coor  get_head_position(void);
+    void    print_dir(void);
     void    update_vision(void);
     void    print_vision(void);
     int move(int direction);

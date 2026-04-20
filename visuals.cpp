@@ -28,7 +28,8 @@ int run_SDL(Board &board, Snake &snake, MyArgs args){
         {
             // snake_step(snake, sdl_snake);
             if (snake.move(snake.dir))
-                break;
+                return (0);
+            snake.print_dir();
             snake.update_vision();
             snake.print_vision();
             state.prev_time += args.snake_speed;

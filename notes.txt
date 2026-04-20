@@ -1,6 +1,6 @@
 TASK 📝
 -ajouter la direction prise par le snake a chaque step
--setting add step-by-step mode (ex -step, -step=true)
+-setting add step-by-step mode (ex -step, -step=true) (OBLIGATOIRE)
 -REWARD example :
 .nothing = -2
 .red apple = -20

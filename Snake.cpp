@@ -80,6 +80,26 @@ t_coor  Snake::get_head_position(void){
     return(_position[0]);
 }
 
+void    Snake::print_dir(void){
+
+    switch (dir)
+    {
+    case LEFT:
+        std::cout << "LEFT" << std::endl;
+        break;
+    case RIGHT:
+        std::cout << "RIGHT" << std::endl;
+        break;
+    case UP:
+        std::cout << "UP" << std::endl;
+        break;
+    case DOWN:
+        std::cout << "DOWN" << std::endl;
+        break;
+    }
+    std::cout << std::endl;
+}
+
 void    Snake::update_vision(void){
     //  update vision with an array for each direction LEFT, RIGHT, UP, DOWN
 
