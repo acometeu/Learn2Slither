@@ -139,14 +139,14 @@ void    Snake::print_vision(void){
     {
         for (int j = 0; j < vision[LEFT].size(); j++)
             std::cout << ' ';
-        std::cout << vision[UP][i];
+        std::cout << vision[UP][vision[UP].size() - 1 - i];
         for (int j = 0; j < vision[RIGHT].size(); j++)
             std::cout << ' ';
         std::cout << std::endl;
     }
 
     //Print vision LEFT and RIGHT
-    for (int i = 0; i < vision[LEFT].size(); i++)
+    for (int i = vision[LEFT].size() - 1; i >= 0; i--)
         std::cout << vision[LEFT][i];
     std::cout << HEAD;
     for (int i = 0; i < vision[RIGHT].size(); i++)
