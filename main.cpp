@@ -1,6 +1,28 @@
 #include "include/visuals.hpp"
-#include <iostream>
 
+
+int game_loop(Board &board, Snake &snake, MyArgs &args){
+
+    snake.update_vision();
+    snake.print_vision();
+
+    if (args.visual)
+    {
+        if (run_SDL(board, snake, args))
+            return (1);
+    }
+    else
+    {
+        bool    running = true;
+        while(running)
+        {
+            if (snake.update_position_and_vision())
+                break;
+        }
+    }
+
+    return (0);
+}
 
 int main(int argc, char* argv[]) {
     MyArgs args = argparse::parse<MyArgs>(argc, argv);
@@ -13,12 +35,14 @@ int main(int argc, char* argv[]) {
     board.print_board();
     snake.print_vision();
 
+    if (game_loop(board, snake, args))
+        return (1);
 
-    if (args.visual)
-    {
-        if (run_SDL(board, snake, args))
-            return (1);
-    }
+    // if (args.visual)
+    // {
+    //     if (run_SDL(board, snake, args))
+    //         return (1);
+    // }
 
     return 0;
 }

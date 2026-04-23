@@ -26,7 +26,8 @@ public:
     void    print_dir(void);
     void    update_vision(void);
     void    print_vision(void);
-    int move(int direction);
+    int     move(int direction);
+    int     update_position_and_vision();
 
 
 private:

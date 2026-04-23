@@ -1,91 +1,18 @@
 #include "include/visuals.hpp"
 
-int run_SDL(Board &board, Snake &snake, MyArgs args){
+int run_SDL(Board &board, Snake &snake, MyArgs &args){
     
     sdl_state   state;
-    
+
     if (initialize(state))
         return(1);
-    
-    
-    // load game datas
-    // const bool *keys = SDL_GetKeyboardState(nullptr);
-    state.prev_time = SDL_GetTicks();
     initialize_objects(board, state);
-    snake.update_vision();
-    snake.print_vision();
-
     
-    // start the game loop
-    bool running = true;
-    while (running)
+    while (state.running)
     {
-        uint64_t    now_time = SDL_GetTicks();
-        float       delta_time = now_time - state.prev_time;
-        
-        // update snake pos
-        if (delta_time >= args.snake_speed)
-        {
-            // snake_step(snake, sdl_snake);
-            if (snake.move(snake.dir))
-                return (0);
-            snake.print_dir();
-            snake.update_vision();
-            snake.print_vision();
-            state.prev_time += args.snake_speed;
-        }
-
-        SDL_Event   event = { 0 };
-        while (SDL_PollEvent(&event))
-        {
-            // std::cout << "READING..." << std::endl;
-            switch (event.type)
-            {
-                case SDL_EVENT_QUIT:
-                {
-                    running = false;
-                    break;
-                }
-                case SDL_EVENT_WINDOW_RESIZED:
-                {
-                    state.width = event.window.data1;
-                    state.height = event.window.data2;
-                    break;
-                }
-                case SDL_EVENT_KEY_DOWN:
-                {
-                    switch (event.key.scancode)
-                    {
-                        case SDL_SCANCODE_ESCAPE:
-                        running = false;
-                        break;
-
-                        // handle movements
-                        case SDL_SCANCODE_D:
-                        snake.dir = RIGHT;
-                        break;
-                        case SDL_SCANCODE_A:
-                        snake.dir = LEFT;
-                        break;
-                        case SDL_SCANCODE_W:
-                        snake.dir = UP;
-                        break;
-                        case SDL_SCANCODE_S:
-                        snake.dir = DOWN;
-                        break;
-                        default :
-                        break;
-                    }
-                    break;
-                }
-                default:
-                {
-                    // SDL_Log("Unhandled Event!");
-                    break;
-                }
-            }
-        }
-
+        sdl_handle_event(snake, state);
+        if (sdl_update_snake_position(snake, state, args))
+            return (0);
         make_draw_command(state, board, snake);
         // swap buffers and present
         SDL_RenderPresent(state.renderer);
@@ -127,6 +54,11 @@ int     initialize(sdl_state &state){
     // state.logW = WINDOW_WIDTH;
     // state.logH = WINDOW_HEIGHT;
     // SDL_SetRenderLogicalPresentation(state.renderer, state.logW, state.logH, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+    state.prev_time = SDL_GetTicks();
+    state.event = { 0 };
+    state.running = true;
+
     return(0);
 }
 
@@ -186,13 +118,79 @@ std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_st
     return (grid);
 }
 
+int    sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args){
+
+    state.now_time = SDL_GetTicks();
+    float       delta_time = state.now_time - state.prev_time;
+    
+    // update snake pos
+    if (delta_time >= args.snake_speed)
+    {
+        if (snake.update_position_and_vision())
+            return(1);
+        state.prev_time += args.snake_speed;
+    }
+    return(0);
+}
+
+void sdl_handle_event(Snake &snake, sdl_state &state){
+
+    while (SDL_PollEvent(&state.event))
+    {
+        switch (state.event.type)
+        {
+            case SDL_EVENT_QUIT:
+            {
+                state.running = false;
+                break;
+            }
+            case SDL_EVENT_WINDOW_RESIZED:
+            {
+                state.width = state.event.window.data1;
+                state.height = state.event.window.data2;
+                break;
+            }
+            case SDL_EVENT_KEY_DOWN:
+            {
+                switch (state.event.key.scancode)
+                {
+                    case SDL_SCANCODE_ESCAPE:
+                        state.running = false;
+                        break;
+
+                    // handle movements
+                    case SDL_SCANCODE_D:
+                        snake.dir = RIGHT;
+                        break;
+                    case SDL_SCANCODE_A:
+                        snake.dir = LEFT;
+                        break;
+                    case SDL_SCANCODE_W:
+                        snake.dir = UP;
+                        break;
+                    case SDL_SCANCODE_S:
+                        snake.dir = DOWN;
+                        break;
+                    default :
+                        break;
+                }
+                break;
+            }
+            default:
+            {
+                // SDL_Log("Unhandled Event!");
+                break;
+            }
+        }
+    }
+}
+
 void    make_draw_command(sdl_state &state, Board &board, Snake &snake){
 
     sdl_draw_background(state);
     sdl_draw_walls(state);
 
     sdl_draw_board_objects(state, board);
-    // sdl draw entire board
     sdl_draw_grid(state);
 
         

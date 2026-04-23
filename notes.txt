@@ -1,10 +1,14 @@
 TASK 📝
--ajouter la direction prise par le snake a chaque step
+-fix : print terminal de up qui est inverse et left aussi
+-modifier le programme pour qu'il soit facilement lance avec ou sans visuels
+-ajouter derniere direction avant de mourir 
+-ajouter le W dans la vision du terminal
 -setting add step-by-step mode (ex -step, -step=true) (OBLIGATOIRE)
+
 -REWARD example :
-.nothing = -2
-.red apple = -20
-.death = -1000
+.nothing = -1
+.red apple = -10
+.death = -100
 .green apple = +50
 .end = +1000
 .not known case = +1 (pour pousser a l'exploration)

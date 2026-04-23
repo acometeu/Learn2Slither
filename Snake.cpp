@@ -245,3 +245,13 @@ t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_co
     }
     return(body);
 }
+
+int Snake::update_position_and_vision(void){
+
+    if (move(dir))
+        return (1);
+    print_dir();
+    update_vision();
+    print_vision();
+    return(0);
+}

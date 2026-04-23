@@ -39,20 +39,27 @@ struct sdl_state
 
     // game time
     uint64_t    prev_time;
+    uint64_t    now_time;
+    bool        running;
 
     // game objects
     sdl_pixel   pixel;
     std::vector< std::array<SDL_FPoint, 2> >    grid;
     std::vector<SDL_FRect>  walls;
+
+    // event
+    SDL_Event   event;
 };
 
 
 // Visual function declarations
-int     run_SDL(Board &board, Snake &snake, MyArgs args);
+int     run_SDL(Board &board, Snake &snake, MyArgs &args);
 int     initialize(sdl_state &state);
 void    initialize_objects(Board board, sdl_state &state);
 std::vector<SDL_FRect>  initialize_walls(Board &board, sdl_state &state);
 std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_state &state);
+int    sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args);
+void    sdl_handle_event(Snake &snake, sdl_state &state);
 void    make_draw_command(sdl_state &state, Board &board, Snake &snake);
 void    cleanup(sdl_state &state);
 void    sdl_draw_background(sdl_state &state);
