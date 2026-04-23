@@ -1,7 +1,4 @@
 TASK 📝
--fix : print terminal de up qui est inverse et left aussi
--modifier le programme pour qu'il soit facilement lance avec ou sans visuels
--ajouter derniere direction avant de mourir 
 -ajouter le W dans la vision du terminal
 -setting add step-by-step mode (ex -step, -step=true) (OBLIGATOIRE)
 
