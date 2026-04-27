@@ -1,4 +1,5 @@
 #include "include/visuals.hpp"
+#include "include/Agent.hpp"
 
 
 int game_loop(Board &board, Snake &snake, MyArgs &args){
@@ -6,10 +7,19 @@ int game_loop(Board &board, Snake &snake, MyArgs &args){
     snake.update_vision();
     snake.print_vision();
 
+    Agent   agent;
+
     if (args.visual)
     {
         if (run_SDL(board, snake, args))
             return (1);
+
+        //testsuppr
+        // for (int i = 0; i < board.empty_cells.size(); i++)
+        // {
+        //     std::cout << board.empty_cells[i].second << "," << board.empty_cells[i].first << "; ";
+        // }
+        // std::cout << std::endl << "size = " << board.empty_cells.size() << std::endl;
     }
     else
     {
@@ -37,12 +47,6 @@ int main(int argc, char* argv[]) {
 
     if (game_loop(board, snake, args))
         return (1);
-
-    // if (args.visual)
-    // {
-    //     if (run_SDL(board, snake, args))
-    //         return (1);
-    // }
 
     return 0;
 }

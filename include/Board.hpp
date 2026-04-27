@@ -10,7 +10,7 @@
 #define WALL 'W'
 #define GREEN_APPLE 'G'
 #define RED_APPLE 'R'
-#define NAN 'N'
+#define NAN_SPACE 'N'
 
 
 class Board
@@ -25,9 +25,10 @@ public:
 
 
     // values
-    std::vector< std::vector<char> > map;
+    std::vector<std::string> map;
     int green_apple;
     int red_apple;
+    std::unordered_set<int>   empty_cells;
 
 
     // functions
@@ -36,6 +37,8 @@ public:
     void    set_map_coor(t_coor &coor, char object);
     char    get_map_char(t_coor &coor);
     int     spawn_object(char object);
+    t_coor  get_random_empty_cell(void);
+
 
 
 private:
@@ -44,8 +47,10 @@ private:
 
     // functions
     void    inizialize_board();
-    void    inizialize_fruits();
+    void    initialize_empty_cells();
+    int     inizialize_fruits();
     void    print_wall_line(void);
+
 
 
 

@@ -8,15 +8,20 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args){
         return(1);
     initialize_objects(board, state);
     
-    while (state.running)
-    {
-        sdl_handle_event(snake, state);
-        if (sdl_update_snake_position(snake, state, args))
-            return (0);
-        make_draw_command(state, board, snake);
-        // swap buffers and present
-        SDL_RenderPresent(state.renderer);
-    }
+    // for (int i = 0; i < args.sessions; i++)
+    // {
+        while (state.running)
+        {
+            sdl_handle_event(snake, state);
+            if (sdl_update_snake_position(snake, state, args))
+                break;
+            make_draw_command(state, board, snake);
+            // swap buffers and present
+            SDL_RenderPresent(state.renderer);
+        }
+
+    // }
+
     cleanup(state);
     return(0);
 }

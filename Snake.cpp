@@ -4,7 +4,9 @@ Snake::Snake(Board  &board, int &snake_size) : board(board){
     // generate a pseudo random number generator
     srand(time(NULL));
     dir = rand() % 4;
-    initialize_head(board, snake_size);
+    if (initialize_head(board, snake_size))
+        throw std::invalid_argument("Not enough space for Snake on the Board");
+    update_vision();
 }
 
 Snake::~Snake(){
@@ -12,23 +14,30 @@ Snake::~Snake(){
 }
 
 int Snake::initialize_head(Board &board, int snake_size){
-    t_coor  head;
+
+    //save impossible position for snake
+    std::vector<t_coor> impossible_position;
+
     while (true)
     {
-        head.x = rand() % (board.get_board_size());
-        head.y = rand() % (board.get_board_size());
+        if (!board.empty_cells.size())
+            return(1);
 
-        if (board.map_coor_is_empty(head) == false)
-            continue;
+        t_coor  head = board.get_random_empty_cell();
 
         _position.push_back(head);
-        board.set_map_coor(head, 'H');
+        board.set_map_coor(head, HEAD);
+        
         if (initialize_body(board, snake_size, 1, head))
         {
-            _position.pop_back();
-            board.set_map_coor(head, '0');
+            impossible_position.push_back(head);
+            board.set_map_coor(head, EMPTY);
             continue;
         }
+
+        //return impossible_position in empty_cells
+        for (int i = 0; i < impossible_position.size(); i++)
+            board.empty_cells.insert(impossible_position[i].y * board.get_board_size() + impossible_position[i].x);
         break;
     }
     
@@ -43,20 +52,20 @@ int Snake::initialize_body(Board &board, int snake_size, int actual_size, t_coor
     std::vector<int>    all_directions = {UP, LEFT, RIGHT, DOWN};
     while (all_directions.size())
     {
-        int direction = choose_random_direction_initialisation(all_directions);
+        int direction = get_random_direction(all_directions);
         all_directions.pop_back();
 
         t_coor  new_body = get_position_after_movement(last_body, direction, new_body);
-        if (board.get_map_char(new_body) != '0')
+        if (board.get_map_char(new_body) != EMPTY)
             continue;
         
         //  body initialisation success
         _position.push_back(new_body);
-        board.set_map_coor(new_body, 'S');
+        board.set_map_coor(new_body, SNAKE);
         if (initialize_body(board, snake_size, actual_size + 1, new_body))
         {
             _position.pop_back();
-            board.set_map_coor(new_body, '0');
+            board.set_map_coor(new_body, EMPTY);
             if (all_directions.size())
                 continue;
             return(1);
@@ -66,13 +75,11 @@ int Snake::initialize_body(Board &board, int snake_size, int actual_size, t_coor
     return(1);
 }
 
-int Snake::choose_random_direction_initialisation(std::vector<int> &all_directions){
+int Snake::get_random_direction(std::vector<int> &all_directions){
 
         size_t random_index = rand() % all_directions.size();
-        //  swap random_index with last element if random_index is not last element
-        if (random_index != all_directions.size() - 1)
-            std::swap(all_directions[random_index], all_directions[all_directions.size() - 1]);
-        return (all_directions[all_directions.size() - 1]);
+        std::swap(all_directions[random_index], all_directions.back());
+        return (all_directions.back());
 }
 
 t_coor  Snake::get_head_position(void){
@@ -109,7 +116,7 @@ void    Snake::update_vision(void){
     vision[UP].clear();
     vision[DOWN].clear();
 
-    t_coor  head;
+    t_coor  head(0, 0);
     head.x = _position[0].x;
     head.y = _position[0].y;
 
@@ -130,7 +137,7 @@ void    Snake::update_vision(void){
 
 void    Snake::print_vision(void){
 
-    t_coor  head;
+    t_coor  head(0, 0);
     head.x = _position[0].x;
     head.y = _position[0].y;
 
@@ -169,46 +176,45 @@ void    Snake::print_vision(void){
 int Snake::move(int direction){
 
     t_coor new_head = get_position_after_movement(_position[0], direction, new_head);
-    t_coor last_body = _position[_position.size() - 1];
-
-    // move snake and update board on last body part
-    _position.emplace_front(new_head);
-    board.set_map_coor(_position[_position.size() - 1], EMPTY);
-    _position.pop_back();
     
-    // analyse where head is and update board
     switch (board.get_map_char(new_head))
     {
     case EMPTY :
-        board.set_map_coor(_position[0], HEAD);
-        if (_position.size() > 1)
-            board.set_map_coor(_position[1], SNAKE);
-        break;
-    case GREEN_APPLE :
-        _position.emplace_back(last_body);
-        board.set_map_coor(_position[0], HEAD);
+    {
+        board.set_map_coor(new_head, HEAD);
+        _position.emplace_front(new_head);
         board.set_map_coor(_position[1], SNAKE);
-        board.set_map_coor(_position[_position.size() - 1], SNAKE);
+        board.set_map_coor(_position.back(), EMPTY);
+        _position.pop_back();
+        break;
+    }
+    case GREEN_APPLE :
+    {
+        board.set_map_coor(new_head, HEAD);
+        _position.emplace_front(new_head);
+        board.set_map_coor(_position[1], SNAKE);
         if (board.spawn_object(GREEN_APPLE))
         {
             std::cout << "FINISH" << std::endl;
             return (1);
         }
         break;
+    }
     case RED_APPLE :
-        if (_position.size() <= 1)
-        {
-            std::cout << "RED APPLE DEAD" << std::endl;
-            return(1);
-        }
-        board.set_map_coor(_position[_position.size() - 1], EMPTY);
+    {
+        board.set_map_coor(new_head, HEAD);
+        _position.emplace_front(new_head);
+        board.set_map_coor(_position[1], SNAKE);
+        board.set_map_coor(_position.back(), EMPTY);
         _position.pop_back();
-        board.set_map_coor(_position[0], HEAD);
-        if (_position.size() > 1)
-            board.set_map_coor(_position[1], SNAKE);
+        board.set_map_coor(_position.back(), EMPTY);
+        _position.pop_back();
+        if (!_position.size())
+            return(1);
         if (board.spawn_object(RED_APPLE))
             return (1);
         break;
+    }
     case WALL :
     case SNAKE :
     case HEAD :
@@ -254,4 +260,9 @@ int Snake::update_position_and_vision(void){
     update_vision();
     print_vision();
     return(0);
+}
+
+void    Snake::clear(void){
+
+    _position.clear();
 }

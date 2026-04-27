@@ -1,6 +1,7 @@
 TASK 📝
 -ajouter le W dans la vision du terminal
 -setting add step-by-step mode (ex -step, -step=true) (OBLIGATOIRE)
+-faire spawn le snake avant les fruits car c'est plus simple
 
 -REWARD example :
 .nothing = -1
@@ -14,6 +15,16 @@ TASK 📝
 
 
 little things ❌
+
+
+-tester diff entre empty_cells dans:
+    .std::vector mais ce sera longt de trouver des coors precisent (operation tres courante)
+    .std::unordered_set mais ce sera longt de trouver des positions random (operation rare)
+    .std::vector + std::unorder_map : plus de place mais pas d'operations chers mais a faire 2 foix (a faire 1 fois pour chaque)
+
+-checker si c'est worth de changer std::unordered_map<int> en std::unordered_map<t_coor> avec special hash_map
+
+-board.spawn_object est pas totalement random car si il va vers la droite si la case n'est pas disponible jusqu'a que yen ait une de dispo alors la premiere case disponible vers la droite aura plus de chance de spawn l'objet
 
 -accept map provided setting 
 
@@ -38,6 +49,8 @@ WWWWW       WWWWW
 -remplacer par des textures si envie
 
 -gerer quand ya plus de places sur le terrain
+
+-voir si replace t_coor avec std::pair<int, int>
 
 
 

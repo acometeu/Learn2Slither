@@ -8,6 +8,8 @@
 #include <array>
 #include <deque>
 #include <set>
+#include <unordered_set>
+#include <cmath>
 #include "argparse/argparse.hpp"
 
 
@@ -15,6 +17,8 @@ typedef struct s_coor
 {
     int x;
     int y;
+
+    s_coor(int y, int x) : y(y), x(x){}
 
     friend std::ostream& operator<<(std::ostream &cout, const s_coor &coor)
     {
@@ -46,7 +50,7 @@ struct MyArgs : public argparse::Args {
     int &snake_size         = kwarg("s,snake_size", "Determine the initial size of the snake").set_default(3);
     int &board_size         = kwarg("b,board_size", "Determine the board size without the walls").set_default(10);
     int &snake_speed         = kwarg("snake_speed", "Determine the speed of the snake").set_default(500);
-    int &sessions   = kwarg("session", "Trigger the training mode and determine the number of session for training").set_default(10);
+    int &sessions   = kwarg("session", "Trigger the training mode and determine the number of session for training").set_default(1);
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
     bool &visual           = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
 };
