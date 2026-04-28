@@ -27,6 +27,16 @@ typedef struct s_coor
     }
 }   t_coor;
 
+typedef struct s_statistics
+{
+    unsigned long int turns;
+    unsigned long int sessions;
+    unsigned int total_length;
+    unsigned int max_length;
+
+    s_statistics() : turns(0), sessions(0), total_length(0), max_length(0){};
+}   t_statistics;
+
 typedef enum
 {
     LEFT,

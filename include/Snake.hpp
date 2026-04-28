@@ -30,17 +30,24 @@ public:
     int     move(int direction);
     int     update_position_and_vision();
     int     reset(void);
+    void    stats_add_session(void);
+    void    display_stats(void);
+
 
 
 private:
 
+    // variables
+    t_statistics    _stats;
 
     //private func
-    int initialize_snake();
-    int initialize_body(int actual_size, t_coor &last_body_part);
-    int get_random_direction(std::vector<int> &all_directions);
+    int     initialize_snake();
+    int     initialize_body(int actual_size, t_coor &last_body_part);
+    int     get_random_direction(std::vector<int> &all_directions);
     t_coor  get_position_after_movement(t_coor last_body, int direction, t_coor &body);
-
+    void    stats_add_turn(void);
+    void    stats_add_length(int new_size);
+    void    stats_reduce_length(void);
 
 };
 

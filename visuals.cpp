@@ -10,8 +10,6 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args){
     
     for (int i = 0; i < args.sessions; i++)
     {
-        board.reset();
-        snake.reset();
         while (state.running)
         {
             sdl_handle_event(snake, state);
@@ -21,10 +19,15 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args){
             // swap buffers and present
             SDL_RenderPresent(state.renderer);
         }
-
+        snake.stats_add_session();
+        if (i < args.sessions - 1)
+        {
+            board.reset();
+            snake.reset();
+        }
     }
-
     cleanup(state);
+    snake.display_stats();
     return(0);
 }
 

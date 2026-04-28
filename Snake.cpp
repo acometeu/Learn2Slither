@@ -1,6 +1,6 @@
 #include "include/Snake.hpp"
 
-Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size){
+Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size), _stats(t_statistics()){
     // generate a pseudo random number generator
     srand(time(NULL));
     dir = rand() % 4;
@@ -27,11 +27,14 @@ int Snake::initialize_snake(){
 
         _position.push_back(head);
         board.set_map_coor(head, HEAD);
+        stats_add_length(_position.size());
         
         if (initialize_body(1, head))
         {
-            impossible_position.push_back(head);
+            _position.pop_back();
             board.set_map_coor(head, EMPTY);
+            stats_reduce_length();
+            impossible_position.push_back(head);
             continue;
         }
 
@@ -62,10 +65,12 @@ int Snake::initialize_body(int actual_size, t_coor &last_body){
         //  body initialisation success
         _position.push_back(new_body);
         board.set_map_coor(new_body, SNAKE);
+        stats_add_length(_position.size());
         if (initialize_body(actual_size + 1, new_body))
         {
             _position.pop_back();
             board.set_map_coor(new_body, EMPTY);
+            stats_reduce_length();
             if (all_directions.size())
                 continue;
             return(1);
@@ -175,51 +180,52 @@ void    Snake::print_vision(void){
 
 int Snake::move(int direction){
 
-    t_coor new_head = get_position_after_movement(_position[0], direction, new_head);
+    stats_add_turn();
+    t_coor new_head = get_position_after_movement(_position.front(), direction, new_head);
+    t_coor last_body = _position.back();
+
+    board.set_map_coor(_position.front(), SNAKE);
+    board.set_map_coor(_position.back(), EMPTY);
+    _position.pop_back();
     
     switch (board.get_map_char(new_head))
     {
-    case EMPTY :
-    {
-        board.set_map_coor(new_head, HEAD);
-        _position.emplace_front(new_head);
-        board.set_map_coor(_position[1], SNAKE);
-        board.set_map_coor(_position.back(), EMPTY);
-        _position.pop_back();
-        break;
-    }
-    case GREEN_APPLE :
-    {
-        board.set_map_coor(new_head, HEAD);
-        _position.emplace_front(new_head);
-        board.set_map_coor(_position[1], SNAKE);
-        if (board.spawn_object(GREEN_APPLE))
+        case EMPTY :
         {
-            std::cout << "FINISH" << std::endl;
-            return (1);
+            board.set_map_coor(new_head, HEAD);
+            _position.push_front(new_head);
+            break;
         }
-        break;
-    }
-    case RED_APPLE :
-    {
-        board.set_map_coor(new_head, HEAD);
-        _position.emplace_front(new_head);
-        board.set_map_coor(_position[1], SNAKE);
-        board.set_map_coor(_position.back(), EMPTY);
-        _position.pop_back();
-        board.set_map_coor(_position.back(), EMPTY);
-        _position.pop_back();
-        if (!_position.size())
-            return(1);
-        if (board.spawn_object(RED_APPLE))
+        case GREEN_APPLE :
+        {
+            stats_add_length(_position.size() + 1);
+            board.set_map_coor(new_head, HEAD);
+            _position.push_front(new_head);
+            board.set_map_coor(last_body, SNAKE);
+            _position.push_back(last_body);
+            if (board.spawn_object(GREEN_APPLE))
+            {
+                std::cout << "FINISH" << std::endl;
+                return (1);
+            }
+            break;
+        }
+        case RED_APPLE :
+        {
+            stats_reduce_length();
+            board.set_map_coor(new_head, HEAD);
+            _position.push_front(new_head);
+            board.set_map_coor(_position.back(), EMPTY);
+            _position.pop_back();
+            if (!_position.size() || board.spawn_object(RED_APPLE))
+                return(1);
+            break;
+        }
+        case WALL :
+        case SNAKE :
+        case HEAD :
+        default :
             return (1);
-        break;
-    }
-    case WALL :
-    case SNAKE :
-    case HEAD :
-    default :
-        return (1);
     }
     return (0);
 }
@@ -268,5 +274,42 @@ int Snake::reset(){
     if (initialize_snake())
         return(1);
     update_vision();
+
     return(0);
+}
+
+void    Snake::stats_add_turn(void){
+
+    _stats.turns++;
+}
+
+void    Snake::stats_add_session(void){
+
+    _stats.sessions++;
+}
+
+void    Snake::stats_add_length(int new_size){
+    //take the new snake size
+
+    //testsuppr
+    std::cout << "adding, size : " << _position.size() << std::endl;
+
+    _stats.total_length++;
+    if (new_size > _stats.max_length)
+        _stats.max_length = new_size;
+}
+
+void    Snake::stats_reduce_length(void){
+
+    _stats.total_length--;
+}
+
+void    Snake::display_stats(void){
+
+    std::cout << "--- Snake Stats ---" << std::endl;
+    std::cout << "Sessions : " << _stats.sessions << std::endl;
+    std::cout << "Turns : " << _stats.turns << std::endl;
+    std::cout << "Average length : " << float(_stats.total_length) / float(_stats.sessions) << std::endl;
+    std::cout << "Max length : " << _stats.max_length << std::endl;
+    std::cout << "total length : " << _stats.total_length << std::endl;
 }
