@@ -54,10 +54,7 @@ void    Board::initialize_empty_cells(){
     for (int y = 0; y < map.size(); y++)
     {
         for (int x = 0; x < map[y].size(); x++)
-        {
-            // t_coor  empty_cell(y, x);
             empty_cells.insert(y * _board_size + x);
-        }
     }
 }
 
@@ -66,7 +63,6 @@ int Board::inizialize_fruits(){
 
     srand(time(NULL));
 
-    t_coor  apple(0, 0);
     for (size_t i = 0; i < green_apple; i++)
     {
         if (spawn_object(GREEN_APPLE))
@@ -121,4 +117,14 @@ t_coor  Board::get_random_empty_cell(void){
         it++;
     t_coor empty_cell(*it / _board_size, *it % _board_size);
     return(empty_cell);
+}
+
+int     Board::reset(void){
+    map.clear();
+    empty_cells.clear();
+    inizialize_board();
+    initialize_empty_cells();
+    if (inizialize_fruits())
+        return(1);
+    return(0);
 }

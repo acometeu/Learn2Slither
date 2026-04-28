@@ -16,6 +16,7 @@ public:
     ~Snake();
 
     // variables
+    int     initial_size;
     Board   &board;
     std::deque<t_coor>   _position;
     std::array<std::string, 4>  vision;
@@ -28,15 +29,15 @@ public:
     void    print_vision(void);
     int     move(int direction);
     int     update_position_and_vision();
-    void    clear();
+    int     reset(void);
 
 
 private:
 
 
     //private func
-    int initialize_head(Board &board, int snake_size);
-    int initialize_body(Board &board, int snake_size, int actual_size, t_coor &last_body_part);
+    int initialize_snake();
+    int initialize_body(int actual_size, t_coor &last_body_part);
     int get_random_direction(std::vector<int> &all_directions);
     t_coor  get_position_after_movement(t_coor last_body, int direction, t_coor &body);
 

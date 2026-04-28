@@ -1,10 +1,10 @@
 #include "include/Snake.hpp"
 
-Snake::Snake(Board  &board, int &snake_size) : board(board){
+Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size){
     // generate a pseudo random number generator
     srand(time(NULL));
     dir = rand() % 4;
-    if (initialize_head(board, snake_size))
+    if (initialize_snake())
         throw std::invalid_argument("Not enough space for Snake on the Board");
     update_vision();
 }
@@ -13,7 +13,7 @@ Snake::~Snake(){
     return;    
 }
 
-int Snake::initialize_head(Board &board, int snake_size){
+int Snake::initialize_snake(){
 
     //save impossible position for snake
     std::vector<t_coor> impossible_position;
@@ -28,7 +28,7 @@ int Snake::initialize_head(Board &board, int snake_size){
         _position.push_back(head);
         board.set_map_coor(head, HEAD);
         
-        if (initialize_body(board, snake_size, 1, head))
+        if (initialize_body(1, head))
         {
             impossible_position.push_back(head);
             board.set_map_coor(head, EMPTY);
@@ -44,9 +44,9 @@ int Snake::initialize_head(Board &board, int snake_size){
     return (0);
 }
 
-int Snake::initialize_body(Board &board, int snake_size, int actual_size, t_coor &last_body){
+int Snake::initialize_body(int actual_size, t_coor &last_body){
 
-    if (actual_size >= snake_size)
+    if (actual_size >= initial_size)
         return(0);
 
     std::vector<int>    all_directions = {UP, LEFT, RIGHT, DOWN};
@@ -62,7 +62,7 @@ int Snake::initialize_body(Board &board, int snake_size, int actual_size, t_coor
         //  body initialisation success
         _position.push_back(new_body);
         board.set_map_coor(new_body, SNAKE);
-        if (initialize_body(board, snake_size, actual_size + 1, new_body))
+        if (initialize_body(actual_size + 1, new_body))
         {
             _position.pop_back();
             board.set_map_coor(new_body, EMPTY);
@@ -262,7 +262,11 @@ int Snake::update_position_and_vision(void){
     return(0);
 }
 
-void    Snake::clear(void){
+int Snake::reset(){
 
     _position.clear();
+    if (initialize_snake())
+        return(1);
+    update_vision();
+    return(0);
 }

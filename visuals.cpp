@@ -8,8 +8,10 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args){
         return(1);
     initialize_objects(board, state);
     
-    // for (int i = 0; i < args.sessions; i++)
-    // {
+    for (int i = 0; i < args.sessions; i++)
+    {
+        board.reset();
+        snake.reset();
         while (state.running)
         {
             sdl_handle_event(snake, state);
@@ -20,7 +22,7 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args){
             SDL_RenderPresent(state.renderer);
         }
 
-    // }
+    }
 
     cleanup(state);
     return(0);

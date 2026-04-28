@@ -13,13 +13,6 @@ int game_loop(Board &board, Snake &snake, MyArgs &args){
     {
         if (run_SDL(board, snake, args))
             return (1);
-
-        //testsuppr
-        // for (int i = 0; i < board.empty_cells.size(); i++)
-        // {
-        //     std::cout << board.empty_cells[i].second << "," << board.empty_cells[i].first << "; ";
-        // }
-        // std::cout << std::endl << "size = " << board.empty_cells.size() << std::endl;
     }
     else
     {
@@ -43,7 +36,6 @@ int main(int argc, char* argv[]) {
     Board board(args.board_size);
     Snake snake(board, args.snake_size);
     board.print_board();
-    snake.print_vision();
 
     if (game_loop(board, snake, args))
         return (1);

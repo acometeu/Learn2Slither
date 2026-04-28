@@ -38,6 +38,7 @@ public:
     char    get_map_char(t_coor &coor);
     int     spawn_object(char object);
     t_coor  get_random_empty_cell(void);
+    int     reset(void);
 
 
 
