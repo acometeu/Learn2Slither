@@ -134,19 +134,33 @@ int    sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args){
     // handle step by step mode if activated
     if (args.step_by_step_mode)
     {
-        if (state.new_input)
-        {
-            state.new_input = false;
-            if (snake.update_position_and_vision())
-                return(1);
-        }
-        return(0);
+        if (sdl_update_snake_position_step_by_step_mode(snake, state))
+            return(1);
     }
+    else
+    {
+        if (sdl_update_snake_position_by_time(snake, state, args))
+            return(1);
+    }
+    return(0);
+}
+
+int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state){
+
+    if (state.new_input)
+    {
+        state.new_input = false;
+        if (snake.update_position_and_vision())
+            return(1);
+    }
+    return(0);
+}
+
+int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs &args){
 
     state.now_time = SDL_GetTicks();
     float       delta_time = state.now_time - state.prev_time;
     
-    // update snake pos
     if (delta_time >= args.snake_speed)
     {
         if (snake.update_position_and_vision())
