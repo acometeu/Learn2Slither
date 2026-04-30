@@ -9,7 +9,7 @@ int game_loop(Board &board, Snake &snake, MyArgs &args){
 
     Agent   agent;
 
-    if (args.visual)
+    if (args.visual_mode)
     {
         if (run_SDL(board, snake, args))
             return (1);

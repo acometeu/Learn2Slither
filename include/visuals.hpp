@@ -49,6 +49,9 @@ struct sdl_state
 
     // event
     SDL_Event   event;
+
+    // Step by step
+    bool    new_input;
 };
 
 

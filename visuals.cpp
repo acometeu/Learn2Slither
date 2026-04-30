@@ -68,6 +68,7 @@ int     initialize(sdl_state &state){
     state.prev_time = SDL_GetTicks();
     state.event = { 0 };
     state.running = true;
+    state.new_input = false;
 
     return(0);
 }
@@ -130,6 +131,18 @@ std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_st
 
 int    sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args){
 
+    // handle step by step mode if activated
+    if (args.step_by_step_mode)
+    {
+        if (state.new_input)
+        {
+            state.new_input = false;
+            if (snake.update_position_and_vision())
+                return(1);
+        }
+        return(0);
+    }
+
     state.now_time = SDL_GetTicks();
     float       delta_time = state.now_time - state.prev_time;
     
@@ -171,15 +184,19 @@ void sdl_handle_event(Snake &snake, sdl_state &state){
                     // handle movements
                     case SDL_SCANCODE_D:
                         snake.dir = RIGHT;
+                        state.new_input = true;
                         break;
                     case SDL_SCANCODE_A:
                         snake.dir = LEFT;
+                        state.new_input = true;
                         break;
                     case SDL_SCANCODE_W:
                         snake.dir = UP;
+                        state.new_input = true;
                         break;
                     case SDL_SCANCODE_S:
                         snake.dir = DOWN;
+                        state.new_input = true;
                         break;
                     default :
                         break;

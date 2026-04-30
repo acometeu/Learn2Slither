@@ -62,7 +62,8 @@ struct MyArgs : public argparse::Args {
     int &snake_speed         = kwarg("snake_speed", "Determine the speed of the snake").set_default(500);
     int &sessions   = kwarg("session", "Trigger the training mode and determine the number of session for training").set_default(1);
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
-    bool &visual           = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
+    bool &visual_mode           = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
+    bool &step_by_step_mode           = flag("step", "A flag to toggle step by step mode, only available in visual mode");
 };
 
 

@@ -198,11 +198,11 @@ int Snake::move(int direction){
         }
         case GREEN_APPLE :
         {
-            stats_add_length(_position.size() + 1);
             board.set_map_coor(new_head, HEAD);
             _position.push_front(new_head);
             board.set_map_coor(last_body, SNAKE);
             _position.push_back(last_body);
+            stats_add_length(_position.size());
             if (board.spawn_object(GREEN_APPLE))
             {
                 std::cout << "FINISH" << std::endl;
@@ -212,11 +212,11 @@ int Snake::move(int direction){
         }
         case RED_APPLE :
         {
-            stats_reduce_length();
             board.set_map_coor(new_head, HEAD);
             _position.push_front(new_head);
             board.set_map_coor(_position.back(), EMPTY);
             _position.pop_back();
+            stats_reduce_length();
             if (!_position.size() || board.spawn_object(RED_APPLE))
                 return(1);
             break;
@@ -290,9 +290,6 @@ void    Snake::stats_add_session(void){
 
 void    Snake::stats_add_length(int new_size){
     //take the new snake size
-
-    //testsuppr
-    std::cout << "adding, size : " << _position.size() << std::endl;
 
     _stats.total_length++;
     if (new_size > _stats.max_length)

@@ -1,6 +1,7 @@
 TASK 📝
--ajouter le W dans la vision du terminal
 -setting add step-by-step mode (ex -step, -step=true) (OBLIGATOIRE)
+-commencer l'agent quoi 
+-ajouter le W dans la vision du terminal
 -faire spawn le snake avant les fruits car c'est plus simple
 
 -REWARD example :
