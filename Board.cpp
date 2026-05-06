@@ -61,8 +61,6 @@ void    Board::initialize_empty_cells(){
 
 int Board::inizialize_fruits(){
 
-    srand(time(NULL));
-
     for (size_t i = 0; i < green_apple; i++)
     {
         if (spawn_object(GREEN_APPLE))

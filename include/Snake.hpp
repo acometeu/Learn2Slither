@@ -4,7 +4,6 @@
 #include "utils.hpp"
 #include "Board.hpp"
 
-class   Board; 
 
 #define ABSCISCA 0
 #define ORDINATE 1
@@ -32,6 +31,7 @@ public:
     int     reset(void);
     void    stats_add_session(void);
     void    display_stats(void);
+    const std::array<std::string, 4>  &get_snake_vision() const;
 
 
 

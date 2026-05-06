@@ -9,9 +9,19 @@
 #include <deque>
 #include <set>
 #include <unordered_set>
+#include <unordered_map>
 #include <cmath>
+#include <algorithm>
+#include <random>
+#include <limits>
 #include "argparse/argparse.hpp"
 
+#define EMPTY_REWARD -1
+#define RED_APPLE_REWARD -10
+#define DEATH_REWARD -100
+#define GREEN_APPLE_REWARD +50
+#define END_REWARD +1000
+#define NO_REWARD 0
 
 typedef struct s_coor
 {
@@ -59,16 +69,22 @@ struct MyArgs : public argparse::Args {
     // float &alpha           = kwarg("a,alpha", "An optional float value").set_default(0.5f);
     int &snake_size         = kwarg("s,snake_size", "Determine the initial size of the snake").set_default(3);
     int &board_size         = kwarg("b,board_size", "Determine the board size without the walls").set_default(10);
-    int &snake_speed         = kwarg("snake_speed", "Determine the speed of the snake").set_default(500);
-    int &sessions   = kwarg("session", "Trigger the training mode and determine the number of session for training").set_default(1);
+    int &snake_speed        = kwarg("snake_speed", "Determine the speed of the snake").set_default(500);
+    int &sessions           = kwarg("session", "Trigger the training mode and determine the number of session for training").set_default(1);
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
-    bool &visual_mode           = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
-    bool &step_by_step_mode           = flag("step", "A flag to toggle step by step mode, only available in visual mode");
+    bool &visual_mode       = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
+    bool &step_by_step_mode = flag("step", "A flag to toggle step by step mode, only available in visual mode");
+    float   &epsilon        = kwarg("e,epsilon", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.1f);
+    float   &alpha        = kwarg("a,alpha", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.5f);
+    float   &gamma        = kwarg("g,gamma", "Determine the gamma of the agent future reward imoportance for the q_learning").set_default(0.3f);
+    std::string &import_path  = arg("import_path", "source path to import q_table values").set_default("");
+    std::string &export_path  = arg("export_path", "source path to export q_table values").set_default("");
+
 };
 
-
 void    print_vector(std::vector<char> &vector);
-
+int     get_random_int(int min, int max);
+float   get_random_float(int min, int max);
 
 
 #endif

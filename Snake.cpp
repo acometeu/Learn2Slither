@@ -1,8 +1,6 @@
 #include "include/Snake.hpp"
 
 Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size), _stats(t_statistics()){
-    // generate a pseudo random number generator
-    srand(time(NULL));
     dir = rand() % 4;
     if (initialize_snake())
         throw std::invalid_argument("Not enough space for Snake on the Board");
@@ -179,6 +177,7 @@ void    Snake::print_vision(void){
 }
 
 int Snake::move(int direction){
+    // return (instant reward)
 
     stats_add_turn();
     t_coor new_head = get_position_after_movement(_position.front(), direction, new_head);
@@ -194,7 +193,7 @@ int Snake::move(int direction){
         {
             board.set_map_coor(new_head, HEAD);
             _position.push_front(new_head);
-            break;
+            return (EMPTY_REWARD);
         }
         case GREEN_APPLE :
         {
@@ -206,9 +205,9 @@ int Snake::move(int direction){
             if (board.spawn_object(GREEN_APPLE))
             {
                 std::cout << "FINISH" << std::endl;
-                return (1);
+                return (END_REWARD);
             }
-            break;
+            return (GREEN_APPLE_REWARD);
         }
         case RED_APPLE :
         {
@@ -218,16 +217,17 @@ int Snake::move(int direction){
             _position.pop_back();
             stats_reduce_length();
             if (!_position.size() || board.spawn_object(RED_APPLE))
-                return(1);
-            break;
+                return(DEATH_REWARD);
+            return(RED_APPLE_REWARD);
         }
         case WALL :
         case SNAKE :
         case HEAD :
         default :
-            return (1);
+            return (DEATH_REWARD);
     }
-    return (0);
+    std::cout << "AIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIE" << std::endl;
+    return (EMPTY_REWARD);
 }
 
 t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_coor &body){
@@ -261,11 +261,12 @@ t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_co
 int Snake::update_position_and_vision(void){
 
     print_dir();
-    if (move(dir))
-        return (1);
+    int reward = move(dir);
+    if (reward == DEATH_REWARD || reward == END_REWARD)
+        return(reward);
     update_vision();
     print_vision();
-    return(0);
+    return(reward);
 }
 
 int Snake::reset(){
@@ -309,4 +310,9 @@ void    Snake::display_stats(void){
     std::cout << "Average length : " << float(_stats.total_length) / float(_stats.sessions) << std::endl;
     std::cout << "Max length : " << _stats.max_length << std::endl;
     std::cout << "total length : " << _stats.total_length << std::endl;
+}
+
+const std::array<std::string, 4>  &Snake::get_snake_vision() const{
+
+    return(vision);
 }

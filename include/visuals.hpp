@@ -7,6 +7,7 @@
 #include <vector>
 #include "Snake.hpp"
 #include "utils.hpp"
+#include "Agent.hpp"
 
 
 #define WINDOW_WIDTH 1400
@@ -56,14 +57,14 @@ struct sdl_state
 
 
 // Visual function declarations
-int     run_SDL(Board &board, Snake &snake, MyArgs &args);
+int     run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent);
 int     initialize(sdl_state &state);
 void    initialize_objects(Board board, sdl_state &state);
 std::vector<SDL_FRect>  initialize_walls(Board &board, sdl_state &state);
 std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_state &state);
-int     sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args);
+int     sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args, Agent &agent);
 int     sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state);
-int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs &args);
+int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs &args, Agent &agent);
 void    sdl_handle_event(Snake &snake, sdl_state &state);
 void    make_draw_command(sdl_state &state, Board &board, Snake &snake);
 void    cleanup(sdl_state &state);
