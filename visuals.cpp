@@ -10,6 +10,7 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     
     for (int i = 0; i < args.sessions; i++)
     {
+        std::cout << "session " << i << std::endl;
         while (state.running)
         {
             sdl_handle_event(snake, state);
@@ -31,16 +32,22 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
         }
     }
     cleanup(state);
+
     snake.display_stats();
-    // testsuppr display q_table
-    for (auto it = agent.q_table.begin(); it != agent.q_table.end(); it++)
+    if (!args.export_path.empty())
     {
-        std::cout << (*it).first[LEFT] << "," << (*it).first[RIGHT] << "," << (*it).first[UP] << "," << (*it).first[DOWN] << std::endl;
-        std::cout << "LEFT = " << (*it).second[LEFT] << std::endl;
-        std::cout << "RIGHT = " << (*it).second[RIGHT] << std::endl;
-        std::cout << "UP = " << (*it).second[UP] << std::endl;
-        std::cout << "DOWN = " << (*it).second[DOWN] << std::endl;
+        if (agent.save_q_table_to_export_path())
+            return (1);
     }
+    // testsuppr display q_table
+    // for (auto it = agent.q_table.begin(); it != agent.q_table.end(); it++)
+    // {
+    //     std::cout << (*it).first[LEFT] << "," << (*it).first[RIGHT] << "," << (*it).first[UP] << "," << (*it).first[DOWN] << std::endl;
+    //     std::cout << "LEFT = " << (*it).second[LEFT] << std::endl;
+    //     std::cout << "RIGHT = " << (*it).second[RIGHT] << std::endl;
+    //     std::cout << "UP = " << (*it).second[UP] << std::endl;
+    //     std::cout << "DOWN = " << (*it).second[DOWN] << std::endl;
+    // }
     return(0);
 }
 
@@ -176,12 +183,13 @@ int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs
         
         int reward = snake.update_position_and_vision();
         std::cout << "reward = " << reward << std::endl;
+        agent.update_q_value(snake, reward, old_state, old_direction);
         if (reward == DEATH_REWARD || reward == END_REWARD)
             return(1);
         state.prev_time += args.snake_speed;
 
         // agent implementation
-        agent.update_q_value(snake, reward, old_state, old_direction);
+        // agent.update_q_value(snake, reward, old_state, old_direction);
         snake.dir = agent.choose_direction(snake);
 
     }

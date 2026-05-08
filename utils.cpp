@@ -22,3 +22,18 @@ float get_random_float(int min, int max){
     std::uniform_real_distribution<float> dist(min, max);
     return(dist(rng));
 }
+
+std::vector<std::string>    ft_split(std::string str, char delim){
+
+    std::vector<std::string>    table;
+    size_t  pos = 0;
+    size_t  end = str.find_first_of(delim);
+    while (end != std::string::npos)
+    {
+        table.push_back(str.substr(pos, end - pos));
+        pos = end + 1;
+        end = str.find_first_of(delim, pos);
+    }
+    table.push_back(str.substr(pos));
+    return (table);
+}

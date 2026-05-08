@@ -1,21 +1,138 @@
 #include "include/Agent.hpp"
 
 Agent::Agent(float epsilon, float alpha, float gamma): epsilon(epsilon), alpha(alpha), gamma(gamma){
+
     return;
 }
 
 Agent::~Agent(){
+
+    if (ofs.is_open())
+        ofs.close();
     return;
 }
 
-int     Agent::set_import_path(std::string import_path){
+int     Agent::set_import_path(const std::string &import_path){
 
-    
+    ifs.open(import_path);
+    if (!ifs.is_open())
+    {
+        std::cerr << "Failed opening import path : " << import_path << std::endl;
+        return(1);
+    }
+    std::string line;
+    while (std::getline(ifs, line))
+        parse_and_add_q_values(line);
+
+    return(0);
 }
 
-int     Agent::set_export_path(std::string export_path){
+void    Agent::parse_and_add_q_values(const std::string &line){
 
+    size_t delim = line.find_first_of(':');
+    if (delim == std::string::npos)
+        return;
+    std::array<std::string, 4>  key = parse_q_table_key(line.substr(0, delim));
+    std::array<float, 4>        values = parse_q_table_values(line.substr(delim + 1));
 
+    // for (int i = 0; i < values.size(); i++)
+    // {
+    //     std::cout << "values[" << i << "] = " << values[i] << std::endl;
+    // }
+
+    q_table[key] = values;
+    
+    // auto temp = q_table[key];
+    // for (int i = 0; i < temp.size(); i++)
+    // {
+    //     std::cout << "temp[" << i << "] = " << temp[i] << std::endl;
+    // }
+
+}
+
+std::array<std::string, 4> Agent::parse_q_table_key(const std::string &keys_line){
+
+    std::vector<std::string>    vision = ft_split(keys_line, ',');
+    std::array<std::string, 4>  key{};
+    for (int i = 0; i < vision.size(); i++)
+        key[i] = vision[i];
+    return(key);
+}
+
+std::array<float, 4>    Agent::parse_q_table_values(const std::string &values_line){
+
+    std::vector<std::string>    values_str = ft_split(values_line, ',');
+    std::array<float, 4>       values{};
+
+    for (int i = 0; i < values_str.size(); i++)
+    {
+        if (!values_str[i].size())
+            continue;
+        switch (values_str[i][0] - 48)
+        {
+        case LEFT:
+            values[LEFT] = std::stof(values_str[i].substr(1));
+            break;
+        case RIGHT:
+            values[RIGHT] = std::stof(values_str[i].substr(1));
+            break;
+        case UP:
+            values[UP] = std::stof(values_str[i].substr(1));
+            break;
+        case DOWN:
+            values[DOWN] = std::stof(values_str[i].substr(1));
+            break;
+        default:
+            std::cout << "NO FIND" << std::endl;
+            break;
+        }
+    }
+    return (values);
+}
+
+int     Agent::set_export_path(const std::string &export_path){
+
+    ofs.open(export_path, std::ofstream::trunc);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Failed opening export path : " << export_path << std::endl;
+        return(1);
+    }
+    return(0);
+}
+
+int     Agent::save_q_table_to_export_path(void){
+
+    if (!ofs.is_open())
+    {
+        std::cerr << "Saved to export file failed : stream closed" << std::endl;
+        return (1);
+    }
+
+    auto q_table_end = q_table.end();
+    for (auto it = q_table.begin(); it != q_table_end; it++)
+    {
+        auto key = (*it).first;
+        auto values = (*it).second;
+        ofs << key[LEFT] << ',' << key[RIGHT] << ',' << key[UP] << ',' << key[DOWN] << ':';
+        if (values[LEFT])
+            ofs << LEFT << values[LEFT] << ',';
+        if (values[RIGHT])
+            ofs << RIGHT << values[RIGHT] << ',';
+        if (values[UP])
+            ofs << UP << values[UP] << ',';
+        if (values[DOWN])
+            ofs << DOWN << values[DOWN];
+        ofs << std::endl;
+    }
+
+    if (!ofs.good())
+    {
+        std::cerr << "Saved to export file failed" << std::endl;
+        return (1);
+    }
+
+    return(0);
 }
 
 

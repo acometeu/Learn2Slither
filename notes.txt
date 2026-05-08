@@ -3,6 +3,11 @@ TASK 📝
 -ajouter le W dans la vision du terminal
 -faire spawn le snake avant les fruits car c'est plus simple
 -voir si c'est on peut pas ameliorer la facon d'arreter la session si mort ou fin au lieu de tout le temps check si mort ou fin
+-corriger : unrecognised commandline argument :  import_path
+unrecognised commandline argument :  export_path
+-corriger le fait qu'il n'y a pas la bonne vision quand il update la q_value avant de mourir (q(s,a) est la meme que q(s+1, a), ce qui est faux)
+-lorsque session = 0, average length = inf (ce qui est faux)
+
 
 -REWARD example :
 .nothing = -1
@@ -17,6 +22,8 @@ TASK 📝
 
 little things ❌
 
+
+-tester si c'est pas mieux de mettre une limite au float pour les modeles
 
 -tester diff entre empty_cells dans:
     .std::vector mais ce sera longt de trouver des coors precisent (operation tres courante)

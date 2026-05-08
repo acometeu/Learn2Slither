@@ -10,10 +10,10 @@
 #include <set>
 #include <unordered_set>
 #include <unordered_map>
-#include <cmath>
 #include <algorithm>
 #include <random>
 #include <limits>
+#include <fstream>
 #include "argparse/argparse.hpp"
 
 #define EMPTY_REWARD -1
@@ -74,17 +74,18 @@ struct MyArgs : public argparse::Args {
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
     bool &visual_mode       = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
     bool &step_by_step_mode = flag("step", "A flag to toggle step by step mode, only available in visual mode");
-    float   &epsilon        = kwarg("e,epsilon", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.1f);
-    float   &alpha        = kwarg("a,alpha", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.5f);
-    float   &gamma        = kwarg("g,gamma", "Determine the gamma of the agent future reward imoportance for the q_learning").set_default(0.3f);
-    std::string &import_path  = arg("import_path", "source path to import q_table values").set_default("");
-    std::string &export_path  = arg("export_path", "source path to export q_table values").set_default("");
+    float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.1f);
+    float   &alpha        = kwarg("a,alpha,learning_rate", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.5f);
+    float   &gamma        = kwarg("g,gamma,future_reward_weight", "Determine the gamma of the agent future reward imoportance for the q_learning").set_default(0.3f);
+    std::string &import_path  = kwarg("import_path", "source path to import q_table values").set_default("");
+    std::string &export_path  = kwarg("export_path", "source path to export q_table values").set_default("");
 
 };
 
 void    print_vector(std::vector<char> &vector);
 int     get_random_int(int min, int max);
 float   get_random_float(int min, int max);
+std::vector<std::string>    ft_split(std::string str, char delim);
 
 
 #endif
