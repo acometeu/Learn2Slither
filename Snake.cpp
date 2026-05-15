@@ -1,4 +1,5 @@
 #include "include/Snake.hpp"
+#include "include/Agent.hpp"
 
 Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size), _stats(t_statistics()){
     dir = rand() % 4;
@@ -269,6 +270,28 @@ int Snake::update_position_and_vision(void){
     return(reward);
 }
 
+int     Snake::update_position_and_q_values(MyArgs &args, Agent &agent){
+
+    if (!args.no_learning)
+    {
+        auto old_state = this->get_snake_vision();
+        int old_direction = this->dir;
+
+        int reward = this->update_position_and_vision();
+        agent.update_q_value(*this, reward, old_state, old_direction);
+        if (reward == DEATH_REWARD || reward == END_REWARD)
+            return(1);
+    }
+    else
+    {
+        int reward = this->update_position_and_vision();
+        if (reward == DEATH_REWARD || reward == END_REWARD)
+            return(1);
+    }
+    return(0);
+}
+
+
 int Snake::reset(){
 
     _position.clear();
@@ -307,7 +330,14 @@ void    Snake::display_stats(void){
     std::cout << "--- Snake Stats ---" << std::endl;
     std::cout << "Sessions : " << _stats.sessions << std::endl;
     std::cout << "Turns : " << _stats.turns << std::endl;
-    std::cout << "Average length : " << float(_stats.total_length) / float(_stats.sessions) << std::endl;
+    float   average_length = float(_stats.total_length) / float(_stats.sessions);
+    if (std::isinf(average_length) || std::isnan(average_length))
+    {
+        average_length = 0;
+        _stats.max_length = 0;
+        _stats.total_length = 0;
+    }
+    std::cout << "Average length : " << average_length << std::endl;
     std::cout << "Max length : " << _stats.max_length << std::endl;
     std::cout << "total length : " << _stats.total_length << std::endl;
 }

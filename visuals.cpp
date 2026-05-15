@@ -1,6 +1,6 @@
 #include "include/visuals.hpp"
 
-int run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
+int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     
     sdl_state   state;
 
@@ -10,6 +10,11 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     
     for (int i = 0; i < args.sessions; i++)
     {
+        if (i > 0)
+        {
+            board.reset();
+            snake.reset();
+        }
         std::cout << "session " << i << std::endl;
         while (state.running)
         {
@@ -25,11 +30,6 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
         if (state.running == false)
             break;
         snake.stats_add_session();
-        if (i < args.sessions - 1)
-        {
-            board.reset();
-            snake.reset();
-        }
     }
     cleanup(state);
 
@@ -39,15 +39,6 @@ int run_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
         if (agent.save_q_table_to_export_path())
             return (1);
     }
-    // testsuppr display q_table
-    // for (auto it = agent.q_table.begin(); it != agent.q_table.end(); it++)
-    // {
-    //     std::cout << (*it).first[LEFT] << "," << (*it).first[RIGHT] << "," << (*it).first[UP] << "," << (*it).first[DOWN] << std::endl;
-    //     std::cout << "LEFT = " << (*it).second[LEFT] << std::endl;
-    //     std::cout << "RIGHT = " << (*it).second[RIGHT] << std::endl;
-    //     std::cout << "UP = " << (*it).second[UP] << std::endl;
-    //     std::cout << "DOWN = " << (*it).second[DOWN] << std::endl;
-    // }
     return(0);
 }
 
@@ -152,19 +143,19 @@ std::vector< std::array<SDL_FPoint, 2> >    initialize_grid(Board &board, sdl_st
 int    sdl_update_snake_position(Snake &snake, sdl_state &state, MyArgs &args, Agent &agent){
 
     if (args.step_by_step_mode)
-        return(sdl_update_snake_position_step_by_step_mode(snake, state));
+        return(sdl_update_snake_position_step_by_step_mode(snake, state, args, agent));
 
     return (sdl_update_snake_position_by_time(snake, state, args, agent));
 }
 
-int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state){
+int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, MyArgs &args, Agent &agent){
 
     if (state.new_input)
     {
         state.new_input = false;
-        int reward = snake.update_position_and_vision();
-        if (reward == DEATH_REWARD || reward == END_REWARD)
+        if (snake.update_position_and_q_values(args, agent))
             return(1);
+        snake.dir = agent.choose_direction(snake);
     }
     return(0);
 }
@@ -172,26 +163,14 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state){
 int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs &args, Agent &agent){
 
     state.now_time = SDL_GetTicks();
-    float       delta_time = state.now_time - state.prev_time;
+    float   delta_time = state.now_time - state.prev_time;
     
     if (delta_time >= args.snake_speed)
     {
-        // agent impl
-        // int reward = agent.get_reward(snake);
-        auto old_state = snake.get_snake_vision();
-        int old_direction = snake.dir;
-        
-        int reward = snake.update_position_and_vision();
-        std::cout << "reward = " << reward << std::endl;
-        agent.update_q_value(snake, reward, old_state, old_direction);
-        if (reward == DEATH_REWARD || reward == END_REWARD)
+        if (snake.update_position_and_q_values(args, agent))
             return(1);
-        state.prev_time += args.snake_speed;
-
-        // agent implementation
-        // agent.update_q_value(snake, reward, old_state, old_direction);
         snake.dir = agent.choose_direction(snake);
-
+        state.prev_time += args.snake_speed;
     }
     return(0);
 }

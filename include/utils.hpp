@@ -16,6 +16,7 @@
 #include <fstream>
 #include "argparse/argparse.hpp"
 
+
 #define EMPTY_REWARD -1
 #define RED_APPLE_REWARD -10
 #define DEATH_REWARD -100
@@ -74,11 +75,12 @@ struct MyArgs : public argparse::Args {
     bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
     bool &visual_mode       = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
     bool &step_by_step_mode = flag("step", "A flag to toggle step by step mode, only available in visual mode");
+    bool &no_learning = flag("no_learning,no_learn", "A flag to toggle no learning_mode, doens't update its q_table");
     float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.1f);
     float   &alpha        = kwarg("a,alpha,learning_rate", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.5f);
     float   &gamma        = kwarg("g,gamma,future_reward_weight", "Determine the gamma of the agent future reward imoportance for the q_learning").set_default(0.3f);
-    std::string &import_path  = kwarg("import_path", "source path to import q_table values").set_default("");
-    std::string &export_path  = kwarg("export_path", "source path to export q_table values").set_default("");
+    std::string &import_path  = kwarg("import,import_path", "source path to import q_table values").set_default("");
+    std::string &export_path  = kwarg("export,export_path", "source path to export q_table values").set_default("");
 
 };
 

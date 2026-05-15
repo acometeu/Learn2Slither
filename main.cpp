@@ -1,8 +1,37 @@
 #include "include/visuals.hpp"
-#include "include/Agent.hpp"
 
 
-int game_loop(Board &board, Snake &snake, MyArgs &args){
+int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
+
+    //testsuppr
+    for (int i = 0; i < args.sessions; i++)
+    {
+        std::cout << "loop" << i << std::endl;
+        bool    running = true;
+        while(running)
+        {
+            if (snake.update_position_and_q_values(args, agent))
+                return(1);
+            snake.dir = agent.choose_direction(snake);
+        }
+        snake.stats_add_session();
+        if (i < args.sessions - 1)
+        {
+            board.reset();
+            snake.reset();
+        }
+    }
+
+    snake.display_stats();
+    if (!args.export_path.empty())
+    {
+        if (agent.save_q_table_to_export_path())
+            return (1);
+    }
+    return(0);
+}
+
+int learn2slither(Board &board, Snake &snake, MyArgs &args){
 
     snake.update_vision();
     snake.print_vision();
@@ -13,16 +42,6 @@ int game_loop(Board &board, Snake &snake, MyArgs &args){
         if (agent.set_import_path(args.import_path))
             return (1);
     }
-    // testsuppr display q_table
-    // for (auto it = agent.q_table.begin(); it != agent.q_table.end(); it++)
-    // {
-    //     std::cout << (*it).first[LEFT] << "," << (*it).first[RIGHT] << "," << (*it).first[UP] << "," << (*it).first[DOWN] << std::endl;
-    //     std::cout << "LEFT = " << (*it).second[LEFT] << std::endl;
-    //     std::cout << "RIGHT = " << (*it).second[RIGHT] << std::endl;
-    //     std::cout << "UP = " << (*it).second[UP] << std::endl;
-    //     std::cout << "DOWN = " << (*it).second[DOWN] << std::endl;
-    // }
-
     if (!args.export_path.empty())
     {
         if (agent.set_export_path(args.export_path))
@@ -31,18 +50,13 @@ int game_loop(Board &board, Snake &snake, MyArgs &args){
 
     if (args.visual_mode)
     {
-        if (run_SDL(board, snake, args, agent))
+        if (game_loop_SDL(board, snake, args, agent))
             return (1);
     }
     else
     {
-        bool    running = true;
-        while(running)
-        {
-            if (snake.update_position_and_vision())
-                break;
-            // agent.choose_direction();
-        }
+        if (game_loop(board, snake, args, agent))
+            return(1);
     }
 
     return (0);
@@ -64,7 +78,7 @@ int main(int argc, char* argv[]) {
     Snake snake(board, args.snake_size);
     board.print_board();
 
-    if (game_loop(board, snake, args))
+    if (learn2slither(board, snake, args))
         return (1);
 
     return 0;

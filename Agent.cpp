@@ -34,20 +34,7 @@ void    Agent::parse_and_add_q_values(const std::string &line){
         return;
     std::array<std::string, 4>  key = parse_q_table_key(line.substr(0, delim));
     std::array<float, 4>        values = parse_q_table_values(line.substr(delim + 1));
-
-    // for (int i = 0; i < values.size(); i++)
-    // {
-    //     std::cout << "values[" << i << "] = " << values[i] << std::endl;
-    // }
-
     q_table[key] = values;
-    
-    // auto temp = q_table[key];
-    // for (int i = 0; i < temp.size(); i++)
-    // {
-    //     std::cout << "temp[" << i << "] = " << temp[i] << std::endl;
-    // }
-
 }
 
 std::array<std::string, 4> Agent::parse_q_table_key(const std::string &keys_line){
@@ -140,16 +127,26 @@ int    Agent::choose_direction(Snake &snake){
     
     float random = get_random_float(0, 1);
     if (random < this->epsilon)
+    {
+        std::cout << "explooooooration" << std::endl;
         return (get_random_int(0, 3));
+    }
     else
+    {
+        std::cout << "GREEEEEEEEEdy" << std::endl;
         return(get_best_q_values_direction(snake));
+    }
 }
 
 int     Agent::get_best_q_values_direction(Snake &snake){
     //  get direction of higher q_value or if multiple best solutions, choose randomly between them
     
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
-    auto q_values = q_table[snake.get_snake_vision()];
+    // auto q_values = q_table[snake.get_snake_vision()];
+    auto it = q_table.find(snake.get_snake_vision());
+    if (it == q_table.end())
+        return (get_random_int(0, 3));
+    auto q_values = (*it).second;
 
     int best_dir = get_random_int(0, 3);
     float max = q_values[best_dir];

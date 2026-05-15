@@ -12,6 +12,14 @@ struct hash_qtable
     }
 };
 
+typedef struct s_q_table_key
+{
+    // numbers as distance, 0 means noting
+    unsigned int    green_apple;
+    unsigned int    red_apple;
+    unsigned int    obstacle;
+} t_q_table_key;
+
 
 class Agent
 {
