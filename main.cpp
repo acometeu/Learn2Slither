@@ -6,12 +6,12 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     //testsuppr
     for (int i = 0; i < args.sessions; i++)
     {
-        std::cout << "loop" << i << std::endl;
         bool    running = true;
         while(running)
         {
+            std::cout << "loop" << i << std::endl;
             if (snake.update_position_and_q_values(args, agent))
-                return(1);
+                break;
             snake.dir = agent.choose_direction(snake);
         }
         snake.stats_add_session();

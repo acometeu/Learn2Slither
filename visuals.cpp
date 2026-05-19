@@ -156,6 +156,39 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
         if (snake.update_position_and_q_values(args, agent))
             return(1);
         snake.dir = agent.choose_direction(snake);
+
+        //testsuppr
+        auto keys = agent.get_t_q_table_key(snake.get_snake_vision());
+
+        auto values = agent.q_table[keys];
+        // std::cout << "LEFT:" << std::endl;
+        std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
+        std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
+        std::cout << "values[UP] = " << values[UP] << std::endl;
+        std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
+        // std::cout << "RIGHT:" << std::endl;
+        // std::cout << "UP:" << std::endl;
+        // std::cout << "DOWN:" << std::endl;
+
+
+        // std::cout << "LEFT:" << std::endl;
+        // std::cout << "keys[LEFT].obstacle = " << keys[LEFT].obstacle << std::endl;
+        // std::cout << "keys[LEFT].green_apple = " << keys[LEFT].green_apple << std::endl;
+        // std::cout << "keys[LEFT].red_apple = " << keys[LEFT].red_apple << std::endl;
+        // std::cout << "RIGHT:" << std::endl;
+        // std::cout << "keys[RIGHT].obstacle = " << keys[RIGHT].obstacle << std::endl;
+        // std::cout << "keys[RIGHT].green_apple = " << keys[RIGHT].green_apple << std::endl;
+        // std::cout << "keys[RIGHT].red_apple = " << keys[RIGHT].red_apple << std::endl;
+        // std::cout << "UP:" << std::endl;
+        // std::cout << "keys[UP].obstacle = " << keys[UP].obstacle << std::endl;
+        // std::cout << "keys[UP].green_apple = " << keys[UP].green_apple << std::endl;
+        // std::cout << "keys[UP].red_apple = " << keys[UP].red_apple << std::endl;
+        // std::cout << "DOWN:" << std::endl;
+        // std::cout << "keys[DOWN].obstacle = " << keys[DOWN].obstacle << std::endl;
+        // std::cout << "keys[DOWN].green_apple = " << keys[DOWN].green_apple << std::endl;
+        // std::cout << "keys[DOWN].red_apple = " << keys[DOWN].red_apple << std::endl;
+
+
     }
     return(0);
 }
