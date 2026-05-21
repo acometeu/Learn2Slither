@@ -143,18 +143,18 @@ int    Agent::choose_direction(Snake &snake){
     }
     else
     {
-        // random = get_random_int(0, 99);
+        random = get_random_int(0, 49);
         
-        // if (random == 0)
-        // {
-        //     std::cout << "RANDOMMMM" << std::endl;
-        //     return (get_safe_random_q_value(snake));
-        // }
-        // else
-        // {
+        if (random == 0)
+        {
+            std::cout << "RANDOMMMM" << std::endl;
+            return (get_safe_random_q_value(snake));
+        }
+        else
+        {
             std::cout << "GREEEEEEEEEdy" << std::endl;
             return(get_best_q_values_direction(snake));
-        // }
+        }
     }
 }
 
@@ -202,13 +202,23 @@ int     Agent::get_safe_random_q_value(Snake &snake){
 
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
     auto vision = snake.get_snake_vision();
-    for (int size = all_dirs.size() - 1; size > 0; size--)
+    for (int index_max = all_dirs.size() - 1; index_max > 0; index_max--)
     {
-        int random = get_random_int(0, size);
-        std::cout << "vision = " << vision[random] << std::endl;
-        if (vision[all_dirs[random]].size() && vision[all_dirs[random]][0] != 'S')
-            return (random);
-        std::swap(size, random);
+        for (int j = 0; j < all_dirs.size(); j++)
+        {
+            std::cout << "before swapt : all_dirs[j] = " << all_dirs[j] << std::endl;
+        }
+        int random = get_random_int(0, index_max);
+        std::swap(all_dirs[index_max], all_dirs[random]);
+        for (int j = 0; j < all_dirs.size(); j++)
+        {
+            std::cout << "after swapt : all_dirs[j] = " << all_dirs[j] << std::endl;
+        }
+        std::cout << "vision = " << vision[all_dirs[index_max]] << std::endl;
+        std::cout << "index_max = " << all_dirs[index_max] << std::endl;
+        // std::cout << "random = " << random << std::endl;
+        if (vision[all_dirs[index_max]].size() && vision[all_dirs[index_max]][0] != 'S')
+            return (all_dirs[index_max]);
     }
     std::cout << "NO good choices" << std::endl;
     return(all_dirs[0]);
