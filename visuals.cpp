@@ -159,7 +159,6 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
 
         //testsuppr
         auto keys = agent.get_t_q_table_key(snake.get_snake_vision());
-
         auto values = agent.q_table[keys];
         // std::cout << "LEFT:" << std::endl;
         std::cout << "values[LEFT] = " << values[LEFT] << std::endl;

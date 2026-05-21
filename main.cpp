@@ -48,6 +48,8 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
             return (1);
     }
 
+    snake.dir = agent.choose_direction(snake);
+
     if (args.visual_mode)
     {
         if (game_loop_SDL(board, snake, args, agent))

@@ -32,15 +32,15 @@ void    Agent::parse_and_add_q_values(const std::string &line){
     size_t delim = line.find_first_of(':');
     if (delim == std::string::npos)
         return;
-    std::array<t_q_table_key, 4>  key = parse_q_table_key(line.substr(0, delim));
+    std::array<t_simple_q, 4>  key = parse_q_table_key(line.substr(0, delim));
     std::array<float, 4>        values = parse_q_table_values(line.substr(delim + 1));
     q_table[key] = values;
 }
 
-std::array<t_q_table_key, 4> Agent::parse_q_table_key(const std::string &keys_line){
+std::array<t_simple_q, 4> Agent::parse_q_table_key(const std::string &keys_line){
 
     std::vector<std::string>    vision = ft_split(keys_line, ',');
-    std::array<t_q_table_key, 4>  keys{};
+    std::array<t_simple_q, 4>  keys{};
     for (int i = 0; i < vision.size(); i++)
     {
         std::vector<std::string>    key = ft_split(vision[i], '.');
@@ -143,24 +143,44 @@ int    Agent::choose_direction(Snake &snake){
     }
     else
     {
-        std::cout << "GREEEEEEEEEdy" << std::endl;
-        return(get_best_q_values_direction(snake));
+        // random = get_random_int(0, 99);
+        
+        // if (random == 0)
+        // {
+        //     std::cout << "RANDOMMMM" << std::endl;
+        //     return (get_safe_random_q_value(snake));
+        // }
+        // else
+        // {
+            std::cout << "GREEEEEEEEEdy" << std::endl;
+            return(get_best_q_values_direction(snake));
+        // }
     }
 }
 
-std::array<t_q_table_key, 4>   Agent::get_t_q_table_key(const std::array<std::string, 4> &vision)
+std::array<t_simple_q, 4>   Agent::get_t_q_table_key(const std::array<std::string, 4> &vision)
 {
-    std::array<t_q_table_key, 4>    key{{{0,0,0},{0,0,0},{0,0,0},{0,0,0}}};
+    std::array<t_simple_q, 4>    key{{{0,0,0},{0,0,0},{0,0,0},{0,0,0}}};
     for (int i = 0; i < 4; i++)
     {
+        //check first case
+        if (vision[i].size())
+        {
+            switch (vision[i][0])
+            {
+            case 'S':
+                key[i].obstacle = true;
+                break;
+            }
+        }
+        else
+            key[i].obstacle = true;
+
+        //check others cases
         for (int j = 0; j < vision[i].size(); j++)
         {
             switch (vision[i][j])
             {
-            case 'S' :
-                if (!key[i].obstacle)
-                    key[i].obstacle = j + 1;
-                break;
             case 'G' :
                 if (!key[i].green_apple)
                     key[i].green_apple = j + 1;
@@ -173,10 +193,25 @@ std::array<t_q_table_key, 4>   Agent::get_t_q_table_key(const std::array<std::st
                 break;
             }
         }
-        if (!key[i].obstacle)
-            key[i].obstacle = vision[i].size() + 1; // wall distance
     }
     return(key);
+}
+
+int     Agent::get_safe_random_q_value(Snake &snake){
+    // get random direction without direct obstacle (if possible)
+
+    std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
+    auto vision = snake.get_snake_vision();
+    for (int size = all_dirs.size() - 1; size > 0; size--)
+    {
+        int random = get_random_int(0, size);
+        std::cout << "vision = " << vision[random] << std::endl;
+        if (vision[all_dirs[random]].size() && vision[all_dirs[random]][0] != 'S')
+            return (random);
+        std::swap(size, random);
+    }
+    std::cout << "NO good choices" << std::endl;
+    return(all_dirs[0]);
 }
 
 int     Agent::get_best_q_values_direction(Snake &snake){
@@ -184,9 +219,8 @@ int     Agent::get_best_q_values_direction(Snake &snake){
     
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
     auto vision = snake.get_snake_vision();
-    std::array<t_q_table_key, 4>   keys = get_t_q_table_key(vision);
+    std::array<t_simple_q, 4>   keys = get_t_q_table_key(vision);
     auto it = q_table.find(keys);
-    // auto it = q_table.find(snake.get_snake_vision());
     if (it == q_table.end())
         return (get_random_int(0, 3));
     auto q_values = (*it).second;
@@ -207,20 +241,10 @@ int     Agent::get_best_q_values_direction(Snake &snake){
 
 void    Agent::update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir){
 
-    // std::cout << "old q_value = " << q_table[old_state][old_dir] << std::endl;
-    // std::cout << "alpha = " << alpha << std::endl;
-    // std::cout << "next max q_value = " << q_table[snake.get_snake_vision()][get_best_q_values_direction(snake)] << std::endl;
-    // std::cout << "instance q_value = " << reward + (gamma * q_table[snake.get_snake_vision()][get_best_q_values_direction(snake)]) << std::endl;
-    // std::cout << "alpha * (instance q_value + old q_value) = " << alpha * (reward + (gamma * q_table[snake.get_snake_vision()][get_best_q_values_direction(snake)]) - q_table[old_state][old_dir]) << std::endl;
-
-
-
-    // before
-    // q_table[old_state][old_dir] += alpha * (reward + (gamma * q_table[snake.get_snake_vision()][get_best_q_values_direction(snake)] - q_table[old_state][old_dir]));
     auto old_key = get_t_q_table_key(old_state);
     auto new_key = get_t_q_table_key(snake.get_snake_vision());
-    std::cout << "old q_value = " << q_table[old_key][old_dir] << std::endl;
+    // std::cout << "old q_value = " << q_table[old_key][old_dir] << std::endl;
     q_table[old_key][old_dir] += alpha * (reward + (gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));
-    std::cout << "new q_value = " << q_table[old_key][old_dir] << std::endl;
+    // std::cout << "new q_value = " << q_table[old_key][old_dir] << std::endl;
     
 }
