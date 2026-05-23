@@ -44,11 +44,12 @@ std::array<t_simple_q, 4> Agent::parse_q_table_key(const std::string &keys_line)
     for (int i = 0; i < vision.size(); i++)
     {
         std::vector<std::string>    key = ft_split(vision[i], '.');
-        if (key.size() != 3)
+        if (key.size() != 4)
             std::cerr << "Error parsing import file : wrong number of key member" << std::endl;
-        keys[i].obstacle = std::stoi(key[0]);
-        keys[i].green_apple = std::stoi(key[1]);
-        keys[i].red_apple = std::stoi(key[2]);
+        keys[i].green_apple = std::stoi(key[0]);
+        keys[i].red_apple = std::stoi(key[1]);
+        keys[i].snake_tail = std::stoi(key[2]);
+        keys[i].wall = std::stoi(key[3]);
     }
     return(keys);
 }
@@ -108,10 +109,14 @@ int     Agent::save_q_table_to_export_path(void){
     {
         auto key = (*it).first;
         auto values = (*it).second;
-        ofs << key[LEFT].obstacle << '.' << key[LEFT].green_apple << '.' << key[LEFT].red_apple << ','
-            << key[RIGHT].obstacle << '.' << key[RIGHT].green_apple << '.' << key[RIGHT].red_apple << ','
-            << key[UP].obstacle << '.' << key[UP].green_apple << '.' << key[UP].red_apple << ','
-            << key[DOWN].obstacle << '.' << key[DOWN].green_apple << '.' << key[DOWN].red_apple << ':';
+        ofs << key[LEFT].green_apple << '.' << key[LEFT].red_apple << '.'
+            << key[LEFT].snake_tail << '.' << key[LEFT].wall << ',';
+        ofs << key[RIGHT].green_apple << '.' << key[RIGHT].red_apple << '.'
+            << key[RIGHT].snake_tail << '.' << key[RIGHT].wall << ',';
+        ofs << key[UP].green_apple << '.' << key[UP].red_apple << '.'
+            << key[UP].snake_tail << '.' << key[UP].wall << ',';
+        ofs << key[DOWN].green_apple << '.' << key[DOWN].red_apple << '.'
+            << key[DOWN].snake_tail << '.' << key[DOWN].wall << ':';
         if (values[LEFT])
             ofs << LEFT << values[LEFT] << ',';
         if (values[RIGHT])
@@ -160,21 +165,15 @@ int    Agent::choose_direction(Snake &snake){
 
 std::array<t_simple_q, 4>   Agent::get_t_q_table_key(const std::array<std::string, 4> &vision)
 {
-    std::array<t_simple_q, 4>    key{{{0,0,0},{0,0,0},{0,0,0},{0,0,0}}};
+    std::array<t_simple_q, 4>    key{{{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}}};
     for (int i = 0; i < 4; i++)
     {
-        //check first case
-        if (vision[i].size())
-        {
-            switch (vision[i][0])
-            {
-            case 'S':
-                key[i].obstacle = true;
-                break;
-            }
-        }
-        else
-            key[i].obstacle = true;
+        //check if first case is obstacle
+        if (!vision[i].size())
+            key[i].wall = true;
+        else if (vision[i][0] == 'S')
+            key[i].snake_tail = true;
+
 
         //check others cases
         for (int j = 0; j < vision[i].size(); j++)
@@ -182,12 +181,10 @@ std::array<t_simple_q, 4>   Agent::get_t_q_table_key(const std::array<std::strin
             switch (vision[i][j])
             {
             case 'G' :
-                if (!key[i].green_apple)
-                    key[i].green_apple = j + 1;
+                key[i].green_apple = true;
                 break;
             case 'R' :
-                if (!key[i].red_apple)
-                    key[i].red_apple = j + 1;
+                key[i].red_apple = true;
                 break;
             default:
                 break;
