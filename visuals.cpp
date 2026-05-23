@@ -167,35 +167,35 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
         //testsuppr
         auto keys = agent.get_t_q_table_key(snake.get_snake_vision());
         auto values = agent.q_table[keys];
-        // std::cout << "LEFT:" << std::endl;
-        // std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
-        // std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
-        // std::cout << "values[UP] = " << values[UP] << std::endl;
-        // std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
+        std::cout << "LEFT:" << std::endl;
+        std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
+        std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
+        std::cout << "values[UP] = " << values[UP] << std::endl;
+        std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
         // std::cout << "RIGHT:" << std::endl;
         // std::cout << "UP:" << std::endl;
         // std::cout << "DOWN:" << std::endl;
 
 
-        // std::cout << "LEFT:" << std::endl;
-        // std::cout << "keys[LEFT].green_apple = " << keys[LEFT].green_apple << std::endl;
-        // std::cout << "keys[LEFT].red_apple = " << keys[LEFT].red_apple << std::endl;
-        // std::cout << "keys[LEFT].snake_tail = " << keys[LEFT].snake_tail << std::endl;
+        std::cout << "LEFT:" << std::endl;
+        std::cout << "keys[LEFT].green_apple = " << keys[LEFT].green_apple << std::endl;
+        std::cout << "keys[LEFT].red_apple = " << keys[LEFT].red_apple << std::endl;
+        std::cout << "keys[LEFT].snake_tail = " << keys[LEFT].obstacle << std::endl;
         // std::cout << "keys[LEFT].wall = " << keys[LEFT].wall << std::endl;
-        // std::cout << "RIGHT:" << std::endl;
-        // std::cout << "keys[RIGHT].green_apple = " << keys[RIGHT].green_apple << std::endl;
-        // std::cout << "keys[RIGHT].red_apple = " << keys[RIGHT].red_apple << std::endl;
-        // std::cout << "keys[RIGHT].snake_tail = " << keys[RIGHT].snake_tail << std::endl;
+        std::cout << "RIGHT:" << std::endl;
+        std::cout << "keys[RIGHT].green_apple = " << keys[RIGHT].green_apple << std::endl;
+        std::cout << "keys[RIGHT].red_apple = " << keys[RIGHT].red_apple << std::endl;
+        std::cout << "keys[RIGHT].snake_tail = " << keys[RIGHT].obstacle << std::endl;
         // std::cout << "keys[RIGHT].wall = " << keys[RIGHT].wall << std::endl;
-        // std::cout << "UP:" << std::endl;
-        // std::cout << "keys[UP].green_apple = " << keys[UP].green_apple << std::endl;
-        // std::cout << "keys[UP].red_apple = " << keys[UP].red_apple << std::endl;
-        // std::cout << "keys[UP].snake_tail = " << keys[UP].snake_tail << std::endl;
+        std::cout << "UP:" << std::endl;
+        std::cout << "keys[UP].green_apple = " << keys[UP].green_apple << std::endl;
+        std::cout << "keys[UP].red_apple = " << keys[UP].red_apple << std::endl;
+        std::cout << "keys[UP].snake_tail = " << keys[UP].obstacle << std::endl;
         // std::cout << "keys[UP].wall = " << keys[UP].wall << std::endl;
-        // std::cout << "DOWN:" << std::endl;
-        // std::cout << "keys[DOWN].green_apple = " << keys[DOWN].green_apple << std::endl;
-        // std::cout << "keys[DOWN].red_apple = " << keys[DOWN].red_apple << std::endl;
-        // std::cout << "keys[DOWN].snake_tail = " << keys[DOWN].snake_tail << std::endl;
+        std::cout << "DOWN:" << std::endl;
+        std::cout << "keys[DOWN].green_apple = " << keys[DOWN].green_apple << std::endl;
+        std::cout << "keys[DOWN].red_apple = " << keys[DOWN].red_apple << std::endl;
+        std::cout << "keys[DOWN].snake_tail = " << keys[DOWN].obstacle << std::endl;
         // std::cout << "keys[DOWN].wall = " << keys[DOWN].wall << std::endl;
 
 
@@ -215,7 +215,6 @@ int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs
             return(1);
         snake.dir = agent.choose_direction(snake);
         state.prev_time = SDL_GetTicks();
-        // state.prev_time += args.snake_speed;
     }
     return(0);
 }

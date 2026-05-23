@@ -32,24 +32,23 @@ void    Agent::parse_and_add_q_values(const std::string &line){
     size_t delim = line.find_first_of(':');
     if (delim == std::string::npos)
         return;
-    std::array<t_simple_q, 4>  key = parse_q_table_key(line.substr(0, delim));
+    std::array<t_q_table_key, 4>  key = parse_q_table_key(line.substr(0, delim));
     std::array<float, 4>        values = parse_q_table_values(line.substr(delim + 1));
     q_table[key] = values;
 }
 
-std::array<t_simple_q, 4> Agent::parse_q_table_key(const std::string &keys_line){
+std::array<t_q_table_key, 4> Agent::parse_q_table_key(const std::string &keys_line){
 
     std::vector<std::string>    vision = ft_split(keys_line, ',');
-    std::array<t_simple_q, 4>  keys{};
+    std::array<t_q_table_key, 4>  keys{};
     for (int i = 0; i < vision.size(); i++)
     {
         std::vector<std::string>    key = ft_split(vision[i], '.');
-        if (key.size() != 4)
+        if (key.size() != 3)
             std::cerr << "Error parsing import file : wrong number of key member" << std::endl;
         keys[i].green_apple = std::stoi(key[0]);
         keys[i].red_apple = std::stoi(key[1]);
-        keys[i].snake_tail = std::stoi(key[2]);
-        keys[i].wall = std::stoi(key[3]);
+        keys[i].obstacle = std::stoi(key[2]);
     }
     return(keys);
 }
@@ -110,13 +109,13 @@ int     Agent::save_q_table_to_export_path(void){
         auto key = (*it).first;
         auto values = (*it).second;
         ofs << key[LEFT].green_apple << '.' << key[LEFT].red_apple << '.'
-            << key[LEFT].snake_tail << '.' << key[LEFT].wall << ',';
+            << key[LEFT].obstacle << ',';
         ofs << key[RIGHT].green_apple << '.' << key[RIGHT].red_apple << '.'
-            << key[RIGHT].snake_tail << '.' << key[RIGHT].wall << ',';
+            << key[RIGHT].obstacle << ',';
         ofs << key[UP].green_apple << '.' << key[UP].red_apple << '.'
-            << key[UP].snake_tail << '.' << key[UP].wall << ',';
+            << key[UP].obstacle << ',';
         ofs << key[DOWN].green_apple << '.' << key[DOWN].red_apple << '.'
-            << key[DOWN].snake_tail << '.' << key[DOWN].wall << ':';
+            << key[DOWN].obstacle << ':';
         if (values[LEFT])
             ofs << LEFT << values[LEFT] << ',';
         if (values[RIGHT])
@@ -149,16 +148,14 @@ int    Agent::choose_direction(Snake &snake){
     return(get_best_q_values_direction(snake));
 }
 
-std::array<t_simple_q, 4>   Agent::get_t_q_table_key(const std::array<std::string, 4> &vision)
+std::array<t_q_table_key, 4>   Agent::get_t_q_table_key(const std::array<std::string, 4> &vision)
 {
-    std::array<t_simple_q, 4>    key{{{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}}};
+    std::array<t_q_table_key, 4>    key{{{0,0,0},{0,0,0},{0,0,0},{0,0,0}}};
     for (int i = 0; i < 4; i++)
     {
         //check if first case is obstacle
-        if (!vision[i].size())
-            key[i].wall = true;
-        else if (vision[i][0] == 'S')
-            key[i].snake_tail = true;
+        if (!vision[i].size() || vision[i][0] == 'S')
+            key[i].obstacle = true;
 
 
         //check others cases
@@ -201,7 +198,7 @@ int     Agent::get_best_q_values_direction(Snake &snake){
     
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
     auto vision = snake.get_snake_vision();
-    std::array<t_simple_q, 4>   keys = get_t_q_table_key(vision);
+    std::array<t_q_table_key, 4>   keys = get_t_q_table_key(vision);
     auto it = q_table.find(keys);
     if (it == q_table.end())
         return (get_random_int(0, 3));

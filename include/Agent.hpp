@@ -19,19 +19,19 @@ typedef struct s_q_table_key
     }
 } t_q_table_key;
 
-typedef struct s_simple_q
-{
-    bool    green_apple;
-    bool    red_apple;
-    bool    snake_tail;
-    bool    wall;
+// typedef struct s_simple_q
+// {
+//     bool    green_apple;
+//     bool    red_apple;
+//     bool    snake_tail;
+//     bool    wall;
 
-    bool operator==(const s_simple_q& key) const{
-        if (green_apple == key.green_apple && red_apple == key.red_apple && snake_tail == key.snake_tail && wall == key.wall)
-            return(true);
-        return(false);
-    }
-} t_simple_q;
+//     bool operator==(const s_simple_q& key) const{
+//         if (green_apple == key.green_apple && red_apple == key.red_apple && snake_tail == key.snake_tail && wall == key.wall)
+//             return(true);
+//         return(false);
+//     }
+// } t_simple_q;
 
 struct hash_qtable
 {
@@ -40,7 +40,7 @@ struct hash_qtable
     // }
 
 
-    int  operator()(const std::array<t_simple_q, 4> &key) const{
+    int  operator()(const std::array<t_q_table_key, 4> &key) const{
         int  hash = 0;
         int key_size = key.size();
         for (int i = 0; i < key_size; i++)
@@ -50,9 +50,9 @@ struct hash_qtable
             hash <<= 2;
             hash += key[i].red_apple;
             hash <<= 2;
-            hash += key[i].snake_tail;
-            hash <<= 2;
-            hash += key[i].wall;
+            hash += key[i].obstacle;
+            // hash <<= 2;
+            // hash += key[i].wall;
         }
         return(hash);
     }
@@ -70,7 +70,7 @@ public:
     float   alpha; //learning_rate
     float   gamma; //future_reward_significance
 
-    std::unordered_map< std::array<t_simple_q, 4>, std::array<float, 4>, hash_qtable>  q_table;
+    std::unordered_map< std::array<t_q_table_key, 4>, std::array<float, 4>, hash_qtable>  q_table;
     // std::unordered_map< std::array<t_q_table_key, 4>, std::array<float, 4>, hash_qtable>  q_table;
     // std::unordered_map< std::array<std::string, 4>, std::array<float, 4>, hash_qtable>  q_table;
 
@@ -82,7 +82,7 @@ public:
     int     get_safe_random_q_value(Snake &snake);
     int     get_best_q_values_direction(Snake &snake);
     void    update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir);
-    std::array<t_simple_q, 4>   get_t_q_table_key(const std::array<std::string, 4> &vision);
+    std::array<t_q_table_key, 4>   get_t_q_table_key(const std::array<std::string, 4> &vision);
 
 
     // q_function methods
@@ -96,7 +96,7 @@ private:
 
     // functions
     void    parse_and_add_q_values(const std::string &line);
-    std::array<t_simple_q, 4>  parse_q_table_key(const std::string &keys_line);
+    std::array<t_q_table_key, 4>  parse_q_table_key(const std::string &keys_line);
     std::array<float, 4>        parse_q_table_values(const std::string &values_line);
 
 };
