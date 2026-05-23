@@ -52,9 +52,8 @@ struct sdl_state
     // event
     SDL_Event   event;
 
-    // key_related
+    // Step by step
     bool    new_input;
-    bool    space_key;
 };
 
 
