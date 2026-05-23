@@ -2,7 +2,7 @@
 #include "include/Agent.hpp"
 
 Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size), _stats(t_statistics()){
-    dir = get_random_int(0, 3);
+    dir = rand() % 4;
     if (initialize_snake())
         throw std::invalid_argument("Not enough space for Snake on the Board");
     update_vision();
@@ -259,17 +259,14 @@ t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_co
     return(body);
 }
 
-int Snake::update_position_and_vision(MyArgs &args){
+int Snake::update_position_and_vision(void){
 
+    print_dir();
     int reward = move(dir);
     if (reward == DEATH_REWARD || reward == END_REWARD)
-    return(reward);
+        return(reward);
     update_vision();
-    if (!args.no_print)
-    {
-        print_dir();
-        print_vision();
-    }
+    print_vision();
     return(reward);
 }
 
@@ -280,14 +277,14 @@ int     Snake::update_position_and_q_values(MyArgs &args, Agent &agent){
         auto old_state = this->get_snake_vision();
         int old_direction = this->dir;
 
-        int reward = this->update_position_and_vision(args);
+        int reward = this->update_position_and_vision();
         agent.update_q_value(*this, reward, old_state, old_direction);
         if (reward == DEATH_REWARD || reward == END_REWARD)
             return(1);
     }
     else
     {
-        int reward = this->update_position_and_vision(args);
+        int reward = this->update_position_and_vision();
         if (reward == DEATH_REWARD || reward == END_REWARD)
             return(1);
     }

@@ -33,11 +33,8 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
 
 int learn2slither(Board &board, Snake &snake, MyArgs &args){
 
-    if (!args.no_print)
-    {
-        snake.update_vision();
-        snake.print_vision();
-    }
+    snake.update_vision();
+    snake.print_vision();
 
     Agent   agent(args.epsilon, args.alpha, args.gamma);
     if (!args.import_path.empty())
@@ -72,6 +69,10 @@ int main(int argc, char* argv[]) {
 
     if (args.verbose)
         args.print();
+
+    //testtsuppr
+    // std::cout << "std::stof(0.5) = " << std::stof("-0.5") << std::endl;
+    // return(0);
 
     // seed random number generator
     srand(time(NULL));

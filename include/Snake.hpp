@@ -28,7 +28,7 @@ public:
     void    update_vision(void);
     void    print_vision(void);
     int     move(int direction);
-    int     update_position_and_vision(MyArgs &args);
+    int     update_position_and_vision();
     int     update_position_and_q_values(MyArgs &args, Agent &agent);
     int     reset(void);
     void    stats_add_session(void);

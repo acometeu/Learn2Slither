@@ -76,7 +76,6 @@ struct MyArgs : public argparse::Args {
     bool &visual_mode       = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
     bool &step_by_step_mode = flag("step", "A flag to toggle step by step mode, only available in visual mode");
     bool &no_learning = flag("no_learning,no_learn", "A flag to toggle no learning_mode, doens't update its q_table");
-    bool &no_print = flag("no_print", "A flag to toggle no no_print mode, doens't print snake vision and direction on terminal");
     float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.1f);
     float   &alpha        = kwarg("a,alpha,learning_rate", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.5f);
     float   &gamma        = kwarg("g,gamma,future_reward_weight", "Determine the gamma of the agent future reward imoportance for the q_learning").set_default(0.3f);

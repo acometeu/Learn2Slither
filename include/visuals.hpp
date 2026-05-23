@@ -54,9 +54,6 @@ struct sdl_state
 
     // Step by step
     bool    new_input;
-
-    // Special key
-    bool    space_key;
 };
 
 
