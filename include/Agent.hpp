@@ -23,10 +23,11 @@ typedef struct s_simple_q
 {
     bool    green_apple;
     bool    red_apple;
-    bool    obstacle;
+    bool    snake_tail;
+    bool    wall;
 
     bool operator==(const s_simple_q& key) const{
-        if (obstacle == key.obstacle && green_apple == key.green_apple && red_apple == key.red_apple)
+        if (green_apple == key.green_apple && red_apple == key.red_apple && snake_tail == key.snake_tail && wall == key.wall)
             return(true);
         return(false);
     }
@@ -39,8 +40,8 @@ struct hash_qtable
     // }
 
 
-    size_t  operator()(const std::array<t_simple_q, 4> &key) const{
-        size_t  hash = 0;
+    int  operator()(const std::array<t_simple_q, 4> &key) const{
+        int  hash = 0;
         int key_size = key.size();
         for (int i = 0; i < key_size; i++)
         {
@@ -49,7 +50,9 @@ struct hash_qtable
             hash <<= 2;
             hash += key[i].red_apple;
             hash <<= 2;
-            hash += key[i].obstacle;
+            hash += key[i].snake_tail;
+            hash <<= 2;
+            hash += key[i].wall;
         }
         return(hash);
     }
