@@ -96,12 +96,7 @@ int main(int argc, char* argv[]) {
     if (args.verbose)
         args.print();
 
-    //testtsuppr
-    // std::cout << "std::stof(0.5) = " << std::stof("-0.5") << std::endl;
-    // return(0);
-
     // seed random number generator
-    srand(time(NULL));
     Board board(args.board_size);
     Snake snake(board, args.snake_size);
     board.print_board();

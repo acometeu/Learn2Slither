@@ -2,7 +2,7 @@
 #include "include/Agent.hpp"
 
 Snake::Snake(Board  &board, int &snake_size) : board(board), initial_size(snake_size), _stats(t_statistics()){
-    dir = rand() % 4;
+    dir = get_random_int(0, 3);
     if (initialize_snake())
         throw std::invalid_argument("Not enough space for Snake on the Board");
     update_vision();
@@ -81,7 +81,7 @@ int Snake::initialize_body(int actual_size, t_coor &last_body){
 
 int Snake::get_random_direction(std::vector<int> &all_directions){
 
-        size_t random_index = rand() % all_directions.size();
+        size_t random_index = get_random_int(0, all_directions.size() - 1);
         std::swap(all_directions[random_index], all_directions.back());
         return (all_directions.back());
 }

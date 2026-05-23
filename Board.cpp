@@ -111,7 +111,7 @@ int     Board::spawn_object(char object){
 
 t_coor  Board::get_random_empty_cell(void){
     auto it = empty_cells.begin();
-    for (int i = rand() % empty_cells.size(); i > 0; i--)
+    for (int i = get_random_int(0, empty_cells.size() - 1); i > 0; i--)
         it++;
     t_coor empty_cell(*it / _board_size, *it % _board_size);
     return(empty_cell);
