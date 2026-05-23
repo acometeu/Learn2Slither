@@ -259,14 +259,17 @@ t_coor  Snake::get_position_after_movement(t_coor last_body, int direction, t_co
     return(body);
 }
 
-int Snake::update_position_and_vision(void){
+int Snake::update_position_and_vision(MyArgs &args){
 
-    print_dir();
     int reward = move(dir);
     if (reward == DEATH_REWARD || reward == END_REWARD)
-        return(reward);
+    return(reward);
     update_vision();
-    print_vision();
+    if (!args.no_print)
+    {
+        print_dir();
+        print_vision();
+    }
     return(reward);
 }
 
@@ -277,14 +280,14 @@ int     Snake::update_position_and_q_values(MyArgs &args, Agent &agent){
         auto old_state = this->get_snake_vision();
         int old_direction = this->dir;
 
-        int reward = this->update_position_and_vision();
+        int reward = this->update_position_and_vision(args);
         agent.update_q_value(*this, reward, old_state, old_direction);
         if (reward == DEATH_REWARD || reward == END_REWARD)
             return(1);
     }
     else
     {
-        int reward = this->update_position_and_vision();
+        int reward = this->update_position_and_vision(args);
         if (reward == DEATH_REWARD || reward == END_REWARD)
             return(1);
     }
