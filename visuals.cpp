@@ -80,6 +80,7 @@ int     initialize(sdl_state &state){
     state.event = { 0 };
     state.running = true;
     state.new_input = false;
+    state.space_key = false;
 
     return(0);
 }
@@ -153,18 +154,22 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
     if (state.new_input)
     {
         state.new_input = false;
+        if (state.space_key)
+        {
+            snake.dir = agent.choose_direction(snake);
+            state.space_key = false;
+        }
         if (snake.update_position_and_q_values(args, agent))
             return(1);
-        snake.dir = agent.choose_direction(snake);
 
         //testsuppr
         auto keys = agent.get_t_q_table_key(snake.get_snake_vision());
         auto values = agent.q_table[keys];
         // std::cout << "LEFT:" << std::endl;
-        std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
-        std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
-        std::cout << "values[UP] = " << values[UP] << std::endl;
-        std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
+        // std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
+        // std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
+        // std::cout << "values[UP] = " << values[UP] << std::endl;
+        // std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
         // std::cout << "RIGHT:" << std::endl;
         // std::cout << "UP:" << std::endl;
         // std::cout << "DOWN:" << std::endl;
@@ -197,12 +202,13 @@ int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs
     state.now_time = SDL_GetTicks();
     float   delta_time = state.now_time - state.prev_time;
     
-    if (delta_time >= args.snake_speed)
+    if (delta_time >= args.snake_speed || state.space_key)
     {
+        state.space_key = false;
         if (snake.update_position_and_q_values(args, agent))
             return(1);
         snake.dir = agent.choose_direction(snake);
-        state.prev_time += args.snake_speed;
+        state.prev_time = SDL_GetTicks();
     }
     return(0);
 }
@@ -249,6 +255,13 @@ void sdl_handle_event(Snake &snake, sdl_state &state){
                         snake.dir = DOWN;
                         state.new_input = true;
                         break;
+                    
+                    // handle special keys
+                    case SDL_SCANCODE_SPACE:
+                        // classic mode : max speed display
+                        // step-by-step mode : agent choose next move
+                        state.space_key = true;
+                        state.new_input = true;
                     default :
                         break;
                 }
