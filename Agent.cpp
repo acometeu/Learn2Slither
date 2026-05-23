@@ -140,27 +140,13 @@ int     Agent::save_q_table_to_export_path(void){
 
 int    Agent::choose_direction(Snake &snake){
     
-    float random = get_random_float(0, 1);
-    if (random < this->epsilon)
-    {
-        std::cout << "explooooooration" << std::endl;
+    if (get_random_float(0, 1) < this->epsilon)
         return (get_random_int(0, 3));
-    }
-    else
-    {
-        random = get_random_int(0, 49);
-        
-        if (random == 0)
-        {
-            std::cout << "RANDOMMMM" << std::endl;
-            return (get_safe_random_q_value(snake));
-        }
-        else
-        {
-            std::cout << "GREEEEEEEEEdy" << std::endl;
-            return(get_best_q_values_direction(snake));
-        }
-    }
+
+    if (get_random_int(0, 49) == 0)
+        return (get_safe_random_q_value(snake));
+
+    return(get_best_q_values_direction(snake));
 }
 
 std::array<t_simple_q, 4>   Agent::get_t_q_table_key(const std::array<std::string, 4> &vision)
@@ -201,19 +187,8 @@ int     Agent::get_safe_random_q_value(Snake &snake){
     auto vision = snake.get_snake_vision();
     for (int index_max = all_dirs.size() - 1; index_max > 0; index_max--)
     {
-        for (int j = 0; j < all_dirs.size(); j++)
-        {
-            std::cout << "before swapt : all_dirs[j] = " << all_dirs[j] << std::endl;
-        }
         int random = get_random_int(0, index_max);
         std::swap(all_dirs[index_max], all_dirs[random]);
-        for (int j = 0; j < all_dirs.size(); j++)
-        {
-            std::cout << "after swapt : all_dirs[j] = " << all_dirs[j] << std::endl;
-        }
-        std::cout << "vision = " << vision[all_dirs[index_max]] << std::endl;
-        std::cout << "index_max = " << all_dirs[index_max] << std::endl;
-        // std::cout << "random = " << random << std::endl;
         if (vision[all_dirs[index_max]].size() && vision[all_dirs[index_max]][0] != 'S')
             return (all_dirs[index_max]);
     }
