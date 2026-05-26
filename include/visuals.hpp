@@ -43,6 +43,7 @@ struct sdl_state
     uint64_t    prev_time;
     uint64_t    now_time;
     bool        running;
+    int         sessions;
 
     // game objects
     sdl_pixel   pixel;

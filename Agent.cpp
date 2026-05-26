@@ -1,27 +1,27 @@
 #include "include/Agent.hpp"
 
-Agent::Agent(float epsilon, float alpha, float gamma): epsilon(epsilon), alpha(alpha), gamma(gamma){
+Agent::Agent(float epsilon, float alpha, float gamma, int total_session): epsilon(epsilon), alpha(alpha), gamma(gamma), _total_session(total_session){
 
     return;
 }
 
 Agent::~Agent(){
 
-    if (ofs.is_open())
-        ofs.close();
+    if (_ofs.is_open())
+        _ofs.close();
     return;
 }
 
 int     Agent::set_import_path(const std::string &import_path){
 
-    ifs.open(import_path);
-    if (!ifs.is_open())
+    _ifs.open(import_path);
+    if (!_ifs.is_open())
     {
         std::cerr << "Failed opening import path : " << import_path << std::endl;
         return(1);
     }
     std::string line;
-    while (std::getline(ifs, line))
+    while (std::getline(_ifs, line))
         parse_and_add_q_values(line);
 
     return(0);
@@ -86,8 +86,8 @@ std::array<float, 4>    Agent::parse_q_table_values(const std::string &values_li
 
 int     Agent::set_export_path(const std::string &export_path){
 
-    ofs.open(export_path, std::ofstream::trunc);
-    if (!ofs.is_open())
+    _ofs.open(export_path, std::ofstream::trunc);
+    if (!_ofs.is_open())
     {
         std::cerr << "Failed opening export path : " << export_path << std::endl;
         return(1);
@@ -97,7 +97,7 @@ int     Agent::set_export_path(const std::string &export_path){
 
 int     Agent::save_q_table_to_export_path(void){
 
-    if (!ofs.is_open())
+    if (!_ofs.is_open())
     {
         std::cerr << "Saved to export file failed : stream closed" << std::endl;
         return (1);
@@ -108,26 +108,26 @@ int     Agent::save_q_table_to_export_path(void){
     {
         auto key = (*it).first;
         auto values = (*it).second;
-        ofs << key[LEFT].green_apple << '.' << key[LEFT].red_apple << '.'
+        _ofs << key[LEFT].green_apple << '.' << key[LEFT].red_apple << '.'
             << key[LEFT].obstacle << ',';
-        ofs << key[RIGHT].green_apple << '.' << key[RIGHT].red_apple << '.'
+        _ofs << key[RIGHT].green_apple << '.' << key[RIGHT].red_apple << '.'
             << key[RIGHT].obstacle << ',';
-        ofs << key[UP].green_apple << '.' << key[UP].red_apple << '.'
+        _ofs << key[UP].green_apple << '.' << key[UP].red_apple << '.'
             << key[UP].obstacle << ',';
-        ofs << key[DOWN].green_apple << '.' << key[DOWN].red_apple << '.'
+        _ofs << key[DOWN].green_apple << '.' << key[DOWN].red_apple << '.'
             << key[DOWN].obstacle << ':';
         if (values[LEFT])
-            ofs << LEFT << values[LEFT] << ',';
+            _ofs << LEFT << values[LEFT] << ',';
         if (values[RIGHT])
-            ofs << RIGHT << values[RIGHT] << ',';
+            _ofs << RIGHT << values[RIGHT] << ',';
         if (values[UP])
-            ofs << UP << values[UP] << ',';
+            _ofs << UP << values[UP] << ',';
         if (values[DOWN])
-            ofs << DOWN << values[DOWN];
-        ofs << std::endl;
+            _ofs << DOWN << values[DOWN];
+        _ofs << std::endl;
     }
 
-    if (!ofs.good())
+    if (!_ofs.good())
     {
         std::cerr << "Saved to export file failed" << std::endl;
         return (1);
@@ -137,10 +137,22 @@ int     Agent::save_q_table_to_export_path(void){
 }
 
 
-int    Agent::choose_direction(Snake &snake){
+int    Agent::choose_direction(Snake &snake, MyArgs &args, int current_session){
     
-    if (get_random_float(0, 1) < this->epsilon)
-        return (get_random_int(0, 3));
+    // exploration rate decrease proportionnaly until it hit 0
+    if (!args.no_learning)
+    {
+        int half_sessions = _total_session * 0.75;
+        if (current_session <= half_sessions)
+        {
+            float current_epsilon = (half_sessions - current_session) * epsilon / half_sessions;
+            if (get_random_float(0, 1) < current_epsilon)
+            {
+                // std::cout << "TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT" << std::endl;
+                return (get_random_int(0, 3));
+            }
+        }
+    }
 
     if (get_random_int(0, 49) == 0)
         return (get_safe_random_q_value(snake));
@@ -189,7 +201,6 @@ int     Agent::get_safe_random_q_value(Snake &snake){
         if (vision[all_dirs[index_max]].size() && vision[all_dirs[index_max]][0] != 'S')
             return (all_dirs[index_max]);
     }
-    std::cout << "NO good choices" << std::endl;
     return(all_dirs[0]);
 }
 

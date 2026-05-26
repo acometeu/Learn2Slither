@@ -8,14 +8,14 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
         return(1);
     initialize_objects(board, state);
     
-    for (int i = 0; i < args.sessions; i++)
+    for (state.sessions = 1; state.sessions <= args.sessions; state.sessions++)
     {
-        if (i > 0)
+        if (state.sessions > 0)
         {
             board.reset();
             snake.reset();
         }
-        std::cout << "session " << i << std::endl;
+        std::cout << "session " << state.sessions << std::endl;
         while (state.running)
         {
             sdl_handle_event(snake, state);
@@ -155,14 +155,14 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
     {
         if (state.space_key)
         {
-            snake.dir = agent.choose_direction(snake);
+            snake.dir = agent.choose_direction(snake, args, state.sessions);
             state.space_key = false;
         }
 
         state.new_input = false;
         if (snake.update_position_and_q_values(args, agent))
             return(1);
-        snake.dir = agent.choose_direction(snake);
+        // snake.dir = agent.choose_direction(snake, state.sessions);
 
         //testsuppr
         auto keys = agent.get_t_q_table_key(snake.get_snake_vision());
@@ -213,7 +213,7 @@ int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs
         state.space_key = false;
         if (snake.update_position_and_q_values(args, agent))
             return(1);
-        snake.dir = agent.choose_direction(snake);
+        snake.dir = agent.choose_direction(snake, args, state.sessions);
         state.prev_time = SDL_GetTicks();
     }
     return(0);

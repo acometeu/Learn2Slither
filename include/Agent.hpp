@@ -7,10 +7,9 @@
 
 typedef struct s_q_table_key
 {
-    // numbers as distance, 0 means noting
-    unsigned int    green_apple;
-    unsigned int    red_apple;
-    unsigned int    obstacle;
+    bool    green_apple;
+    bool    red_apple;
+    bool    obstacle;
 
     bool operator==(const s_q_table_key& key) const{
         if (obstacle == key.obstacle && green_apple == key.green_apple && red_apple == key.red_apple)
@@ -19,27 +18,8 @@ typedef struct s_q_table_key
     }
 } t_q_table_key;
 
-// typedef struct s_simple_q
-// {
-//     bool    green_apple;
-//     bool    red_apple;
-//     bool    snake_tail;
-//     bool    wall;
-
-//     bool operator==(const s_simple_q& key) const{
-//         if (green_apple == key.green_apple && red_apple == key.red_apple && snake_tail == key.snake_tail && wall == key.wall)
-//             return(true);
-//         return(false);
-//     }
-// } t_simple_q;
-
 struct hash_qtable
 {
-    // size_t  operator()(const std::array<s_q_table_key, 4> &key) const{
-    //     return (std::hash<int>{}(key[0].obstacle + key[0].green_apple + key[0].red_apple + key[1].obstacle + key[1].green_apple + key[1].red_apple + key[2].obstacle + key[2].green_apple + key[2].red_apple + key[3].obstacle + key[3].green_apple + key[3].red_apple));
-    // }
-
-
     int  operator()(const std::array<t_q_table_key, 4> &key) const{
         int  hash = 0;
         int key_size = key.size();
@@ -51,8 +31,6 @@ struct hash_qtable
             hash += key[i].red_apple;
             hash <<= 2;
             hash += key[i].obstacle;
-            // hash <<= 2;
-            // hash += key[i].wall;
         }
         return(hash);
     }
@@ -62,7 +40,7 @@ struct hash_qtable
 class Agent
 {
 public:
-    Agent(float epsilon, float alpha, float gamma);
+    Agent(float epsilon, float alpha, float gamma, int total_sessions);
     ~Agent();
 
     // variables
@@ -78,7 +56,7 @@ public:
     int     set_import_path(const std::string &import_path);
     int     set_export_path(const std::string &export_path);
     int     save_q_table_to_export_path(void);
-    int     choose_direction(Snake &snake);
+    int     choose_direction(Snake &snake, MyArgs &args, int current_session);
     int     get_safe_random_q_value(Snake &snake);
     int     get_best_q_values_direction(Snake &snake);
     void    update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir);
@@ -91,8 +69,9 @@ public:
 private:
 
     // variables
-    std::ofstream   ofs;
-    std::ifstream   ifs;
+    std::ofstream   _ofs;
+    std::ifstream   _ifs;
+    int             _total_session;
 
     // functions
     void    parse_and_add_q_values(const std::string &line);

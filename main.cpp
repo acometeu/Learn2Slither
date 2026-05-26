@@ -3,16 +3,15 @@
 
 int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
 
-    //testsuppr
-    for (int i = 0; i < args.sessions; i++)
+    for (int i = 1; i <= args.sessions; i++)
     {
         bool    running = true;
         while(running)
         {
-            std::cout << "loop" << i << std::endl;
+            std::cout << "session" << i << std::endl;
             if (snake.update_position_and_q_values(args, agent))
                 break;
-            snake.dir = agent.choose_direction(snake);
+            snake.dir = agent.choose_direction(snake, args, i);
         }
         snake.stats_add_session();
         if (i < args.sessions - 1)
@@ -36,7 +35,7 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     snake.update_vision();
     snake.print_vision();
 
-    Agent   agent(args.epsilon, args.alpha, args.gamma);
+    Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions);
     if (!args.import_path.empty())
     {
         if (agent.set_import_path(args.import_path))
@@ -74,7 +73,7 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
             return (1);
     }
 
-    snake.dir = agent.choose_direction(snake);
+    snake.dir = agent.choose_direction(snake, args, 1);
 
     if (args.visual_mode)
     {
