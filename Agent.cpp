@@ -139,23 +139,29 @@ int     Agent::save_q_table_to_export_path(void){
 
 int    Agent::choose_direction(Snake &snake, MyArgs &args, int current_session){
     
-    // exploration rate decrease proportionnaly until it hit 0
+    // exploration rate
     if (!args.no_learning)
     {
-        int half_sessions = _total_session * 0.75;
+        int half_sessions = _total_session / 0.25;
         if (current_session <= half_sessions)
         {
             float current_epsilon = (half_sessions - current_session) * epsilon / half_sessions;
             if (get_random_float(0, 1) < current_epsilon)
-            {
-                // std::cout << "TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT" << std::endl;
                 return (get_random_int(0, 3));
-            }
         }
     }
 
-    if (get_random_int(0, 49) == 0)
-        return (get_safe_random_q_value(snake));
+    if (!args.no_random && get_random_int(0, 49) == 0)
+    {
+        if (!args.no_safe_random)
+        {
+            std::cout << "SAFE_RANDOM TRIGGERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR" << std::endl;
+            return (get_safe_random_q_value(snake));
+        }
+        std::cout << "NOOOOOO SAFE_RANDOM TRIGGERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRr" << std::endl;
+        if (get_random_int(0, 29) == 0)
+            return(get_random_int(0, 3));
+    }
 
     return(get_best_q_values_direction(snake));
 }
