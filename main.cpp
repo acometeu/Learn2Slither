@@ -35,7 +35,8 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     snake.update_vision();
     snake.print_vision();
 
-    Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions);
+    AStateStrategy *strat = new SimpleStateStrategy();
+    Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions, strat);
     if (!args.import_path.empty())
     {
         if (agent.set_import_path(args.import_path))
@@ -89,6 +90,7 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     return (0);
 }
 
+#include "include/SimpleStateStrategy.hpp"
 int main(int argc, char* argv[]) {
     MyArgs args = argparse::parse<MyArgs>(argc, argv);
 
