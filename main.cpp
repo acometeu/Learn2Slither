@@ -43,31 +43,6 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
             return (1);
     }
 
-    // // testsuppr
-    // for (auto it = agent.q_table.begin(); it != agent.q_table.end(); it++)
-    // {
-    //     auto key = (*it).first;
-    //     auto values = (*it).second;
-    //     std::cout << key[LEFT].green_apple << '.' << key[LEFT].red_apple << '.'
-    //               << key[LEFT].snake_tail << '.' << key[LEFT].wall << ',';
-    //     std::cout << key[RIGHT].green_apple << '.' << key[RIGHT].red_apple << '.'
-    //               << key[RIGHT].snake_tail << '.' << key[RIGHT].wall << ',';
-    //     std::cout << key[UP].green_apple << '.' << key[UP].red_apple << '.'
-    //               << key[UP].snake_tail << '.' << key[UP].wall << ',';
-    //     std::cout << key[DOWN].green_apple << '.' << key[DOWN].red_apple << '.'
-    //               << key[DOWN].snake_tail << '.' << key[DOWN].wall << ':';
-    //     if (values[LEFT])
-    //         std::cout << LEFT << values[LEFT] << ',';
-    //     if (values[RIGHT])
-    //         std::cout << RIGHT << values[RIGHT] << ',';
-    //     if (values[UP])
-    //         std::cout << UP << values[UP] << ',';
-    //     if (values[DOWN])
-    //         std::cout << DOWN << values[DOWN];
-    //     std::cout << std::endl;
-    // }
-
-
     if (!args.export_path.empty())
     {
         if (agent.set_export_path(args.export_path))
@@ -97,7 +72,6 @@ int main(int argc, char* argv[]) {
     if (args.verbose)
         args.print();
 
-    // seed random number generator
     Board board(args.board_size);
     Snake snake(board, args.snake_size);
     board.print_board();

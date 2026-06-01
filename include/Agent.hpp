@@ -62,7 +62,6 @@ public:
     int     get_safe_random_q_value(Snake &snake);
     int     get_best_q_values_direction(Snake &snake);
     void    update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir);
-    // std::array<t_q_table_key, 4>   get_t_q_table_key(const std::array<std::string, 4> &vision);
 
 
 private:
@@ -74,7 +73,6 @@ private:
 
     // functions
     void    parse_and_add_q_values(const std::string &line);
-    int     parse_q_table_key(const std::string &keys_line);
     std::array<float, 4>        parse_q_table_values(const std::string &values_line);
 
 };
