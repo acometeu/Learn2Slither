@@ -166,6 +166,7 @@ int     Agent::get_best_q_values_direction(Snake &snake){
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
     std::array<std::string, 4>  vision = snake.get_snake_vision();
     int key = strategy->encode(vision);
+    
     std::unordered_map<int, std::array<float, 4>>::iterator    it = q_table.find(key);
     if (it == q_table.end())
         return (get_random_int(0, 3));

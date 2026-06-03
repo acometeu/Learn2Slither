@@ -5,6 +5,7 @@
 #include "Snake.hpp"
 #include "AStateStrategy.hpp"
 #include "SimpleStateStrategy.hpp"
+#include "ComplexStateStrategy.hpp"
 
 
 // typedef struct s_q_table_key

@@ -7,7 +7,7 @@ class AStateStrategy
 {
 public:
     virtual ~AStateStrategy() {};
-    virtual int encode(std::array<std::string, 4> const &vision) const = 0;
+    virtual unsigned int encode(std::array<std::string, 4> const &vision) const = 0;
 };
 
 

@@ -18,7 +18,7 @@ public:
     SimpleStateStrategy();
     ~SimpleStateStrategy();
 
-    int encode(std::array<std::string, 4> const &vision) const override;
+    unsigned int encode(std::array<std::string, 4> const &vision) const override;
     t_simple_state  get_simple_state(const std::string &vision) const;
 };
 

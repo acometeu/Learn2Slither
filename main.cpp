@@ -35,7 +35,8 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     snake.update_vision();
     snake.print_vision();
 
-    AStateStrategy *strat = new SimpleStateStrategy();
+    // AStateStrategy *strat = new SimpleStateStrategy();
+    AStateStrategy *strat = new ComplexStateStrategy();
     Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions, strat);
     if (!args.import_path.empty())
     {

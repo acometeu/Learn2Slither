@@ -7,6 +7,8 @@ TASK 📝
 -verifier que les imports et exports error sont incrashable
 -check bucket collision hash table (voir si ameliorer la hash table (voir Boost hash_combine))
 -mettre un random pour que le snake creve au bout d'un moment pour pas bloquer
+-verifier que le complex state strategy n'overflow jamais
+-crash en complexstatestrategy board size 3
 
 
 -REWARD example :
