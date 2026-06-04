@@ -9,6 +9,7 @@ TASK 📝
 -mettre un random pour que le snake creve au bout d'un moment pour pas bloquer
 -verifier que le complex state strategy n'overflow jamais
 -crash en complexstatestrategy board size 3
+-mettre le snake avant le board ou trouver une solution quand y'a pas la place
 
 
 -REWARD example :
