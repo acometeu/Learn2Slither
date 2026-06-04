@@ -4,6 +4,6 @@ Machine learning, training of a Q_learning model using Q_table to play the snake
 
 
 
-lunch in main file with :
+build with cmake :
 cmake -S . -B build
 cmake --build build

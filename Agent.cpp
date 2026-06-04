@@ -133,18 +133,12 @@ int    Agent::choose_direction(Snake &snake, MyArgs &args, int current_session){
     if (args.safe_random)
     {
         if (get_random_int(0, 49) == 0)
-        {
-            std::cout << "SAFE_RANDOM TRIGGERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR" << std::endl;
             return (get_safe_random_q_value(snake));
-        }
     }
     else if (args.random)
     {
         if (get_random_int(0, 49) == 0)
-        {
-            std::cout << "RANDOM TRIGGERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRr" << std::endl;
             return(get_random_int(0, 3));
-        }
     }
 
     return(get_best_q_values_direction(snake));

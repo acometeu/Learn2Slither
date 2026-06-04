@@ -8,38 +8,6 @@
 #include "ComplexStateStrategy.hpp"
 
 
-// typedef struct s_q_table_key
-// {
-//     bool    green_apple;
-//     bool    red_apple;
-//     bool    obstacle;
-
-//     bool operator==(const s_q_table_key& key) const{
-//         if (obstacle == key.obstacle && green_apple == key.green_apple && red_apple == key.red_apple)
-//             return(true);
-//         return(false);
-//     }
-// } t_q_table_key;
-
-// struct hash_qtable
-// {
-//     int  operator()(const std::array<t_q_table_key, 4> &key) const{
-//         int  hash = 0;
-//         int key_size = key.size();
-//         for (int i = 0; i < key_size; i++)
-//         {
-//             hash <<= 2;
-//             hash += key[i].green_apple;
-//             hash <<= 2;
-//             hash += key[i].red_apple;
-//             hash <<= 2;
-//             hash += key[i].obstacle;
-//         }
-//         return(hash);
-//     }
-// };
-
-
 class Agent
 {
 public:

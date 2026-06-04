@@ -1,24 +1,22 @@
 TASK 📝
--des fois des sessions echouent avant meme le premier mouvement (alors qu'elles ont des modeles tres bien trains)
 -ajouter le W dans la vision du terminal
--faire spawn le snake avant les fruits car c'est plus simple
+-mettre le snake avant le board ou trouver une solution quand y'a pas la place
 -voir si c'est on peut pas ameliorer la facon d'arreter la session si mort ou fin au lieu de tout le temps check si mort ou fin
 -mettre export path dans le destructor plutot avec un boolean
 -verifier que les imports et exports error sont incrashable
 -check bucket collision hash table (voir si ameliorer la hash table (voir Boost hash_combine))
--mettre un random pour que le snake creve au bout d'un moment pour pas bloquer
--verifier que le complex state strategy n'overflow jamais
--crash en complexstatestrategy board size 3
--mettre le snake avant le board ou trouver une solution quand y'a pas la place
+-crash en complexstatestrategy board size 3 ou lorsque tableau trop petit (ou c'est juste un throw pas catch)
+-tester difference entre learning rate acruel et inferieur sur de tres nombreuses sessions d'entrainements (au moins 1 million)
+-verifier les leaks
+-faire barre de chargement
 
 
--REWARD example :
-.nothing = -1
-.red apple = -10
-.death = -100
-.green apple = +50
-.end = +1000
-.not known case = +1 (pour pousser a l'exploration)
+Bigger Tasks 🎯
+-faire une strategy avec emplacement precis
+-faire Q_reseau de neurones
+-faire un visualiseur de la q_table
+-trouver un moyen pour voir quels fonctions prennent le + de temps et optimiser
+-1v1 snake and more (1v1v1v1v1v1v1...)
 
 
 
@@ -35,11 +33,7 @@ little things ❌
 
 -checker si c'est worth de changer std::unordered_map<int> en std::unordered_map<t_coor> avec special hash_map
 
--board.spawn_object est pas totalement random car si il va vers la droite si la case n'est pas disponible jusqu'a que yen ait une de dispo alors la premiere case disponible vers la droite aura plus de chance de spawn l'objet
-
 -accept map provided setting 
-
--make a better random generator for the map objects placement et/ou verifier que les genrateur de random sont differents selons les instatnces 
 
 -gerer les cas de figures ou le serpent commence bloque (pas besoin si tu peux pas changer la taille de base du serpent):
 WWWWW       WWWWW
@@ -51,57 +45,8 @@ WWWWW       WWWWW
 
 -gerer quand les arguments passes sont des valeurs imposibles (mettre les tailles en unsigned)
 
--fully understand why all steps are needed to make SFML works
-
 -choose to either comeback latency or wait for the user machine (freeze and accelerate or freeze stop game)
-
--verifier les leaks
 
 -remplacer par des textures si envie
 
 -gerer quand ya plus de places sur le terrain
-
--voir si replace t_coor avec std::pair<int, int>
-
--implementer un vrai generateur de random (voir : https://codingnest.com/generating-random-numbers-using-c-standard-library-the-problems/)
-
-
-
-
-
-
-
-GAME BONUS
--being able to make a path in advance for the snake "↑ ↓ → → ↑ ← ↑"
--1v1 snake and more (1v1v1v1v1v1v1...)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-HANDLE ✅
-
--ne pas mettre les wall 'W' dans la map (et changer tout ce qui contient les trucs en rapports au tailles du coup)
-
-
-
-
-
-
-
-
-
-TESTs 🤔
--serpent peut se manger la queue (demi-tour) et meurt ✅
--serpent meurt si fruit rouge a 1 de longeur ✅
--quand ya plus de places est-ce que ca finit ✅
--quand ya pas de place a l'initialisation est-ce que ca throw une exception 

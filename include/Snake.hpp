@@ -36,17 +36,18 @@ public:
     const std::array<std::string, 4>  &get_snake_vision() const;
 
 
-
-private:
-
+    
+    private:
+    
     // variables
     t_statistics    _stats;
 
     //private func
-    int     initialize_snake();
+    int     initialize_snake(void);
     int     initialize_body(int actual_size, t_coor &last_body_part);
     int     get_random_direction(std::vector<int> &all_directions);
     t_coor  get_position_after_movement(t_coor last_body, int direction, t_coor &body);
+    int     snake_looping(void);
     void    stats_add_turn(void);
     void    stats_add_length(int new_size);
     void    stats_reduce_length(void);

@@ -47,8 +47,10 @@ typedef struct s_statistics
     unsigned long int sessions;
     unsigned int total_length;
     unsigned int max_length;
+    unsigned int consec_basic_moves;
+    unsigned int stucked_in_loop;
 
-    s_statistics() : turns(0), sessions(0), total_length(0), max_length(0){};
+    s_statistics() : turns(0), sessions(0), total_length(0), max_length(0), consec_basic_moves(0), stucked_in_loop(0){};
 }   t_statistics;
 
 typedef enum

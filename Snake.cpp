@@ -192,12 +192,14 @@ int Snake::move(int direction){
     {
         case EMPTY :
         {
+            _stats.consec_basic_moves++;
             board.set_map_coor(new_head, HEAD);
             _position.push_front(new_head);
             return (EMPTY_REWARD);
         }
         case GREEN_APPLE :
         {
+            _stats.consec_basic_moves = 0;
             board.set_map_coor(new_head, HEAD);
             _position.push_front(new_head);
             board.set_map_coor(last_body, SNAKE);
@@ -212,6 +214,7 @@ int Snake::move(int direction){
         }
         case RED_APPLE :
         {
+            _stats.consec_basic_moves = 0;
             board.set_map_coor(new_head, HEAD);
             _position.push_front(new_head);
             board.set_map_coor(_position.back(), EMPTY);
@@ -225,7 +228,10 @@ int Snake::move(int direction){
         case SNAKE :
         case HEAD :
         default :
+        {
+            _stats.consec_basic_moves = 0;
             return (DEATH_REWARD);
+        }
     }
     std::cout << "AIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIE" << std::endl;
     return (EMPTY_REWARD);
@@ -263,7 +269,7 @@ int Snake::update_position_and_vision(MyArgs &args){
 
     int reward = move(dir);
     if (reward == DEATH_REWARD || reward == END_REWARD)
-    return(reward);
+        return(reward);
     update_vision();
     if (!args.no_print)
     {
@@ -290,6 +296,22 @@ int     Snake::update_position_and_q_values(MyArgs &args, Agent &agent){
         int reward = this->update_position_and_vision(args);
         if (reward == DEATH_REWARD || reward == END_REWARD)
             return(1);
+    }
+
+    if(snake_looping())
+        return(1);
+
+    return(0);
+}
+
+int Snake::snake_looping(void){
+
+    if (_stats.consec_basic_moves > board.get_board_size() * 10)
+    {
+        std::cout << "LOOOOOOOOOOOOOOOOOOOOOP" << std::endl;
+        _stats.consec_basic_moves = 0;
+        _stats.stucked_in_loop++;
+        return(1);
     }
     return(0);
 }
@@ -331,6 +353,7 @@ void    Snake::stats_reduce_length(void){
 void    Snake::display_stats(void){
 
     std::cout << "--- Snake Stats ---" << std::endl;
+    std::cout << "stucked in loop : " << _stats.stucked_in_loop << std::endl;
     std::cout << "Sessions : " << _stats.sessions << std::endl;
     std::cout << "Turns : " << _stats.turns << std::endl;
     float   average_length = float(_stats.total_length) / float(_stats.sessions);
