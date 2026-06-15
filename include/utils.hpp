@@ -99,4 +99,5 @@ float   get_random_float(int min, int max);
 std::vector<std::string>    ft_split(std::string str, char delim);
 
 
+
 #endif

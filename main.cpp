@@ -42,15 +42,28 @@ AStateStrategy  *choose_strategy(MyArgs &args){
         return (new IntermediateStateStrategy());
 }
 
+void    print_strategy(MyArgs &args, Agent &agent){
+
+    if (args.verbose)
+    {
+        if (dynamic_cast<SimpleStateStrategy*>(agent.strategy) != nullptr)
+            std::cout << "--strat selected : Simple strategy (fast learning, lowest space, worse results)" << std::endl;
+        else if (dynamic_cast<IntermediateStateStrategy*>(agent.strategy) != nullptr)
+            std::cout << "--strat selected : Intermediate strategy (medium speed learning, medium space, best results)" << std::endl;
+        else if (dynamic_cast<ComplexStateStrategy*>(agent.strategy) != nullptr)
+            std::cout << "--strat selected : Complex strategy (slow learning, huge space, medium results, dependant of training board size used)" << std::endl;
+        else
+            std::cout << "--strat selected : Not recognised" << std::endl;
+    }
+
+    return;
+}
+
 int learn2slither(Board &board, Snake &snake, MyArgs &args){
 
-    snake.update_vision();
-    snake.print_vision();
-
-    // AStateStrategy *strat = new SimpleStateStrategy();
-    // AStateStrategy *strat = new IntermediateStateStrategy();
     AStateStrategy *strat = choose_strategy(args);
     Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions, strat);
+
     if (!args.import_path.empty())
     {
         if (agent.set_import_path(args.import_path))
@@ -63,6 +76,10 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
             return (1);
     }
 
+    print_strategy(args, agent);
+    board.print_board();
+    snake.update_vision();
+    snake.print_vision();
     snake.dir = agent.choose_direction(snake, args, 1);
 
     if (args.visual_mode)
@@ -88,7 +105,6 @@ int main(int argc, char* argv[]) {
 
     Board board(args.board_size);
     Snake snake(board, args.snake_size);
-    board.print_board();
 
     if (learn2slither(board, snake, args))
         return (1);
