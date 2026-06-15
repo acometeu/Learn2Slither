@@ -7,7 +7,7 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     if (initialize(state))
         return(1);
     initialize_objects(board, state);
-    
+
     for (state.sessions = 1; state.sessions <= args.sessions; state.sessions++)
     {
         if (state.sessions > 1)
@@ -15,6 +15,7 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
             board.reset();
             snake.reset();
         }
+        snake.dir = agent.choose_direction(snake, args, 1);
         std::cout << "session " << state.sessions << std::endl;
         while (state.running)
         {
@@ -164,10 +165,9 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
             return(1);
         // snake.dir = agent.choose_direction(snake, state.sessions);
 
-        //testsuppr
+        //testsuppr to get q_values
         auto keys = agent.strategy->encode(snake.get_snake_vision());
         auto values = agent.q_table[keys];
-        std::cout << "LEFT:" << std::endl;
         std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
         std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
         std::cout << "values[UP] = " << values[UP] << std::endl;

@@ -269,7 +269,15 @@ int Snake::update_position_and_vision(MyArgs &args){
 
     int reward = move(dir);
     if (reward == DEATH_REWARD || reward == END_REWARD)
+    {
+        if (!args.no_print)
+        {
+            print_dir();
+            if (reward == END_REWARD)
+                print_vision();
+        }
         return(reward);
+    }
     update_vision();
     if (!args.no_print)
     {
@@ -308,7 +316,6 @@ int Snake::snake_looping(void){
 
     if (_stats.consec_basic_moves > board.get_board_size() * 10)
     {
-        std::cout << "LOOOOOOOOOOOOOOOOOOOOOP" << std::endl;
         _stats.consec_basic_moves = 0;
         _stats.stucked_in_loop++;
         return(1);

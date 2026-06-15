@@ -1,7 +1,7 @@
 TASK 📝
 -des fois ya la derniere session qui echoue direct
--faire une option pour choisir la strategy
 -la session 1 pette premier move
+-peut-etre passer de 0 a 25% degressif puis rien en exploration rate (ER), a 0 a 25% degressif a 1/200 coup aleatoire jusqu'a 75%
 -ajouter le W dans la vision du terminal
 -peut-etre changer le type int par int_64 dans les states strategy
 -faire que le max board size c'est 255 ou 256 (en rapport avec la limite de taille d'encodage dans un int du complexstate strategy)
@@ -18,7 +18,6 @@ TASK 📝
 
 
 Bigger Tasks 🎯
--faire une strategy avec emplacement precis
 -faire Q_reseau de neurones
 -faire un visualiseur de la q_table
 -trouver un moyen pour voir quels fonctions prennent le + de temps et optimiser
