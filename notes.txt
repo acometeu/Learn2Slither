@@ -1,7 +1,5 @@
 TASK 📝
--des fois ya la derniere session qui echoue direct
--la session 1 pette premier move
--peut-etre passer de 0 a 25% degressif puis rien en exploration rate (ER), a 0 a 25% degressif a 1/200 coup aleatoire jusqu'a 75%
+-retrain un modele bien train le deteriore (peut-etre que les exploration rate ne sont pas enregistre avec la bonne direc)
 -ajouter le W dans la vision du terminal
 -peut-etre changer le type int par int_64 dans les states strategy
 -faire que le max board size c'est 255 ou 256 (en rapport avec la limite de taille d'encodage dans un int du complexstate strategy)
