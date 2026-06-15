@@ -1,5 +1,9 @@
 TASK 📝
+-faire une option pour choisir la strategy
+-la session 1 pette premier move
 -ajouter le W dans la vision du terminal
+-peut-etre changer le type int par int_64 dans les states strategy
+-faire que le max board size c'est 255 ou 256 (en rapport avec la limite de taille d'encodage dans un int du complexstate strategy)
 -mettre le snake avant le board ou trouver une solution quand y'a pas la place
 -voir si c'est on peut pas ameliorer la facon d'arreter la session si mort ou fin au lieu de tout le temps check si mort ou fin
 -mettre export path dans le destructor plutot avec un boolean
@@ -9,6 +13,7 @@ TASK 📝
 -tester difference entre learning rate acruel et inferieur sur de tres nombreuses sessions d'entrainements (au moins 1 million)
 -verifier les leaks
 -faire barre de chargement
+-lorsque le snake est coupe en court de route de max_length n'est pas update avec la derniere valeur
 
 
 Bigger Tasks 🎯
@@ -17,6 +22,8 @@ Bigger Tasks 🎯
 -faire un visualiseur de la q_table
 -trouver un moyen pour voir quels fonctions prennent le + de temps et optimiser
 -1v1 snake and more (1v1v1v1v1v1v1...)
+-peut-etre faire des threads
+-faire un menu en mode visuel pour choisir des options
 
 
 

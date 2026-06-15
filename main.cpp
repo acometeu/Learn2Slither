@@ -9,12 +9,12 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
         while(running)
         {
             std::cout << "session" << i << std::endl;
+            snake.dir = agent.choose_direction(snake, args, i);
             if (snake.update_position_and_q_values(args, agent))
                 break;
-            snake.dir = agent.choose_direction(snake, args, i);
         }
         snake.stats_add_session();
-        if (i < args.sessions - 1)
+        if (i < args.sessions)
         {
             board.reset();
             snake.reset();
@@ -30,13 +30,26 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     return(0);
 }
 
+AStateStrategy  *choose_strategy(MyArgs &args){
+
+    if (args.state_strategy == "simple" || args.state_strategy == "simple_strategy")
+        return (new SimpleStateStrategy());
+    else if (args.state_strategy == "" || args.state_strategy == "intermediate" || args.state_strategy == "intermediate_strategy")
+        return(new IntermediateStateStrategy());
+    else if (args.state_strategy == "complex" || args.state_strategy == "complex_strategy")
+        return(new ComplexStateStrategy());
+    else
+        return (new IntermediateStateStrategy());
+}
+
 int learn2slither(Board &board, Snake &snake, MyArgs &args){
 
     snake.update_vision();
     snake.print_vision();
 
     // AStateStrategy *strat = new SimpleStateStrategy();
-    AStateStrategy *strat = new ComplexStateStrategy();
+    // AStateStrategy *strat = new IntermediateStateStrategy();
+    AStateStrategy *strat = choose_strategy(args);
     Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions, strat);
     if (!args.import_path.empty())
     {

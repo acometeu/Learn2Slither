@@ -1,20 +1,20 @@
-#include "include/ComplexStateStrategy.hpp"
+#include "include/IntermediateStateStrategy.hpp"
 
-ComplexStateStrategy::ComplexStateStrategy(){
-
-    return;
-}
-
-ComplexStateStrategy::~ComplexStateStrategy(){
+IntermediateStateStrategy::IntermediateStateStrategy(){
 
     return;
 }
 
+IntermediateStateStrategy::~IntermediateStateStrategy(){
+
+    return;
+}
 
 
-unsigned int ComplexStateStrategy::encode(std::array<std::string, 4> const &vision) const {
+
+unsigned int IntermediateStateStrategy::encode(std::array<std::string, 4> const &vision) const {
     
-    t_complex_state state;
+    t_intermediate_state state;
     state.pos = get_complex_state_pos(vision);
     unsigned int  hash = state.pos;
     for (int i = 0; i < 4; i++)
@@ -28,15 +28,18 @@ unsigned int ComplexStateStrategy::encode(std::array<std::string, 4> const &visi
     return(hash);
 }
 
-unsigned int ComplexStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
+unsigned int IntermediateStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
 
     float size = vision[0].size() + vision[1].size() + 1; //equivalent of get_board_size
-    unsigned int pos = vision[2].size() * size + vision[0].size();
+    unsigned int pos = 0;
+    pos += vision[2].size() / (size/4);
+    pos <<= 2;
+    pos += vision[0].size() / (size/4);
     return(pos);
 }
 
 
-t_state_4_bools  ComplexStateStrategy::get_simple_state(const std::string &vision) const{
+t_state_4_bools  IntermediateStateStrategy::get_simple_state(const std::string &vision) const{
 
     t_state_4_bools state = {false, false, false, false};
         

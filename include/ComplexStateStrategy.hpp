@@ -2,20 +2,21 @@
 #define COMPLEXSTATESTRATEGY_HPP
 
 #include "AStateStrategy.hpp"
+#include "IntermediateStateStrategy.hpp"
 
-typedef struct state_4_bools
-{
-    bool    green_apple;
-    bool    red_apple;
-    bool    body;
-    bool    wall;
+// typedef struct state_4_bools
+// {
+//     bool    green_apple;
+//     bool    red_apple;
+//     bool    body;
+//     bool    wall;
 
-} t_state_4_bools;
+// } t_state_4_bools;
 
 typedef struct complex_state
 {
     std::array<t_state_4_bools, 4>   visions;
-    int     pos;    //position from 0 to 15 left to right, top to down
+    int     pos;    //position from 0 to X (X = board_size * board_size) left to right, top to down
 } t_complex_state;
 
 

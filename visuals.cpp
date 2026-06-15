@@ -10,7 +10,7 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     
     for (state.sessions = 1; state.sessions <= args.sessions; state.sessions++)
     {
-        if (state.sessions > 0)
+        if (state.sessions > 1)
         {
             board.reset();
             snake.reset();

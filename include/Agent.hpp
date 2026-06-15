@@ -5,6 +5,7 @@
 #include "Snake.hpp"
 #include "AStateStrategy.hpp"
 #include "SimpleStateStrategy.hpp"
+#include "IntermediateStateStrategy.hpp"
 #include "ComplexStateStrategy.hpp"
 
 
