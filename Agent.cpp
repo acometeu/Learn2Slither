@@ -125,17 +125,13 @@ int    Agent::choose_direction(Snake &snake, MyArgs &args, int current_session){
     // exploration rate
     if (!args.no_learning)
     {
-        static int first_quartile = _total_session * 0.25;
-        if (current_session <= first_quartile)
+        if (current_session <= _total_session * 0.25) //~first quartile
         {
-            float current_epsilon = (first_quartile - current_session) * epsilon / first_quartile;
-            if (get_random_float(0, 1) < current_epsilon)
-                return (get_random_int(0, 3));
-        }
-        else if (current_session <= first_quartile * 2) //~half
-        {
-            if (get_random_float(0, 1) < 0.005) //0.5% exploration rate
+            if (get_random_float(0, 1) < epsilon)
+            {
+                std::cout << "OUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << std::endl;
                 return(get_random_int(0, 3));
+            }
         }
     }
 

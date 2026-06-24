@@ -84,8 +84,8 @@ struct MyArgs : public argparse::Args {
     bool &no_print          = flag("no_print", "A flag to toggle no print mode, doens't print snake vision and direction on terminal");
     bool &random            = flag("rand,random", "A flag to toggle random mode, trigger random movement to unstuck snake");
     bool &safe_random       = flag("safe_rand,safe_random", "A flag to toggle safe random mode, at random intervale select the second best q_value instead of the best q_value");
-    float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.2f);
-    float   &alpha          = kwarg("a,alpha,learning_rate", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.5f);
+    float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.005f);
+    float   &alpha          = kwarg("a,alpha,learning_rate", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.1f);
     float   &gamma          = kwarg("g,gamma,future_reward_weight", "Determine the gamma of the agent future reward importance for the q_learning").set_default(0.3f);
     std::string &import_path  = kwarg("import,import_path", "source path to import q_table values").set_default("");
     std::string &export_path  = kwarg("export,export_path", "source path to export q_table values").set_default("");
