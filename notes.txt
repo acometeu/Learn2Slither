@@ -1,7 +1,4 @@
 TASK 📝
--ajouter le W dans la vision du terminal
--peut-etre changer le type int par int_64 dans les states strategy
--faire que le max board size c'est 255 ou 256 (en rapport avec la limite de taille d'encodage dans un int du complexstate strategy)
 -mettre le snake avant le board ou trouver une solution quand y'a pas la place
 -voir si c'est on peut pas ameliorer la facon d'arreter la session si mort ou fin au lieu de tout le temps check si mort ou fin
 -mettre export path dans le destructor plutot avec un boolean
@@ -13,11 +10,11 @@ TASK 📝
 -faire barre de chargement
 -lorsque le snake est coupe en court de route de max_length n'est pas update avec la derniere valeur
 -un peu mieux ranger les fonctions (dans utils par ex)
+-regler/choisir la taille du visuel
 
 
 Bigger Tasks 🎯
 -faire Q_reseau de neurones
--faire un visualiseur de la q_table
 -trouver un moyen pour voir quels fonctions prennent le + de temps et optimiser
 -1v1 snake and more (1v1v1v1v1v1v1...)
 -peut-etre faire des threads

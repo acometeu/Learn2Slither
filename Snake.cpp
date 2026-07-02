@@ -141,39 +141,48 @@ void    Snake::update_vision(void){
 
 void    Snake::print_vision(void){
 
-    t_coor  head(0, 0);
-    head.x = _position[0].x;
-    head.y = _position[0].y;
+    int left_padding = vision[LEFT].size() + 1;
+    int right_padding = vision[RIGHT].size() + 1;
+
+    //Print wall UP
+    print_padding(left_padding);
+    std::cout << WALL;
+    print_padding(right_padding);
+    std::cout << std::endl;
 
     //Print vision UP
     for (int i = 0; i < vision[UP].size(); i++)
     {
-        for (int j = 0; j < vision[LEFT].size(); j++)
-            std::cout << ' ';
+        print_padding(left_padding);
         std::cout << vision[UP][vision[UP].size() - 1 - i];
-        for (int j = 0; j < vision[RIGHT].size(); j++)
-            std::cout << ' ';
+        print_padding(right_padding);
         std::cout << std::endl;
     }
 
     //Print vision LEFT and RIGHT
+    std::cout << WALL;
     for (int i = vision[LEFT].size() - 1; i >= 0; i--)
         std::cout << vision[LEFT][i];
     std::cout << HEAD;
     for (int i = 0; i < vision[RIGHT].size(); i++)
         std::cout << vision[RIGHT][i];
+    std::cout << WALL;
     std::cout << std::endl;
 
     //Print vision DOWN
     for (int i = 0; i < vision[DOWN].size(); i++)
     {
-        for (int j = 0; j < vision[LEFT].size(); j++)
-            std::cout << ' ';
+        print_padding(left_padding);
         std::cout << vision[DOWN][i];
-        for (int j = 0; j < vision[RIGHT].size(); j++)
-            std::cout << ' ';
+        print_padding(right_padding);
         std::cout << std::endl;
     }
+
+    //Print wall DOWN
+    print_padding(left_padding);
+    std::cout << WALL;
+    print_padding(right_padding);
+    std::cout << std::endl;
     std::cout << std::endl;
 }
 

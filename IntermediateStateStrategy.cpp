@@ -12,11 +12,11 @@ IntermediateStateStrategy::~IntermediateStateStrategy(){
 
 
 
-unsigned int IntermediateStateStrategy::encode(std::array<std::string, 4> const &vision) const {
+uint32_t    IntermediateStateStrategy::encode(std::array<std::string, 4> const &vision) const {
     
     t_intermediate_state state;
     state.pos = get_complex_state_pos(vision);
-    unsigned int  hash = state.pos;
+    uint32_t  hash = state.pos;
     for (int i = 0; i < 4; i++)
     {
         state.visions[i] = get_simple_state(vision[i]);
@@ -28,10 +28,10 @@ unsigned int IntermediateStateStrategy::encode(std::array<std::string, 4> const 
     return(hash);
 }
 
-unsigned int IntermediateStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
+uint32_t IntermediateStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
 
     float size = vision[0].size() + vision[1].size() + 1; //equivalent of get_board_size
-    unsigned int pos = 0;
+    uint32_t pos = 0;
     pos += vision[2].size() / (size/4);
     pos <<= 2;
     pos += vision[0].size() / (size/4);

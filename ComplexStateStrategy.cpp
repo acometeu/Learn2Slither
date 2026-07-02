@@ -12,11 +12,11 @@ ComplexStateStrategy::~ComplexStateStrategy(){
 
 
 
-unsigned int ComplexStateStrategy::encode(std::array<std::string, 4> const &vision) const {
+uint32_t ComplexStateStrategy::encode(std::array<std::string, 4> const &vision) const {
     
     t_complex_state state;
     state.pos = get_complex_state_pos(vision);
-    unsigned int  hash = state.pos;
+    uint32_t  hash = state.pos;
     for (int i = 0; i < 4; i++)
     {
         state.visions[i] = get_simple_state(vision[i]);
@@ -28,10 +28,10 @@ unsigned int ComplexStateStrategy::encode(std::array<std::string, 4> const &visi
     return(hash);
 }
 
-unsigned int ComplexStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
+uint32_t ComplexStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
 
     float size = vision[0].size() + vision[1].size() + 1; //equivalent of get_board_size
-    unsigned int pos = vision[2].size() * size + vision[0].size();
+    uint32_t pos = vision[2].size() * size + vision[0].size();
     return(pos);
 }
 

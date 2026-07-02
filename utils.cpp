@@ -37,3 +37,9 @@ std::vector<std::string>    ft_split(std::string str, char delim){
     table.push_back(str.substr(pos));
     return (table);
 }
+
+void    print_padding(int size){
+
+    for (int i = 0; i < size; i++)
+        std::cout << ' ';
+}

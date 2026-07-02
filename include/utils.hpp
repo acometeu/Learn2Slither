@@ -97,6 +97,8 @@ void    print_vector(std::vector<char> &vector);
 int     get_random_int(int min, int max);
 float   get_random_float(int min, int max);
 std::vector<std::string>    ft_split(std::string str, char delim);
+void    print_padding(int size);
+
 
 
 

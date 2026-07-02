@@ -12,9 +12,9 @@ SimpleStateStrategy::~SimpleStateStrategy(){
 
 
 
-unsigned SimpleStateStrategy::encode(std::array<std::string, 4> const &vision) const {
+uint32_t    SimpleStateStrategy::encode(std::array<std::string, 4> const &vision) const {
     
-    unsigned int  hash = 0;
+    uint32_t    hash = 0;
     for (int i = 0; i < 4; i++)
     {
         t_simple_state  state = get_simple_state(vision[i]);

@@ -128,10 +128,7 @@ int    Agent::choose_direction(Snake &snake, MyArgs &args, int current_session){
         if (current_session <= _total_session * 0.25) //~first quartile
         {
             if (get_random_float(0, 1) < epsilon)
-            {
-                std::cout << "OUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << std::endl;
                 return(get_random_int(0, 3));
-            }
         }
     }
 
