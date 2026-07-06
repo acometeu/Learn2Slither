@@ -28,9 +28,9 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
             // swap buffers and present
             SDL_RenderPresent(state.renderer);
         }
+        snake.stats_add_session();
         if (state.running == false)
             break;
-        snake.stats_add_session();
     }
     cleanup(state);
 
@@ -168,10 +168,10 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
         //testsuppr to get q_values
         auto keys = agent.strategy->encode(snake.get_snake_vision());
         auto values = agent.q_table[keys];
-        std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
-        std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
-        std::cout << "values[UP] = " << values[UP] << std::endl;
-        std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
+        // std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
+        // std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
+        // std::cout << "values[UP] = " << values[UP] << std::endl;
+        // std::cout << "values[DOWN] = " << values[DOWN] << std::endl;
         // std::cout << "RIGHT:" << std::endl;
         // std::cout << "UP:" << std::endl;
         // std::cout << "DOWN:" << std::endl;

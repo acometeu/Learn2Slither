@@ -1,21 +1,19 @@
 TASK 📝
+-verifier les leaks
+-faire barre de chargement
 -mettre le snake avant le board ou trouver une solution quand y'a pas la place
 -voir si c'est on peut pas ameliorer la facon d'arreter la session si mort ou fin au lieu de tout le temps check si mort ou fin
 -mettre export path dans le destructor plutot avec un boolean
 -verifier que les imports et exports error sont incrashable
 -check bucket collision hash table (voir si ameliorer la hash table (voir Boost hash_combine))
 -crash en complexstatestrategy board size 3 ou lorsque tableau trop petit (ou c'est juste un throw pas catch)
--tester difference entre learning rate acruel et inferieur sur de tres nombreuses sessions d'entrainements (au moins 1 million)
--verifier les leaks
--faire barre de chargement
--lorsque le snake est coupe en court de route de max_length n'est pas update avec la derniere valeur
 -un peu mieux ranger les fonctions (dans utils par ex)
 -regler/choisir la taille du visuel
 
 
 Bigger Tasks 🎯
--faire Q_reseau de neurones
 -trouver un moyen pour voir quels fonctions prennent le + de temps et optimiser
+-faire Q_reseau de neurones
 -1v1 snake and more (1v1v1v1v1v1v1...)
 -peut-etre faire des threads
 -faire un menu en mode visuel pour choisir des options
