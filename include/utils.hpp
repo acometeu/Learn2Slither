@@ -14,18 +14,22 @@
 #include <random>
 #include <limits>
 #include <fstream>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #include "argparse/argparse.hpp"
 
 
+
+// define REWARDS
 #define EMPTY_REWARD -1
 #define RED_APPLE_REWARD -10
 #define DEATH_REWARD -100
 #define GREEN_APPLE_REWARD +50
 #define END_REWARD +1000
 #define NO_REWARD 0
-#define LOOP_REWARD -100
-#define GREEN_APPLE_CLOSER +1
-#define GREEN_APPLE_FARTHER -2
+
+// various defines
+#define DEFAULT_WIDTH 70
 
 typedef struct s_coor
 {
@@ -98,6 +102,8 @@ int     get_random_int(int min, int max);
 float   get_random_float(int min, int max);
 std::vector<std::string>    ft_split(std::string str, char delim);
 void    print_padding(int size);
+int     get_terminal_width(void);
+void    loading_bar(int current, int max);
 
 
 

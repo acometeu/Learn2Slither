@@ -43,3 +43,35 @@ void    print_padding(int size){
     for (int i = 0; i < size; i++)
         std::cout << ' ';
 }
+
+int get_terminal_width(){
+
+    struct winsize window_size;
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size) == 0);
+        return(window_size.ws_col);
+    return(-1);
+}
+
+void    loading_bar(int current, int max){
+
+
+    int bar_width  = get_terminal_width();
+    if (bar_width == -1)
+        bar_width = DEFAULT_WIDTH;
+
+    int len = bar_width - 7;
+    int progress = current * len / max;
+    std::cout << "\r[";
+    for (int i = 0; i < len; i++)
+    {
+        if (i < progress)
+            std::cout << '=';
+        else if (i == progress)
+            std::cout << '>';
+        else
+            std::cout << ' ';
+    }
+    int pourcentage = current * 100 / max;
+    std::cout << "] " << pourcentage << "%";
+    std::cout.flush();
+}

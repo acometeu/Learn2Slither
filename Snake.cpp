@@ -368,7 +368,7 @@ void    Snake::stats_reduce_length(void){
 
 void    Snake::display_stats(void){
 
-    std::cout << "--- Snake Stats ---" << std::endl;
+    std::cout << std::endl << "--- Snake Stats ---" << std::endl;
     std::cout << "stucked in loop : " << _stats.stucked_in_loop << std::endl;
     std::cout << "Sessions : " << _stats.sessions << std::endl;
     std::cout << "Turns : " << _stats.turns << std::endl;

@@ -1,4 +1,5 @@
 TASK 📝
+-prints issue: no visual, no model, pas toujours la vision (directions qui s'enchainent sans la vision)
 -verifier les leaks
 -faire barre de chargement
 -mettre le snake avant le board ou trouver une solution quand y'a pas la place

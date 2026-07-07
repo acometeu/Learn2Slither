@@ -10,6 +10,7 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
 
     for (state.sessions = 1; state.sessions <= args.sessions; state.sessions++)
     {
+        // loading_bar(state.sessions, args.sessions);
         if (state.sessions > 1)
         {
             board.reset();
