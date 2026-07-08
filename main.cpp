@@ -7,6 +7,12 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     {
         if (args.no_print)
             loading_bar(i, args.sessions);
+        else
+        {
+            std::cout << "session " << i << std::endl << std::endl;
+            snake.print_vision();
+        }
+
         bool    running = true;
         while(running)
         {
@@ -23,11 +29,8 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     }
 
     snake.display_stats();
-    if (!args.export_path.empty())
-    {
-        if (agent.save_q_table_to_export_path())
-            return (1);
-    }
+    if (agent.save_q_table_to_export_path(args))
+        return (1);
     return(0);
 }
 
@@ -78,10 +81,8 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     }
 
     print_strategy(args, agent);
-    board.print_board();
     snake.update_vision();
-    if (!args.no_print)
-        snake.print_vision();
+    board.print_board();
 
     if (args.visual_mode)
     {

@@ -1,7 +1,6 @@
 TASK 📝
 -prints issue: no visual, no model, pas toujours la vision (directions qui s'enchainent sans la vision)
 -verifier les leaks
--faire barre de chargement
 -mettre le snake avant le board ou trouver une solution quand y'a pas la place
 -voir si c'est on peut pas ameliorer la facon d'arreter la session si mort ou fin au lieu de tout le temps check si mort ou fin
 -mettre export path dans le destructor plutot avec un boolean

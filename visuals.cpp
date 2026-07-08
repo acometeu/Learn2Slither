@@ -10,20 +10,25 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
 
     for (state.sessions = 1; state.sessions <= args.sessions; state.sessions++)
     {
-        // loading_bar(state.sessions, args.sessions);
+        if (args.no_print)
+            loading_bar(state.sessions, args.sessions);
+        else
+        {
+            std::cout << "session " << state.sessions << std::endl << std::endl;
+            snake.print_vision();
+        }
+
         if (state.sessions > 1)
         {
             board.reset();
             snake.reset();
         }
         snake.dir = agent.choose_direction(snake, args, 1);
-        std::cout << "session " << state.sessions << std::endl;
         while (state.running)
         {
             sdl_handle_event(snake, state);
             if (sdl_update_snake_position(snake, state, args, agent))
                 break;
-            // snake.dir = agent.choose_direction(snake);
             
             make_draw_command(state, board, snake);
             // swap buffers and present
@@ -36,11 +41,8 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     cleanup(state);
 
     snake.display_stats();
-    if (!args.export_path.empty())
-    {
-        if (agent.save_q_table_to_export_path())
-            return (1);
-    }
+    if (agent.save_q_table_to_export_path(args))
+        return (1);
     return(0);
 }
 

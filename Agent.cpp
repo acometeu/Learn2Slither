@@ -81,7 +81,10 @@ int     Agent::set_export_path(const std::string &export_path){
     return(0);
 }
 
-int     Agent::save_q_table_to_export_path(void){
+int     Agent::save_q_table_to_export_path(MyArgs &args){
+
+    if (args.export_path.empty())
+        return(0);
 
     if (!_ofs.is_open())
     {

@@ -27,7 +27,7 @@ public:
     // functions
     int     set_import_path(const std::string &import_path);
     int     set_export_path(const std::string &export_path);
-    int     save_q_table_to_export_path(void);
+    int     save_q_table_to_export_path(MyArgs &args);
     int     choose_direction(Snake &snake, MyArgs &args, int current_session);
     int     get_safe_random_q_value(Snake &snake);
     int     get_best_q_values_direction(Snake &snake);

@@ -86,6 +86,7 @@ void    Board::print_board(void){
         std::cout << std::endl;
     }
     print_wall_line();
+    std::cout << std::endl;
 }
 
 void    Board::print_wall_line(void){
