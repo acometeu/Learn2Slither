@@ -29,7 +29,6 @@ public:
     int     set_export_path(const std::string &export_path);
     int     save_q_table_to_export_path(MyArgs &args);
     int     choose_direction(Snake &snake, MyArgs &args, int current_session);
-    int     get_safe_random_q_value(Snake &snake);
     int     get_best_q_values_direction(Snake &snake);
     void    update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir);
 

@@ -135,33 +135,7 @@ int    Agent::choose_direction(Snake &snake, MyArgs &args, int current_session){
         }
     }
 
-    if (args.safe_random)
-    {
-        if (get_random_int(0, 49) == 0)
-            return (get_safe_random_q_value(snake));
-    }
-    else if (args.random)
-    {
-        if (get_random_int(0, 49) == 0)
-            return(get_random_int(0, 3));
-    }
-
     return(get_best_q_values_direction(snake));
-}
-
-int     Agent::get_safe_random_q_value(Snake &snake){
-    // get random direction without direct obstacle (if possible)
-
-    std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
-    std::array<std::string, 4>  vision = snake.get_snake_vision();
-    for (int index_max = all_dirs.size() - 1; index_max > 0; index_max--)
-    {
-        int random = get_random_int(0, index_max);
-        std::swap(all_dirs[index_max], all_dirs[random]);
-        if (vision[all_dirs[index_max]].size() && vision[all_dirs[index_max]][0] != 'S')
-            return (all_dirs[index_max]);
-    }
-    return(all_dirs[0]);
 }
 
 int     Agent::get_best_q_values_direction(Snake &snake){
