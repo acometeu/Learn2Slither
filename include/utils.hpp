@@ -29,7 +29,7 @@
 #define NO_REWARD 0
 
 // various defines
-#define DEFAULT_WIDTH 70
+#define DEFAULT_BAR_WIDTH 70
 
 typedef struct s_coor
 {

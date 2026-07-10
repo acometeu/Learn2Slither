@@ -46,6 +46,26 @@ int game_loop_SDL(Board &board, Snake &snake, MyArgs &args, Agent &agent){
     return(0);
 }
 
+void    setting_window_size(int *width, int *height){
+
+    int count;
+    SDL_Rect bounds{0, 0, 0, 0};
+
+    SDL_DisplayID *displays = SDL_GetDisplays(&count);
+    SDL_GetDisplayBounds(displays[0], &bounds);
+    SDL_free(displays);
+
+    *width = bounds.w -100;
+    *height = bounds.h - 100;
+    if (*width < DEFAULT_WINDOW_SIZE || *height < DEFAULT_WINDOW_SIZE)
+        *width = *height = DEFAULT_WINDOW_SIZE;
+
+    if (*width > *height)
+        *width = *height;
+    else
+        *height = *width;
+}
+
 int     initialize(sdl_state &state){
 
     if (!SDL_Init(SDL_INIT_VIDEO))
@@ -55,8 +75,7 @@ int     initialize(sdl_state &state){
     }
     
     // create the window
-    state.width = WINDOW_WIDTH;
-    state.height = WINDOW_HEIGHT;
+    setting_window_size(&state.width, &state.height);
     // state.window = SDL_CreateWindow("Snake", state.width, state.height, SDL_WINDOW_RESIZABLE);
     state.window = SDL_CreateWindow("Snake", state.width, state.height, SDL_LOGICAL_PRESENTATION_DISABLED);
     if (!state.window)
@@ -80,6 +99,7 @@ int     initialize(sdl_state &state){
     // state.logH = WINDOW_HEIGHT;
     // SDL_SetRenderLogicalPresentation(state.renderer, state.logW, state.logH, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
+    // initialize variables
     state.prev_time = SDL_GetTicks();
     state.event = { 0 };
     state.running = true;
@@ -92,7 +112,7 @@ int     initialize(sdl_state &state){
 void    initialize_objects(Board board, sdl_state &state){
 
     int wall_nbr = 2;
-    state.pixel.height = state.pixel.width = ((WINDOW_WIDTH > WINDOW_HEIGHT) ? WINDOW_HEIGHT : WINDOW_WIDTH) / (board.get_board_size() + wall_nbr);
+    state.pixel.height = state.pixel.width = ((state.width > state.height) ? state.height : state.width) / (board.get_board_size() + wall_nbr);
     state.grid = initialize_grid(board, state);
     state.walls = initialize_walls(board, state);
 }

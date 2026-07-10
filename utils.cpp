@@ -57,7 +57,7 @@ void    loading_bar(int current, int max){
 
     int bar_width  = get_terminal_width();
     if (bar_width == -1)
-        bar_width = DEFAULT_WIDTH;
+        bar_width = DEFAULT_BAR_WIDTH;
 
     int len = bar_width - 7;
     int progress = current * len / max;
