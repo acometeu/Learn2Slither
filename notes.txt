@@ -6,7 +6,6 @@ TASK 📝
 -check bucket collision hash table (voir si ameliorer la hash table (voir Boost hash_combine))
 -crash en complexstatestrategy board size 3 ou lorsque tableau trop petit (ou c'est juste un throw pas catch)
 -un peu mieux ranger les fonctions (dans utils par ex)
--regler/choisir la taille du visuel
 
 
 Bigger Tasks 🎯
