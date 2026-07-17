@@ -26,7 +26,7 @@ public:
     ~IntermediateStateStrategy();
 
     uint32_t    encode(std::array<std::string, 4> const &vision) const override;
-    uint32_t    get_complex_state_pos(const std::array<std::string, 4> &vision) const;
+    uint32_t    get_intermediate_snake_pos(const std::array<std::string, 4> &vision) const;
     t_state_4_bools get_simple_state(const std::string &vision) const;
 };
 

@@ -15,7 +15,7 @@ IntermediateStateStrategy::~IntermediateStateStrategy(){
 uint32_t    IntermediateStateStrategy::encode(std::array<std::string, 4> const &vision) const {
     
     t_intermediate_state state;
-    state.pos = get_complex_state_pos(vision);
+    state.pos = get_intermediate_snake_pos(vision);
     uint32_t  hash = state.pos;
     for (int i = 0; i < 4; i++)
     {
@@ -28,7 +28,7 @@ uint32_t    IntermediateStateStrategy::encode(std::array<std::string, 4> const &
     return(hash);
 }
 
-uint32_t IntermediateStateStrategy::get_complex_state_pos(const std::array<std::string, 4> &vision) const{
+uint32_t IntermediateStateStrategy::get_intermediate_snake_pos(const std::array<std::string, 4> &vision) const{
 
     float size = vision[0].size() + vision[1].size() + 1; //equivalent of get_board_size
     uint32_t pos = 0;

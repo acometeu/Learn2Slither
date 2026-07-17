@@ -15,5 +15,8 @@ add_subdirectory(SDL EXCLUDE_FROM_ALL)
 # Create your game executable target as usual
 add_executable(Learn2Slither main.cpp Board.cpp Snake.cpp utils.cpp visuals.cpp Agent.cpp SimpleStateStrategy.cpp IntermediateStateStrategy.cpp ComplexStateStrategy.cpp)
 
+# Debug option
+# target_compile_options(Learn2Slither PRIVATE -g)
+
 # Link to the actual SDL3 library.
 target_link_libraries(Learn2Slither PRIVATE SDL3::SDL3)

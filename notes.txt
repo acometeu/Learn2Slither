@@ -1,5 +1,4 @@
 TASK 📝
--verifier les leaks
 -mettre le snake avant le board ou trouver une solution quand y'a pas la place
 -mettre export path dans le destructor plutot avec un boolean
 -verifier que les imports et exports error sont incrashable
@@ -21,16 +20,8 @@ Bigger Tasks 🎯
 little things ❌
 
 
--tester si c'est pas mieux de mettre une limite au float pour les modeles
-
--tester diff entre empty_cells dans:
-    .std::vector mais ce sera longt de trouver des coors precisent (operation tres courante)
-    .std::unordered_set mais ce sera longt de trouver des positions random (operation rare)
-    .std::vector + std::unorder_map : plus de place mais pas d'operations chers mais a faire 2 foix (a faire 1 fois pour chaque)
-
 -checker si c'est worth de changer std::unordered_map<int> en std::unordered_map<t_coor> avec special hash_map
 
--accept map provided setting 
 
 -gerer les cas de figures ou le serpent commence bloque (pas besoin si tu peux pas changer la taille de base du serpent):
 WWWWW       WWWWW
@@ -41,8 +32,6 @@ WWWWW       WWWWW
 
 
 -gerer quand les arguments passes sont des valeurs imposibles (mettre les tailles en unsigned)
-
--choose to either comeback latency or wait for the user machine (freeze and accelerate or freeze stop game)
 
 -remplacer par des textures si envie
 
