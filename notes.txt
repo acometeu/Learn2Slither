@@ -8,11 +8,9 @@ TASK 📝
 
 
 Bigger Tasks 🎯
--trouver un moyen pour voir quels fonctions prennent le + de temps et optimiser
 -faire Q_reseau de neurones
 -1v1 snake and more (1v1v1v1v1v1v1...)
 -peut-etre faire des threads
--faire un menu en mode visuel pour choisir des options
 
 
 
