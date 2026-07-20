@@ -168,7 +168,8 @@ void    Agent::update_q_value(Snake &snake, int reward, const std::array<std::st
     int old_key = strategy->encode(old_state);
     int new_key = strategy->encode(snake.get_snake_vision());
     // std::cout << "old q_value = " << q_table[old_key][old_dir] << std::endl;
-    q_table[old_key][old_dir] += alpha * (reward + (gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));
+    // q_table[old_key][old_dir] += alpha * (reward + (gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));
+    q_table[old_key][old_dir] = ((1 - alpha) * q_table[old_key][old_dir]) + (alpha * (reward + (gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir])));
     // std::cout << "new q_value = " << q_table[old_key][old_dir] << std::endl;
     
 }

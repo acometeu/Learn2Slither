@@ -73,25 +73,21 @@ typedef struct s_rgb
 
 
 struct MyArgs : public argparse::Args {
-    // std::string &anonymous = arg("an anonymous positional string argument");
-    // std::string &src_path  = arg("src_path", "a positional string argument");
-    // int &k                 = kwarg("k", "A keyworded integer value");
-    // float &alpha           = kwarg("a,alpha", "An optional float value").set_default(0.5f);
-    int &snake_size         = kwarg("s,snake_size", "Determine the initial size of the snake").set_default(3);
-    int &board_size         = kwarg("b,board_size", "Determine the board size without the walls").set_default(10);
-    int &snake_speed        = kwarg("snake_speed,speed", "Determine the speed of the snake").set_default(500);
-    int &sessions           = kwarg("session", "Trigger the training mode and determine the number of session for training").set_default(1);
-    bool &verbose           = flag("v,verbose", "A flag to toggle verbose");
-    bool &visual_mode       = flag("V,view,visual", "A flag to toggle visual inbterface for the snake");
-    bool &step_by_step_mode = flag("step", "A flag to toggle step by step mode, only available in visual mode");
-    bool &no_learning       = flag("no_learning,no_learn", "A flag to toggle no learning_mode, doens't update its q_table");
-    bool &no_print          = flag("no_print", "A flag to toggle no print mode, doens't print snake vision and direction on terminal");
-    float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Determine the epsilon of the agent or exploration rate for the q_learning").set_default(0.005f);
-    float   &alpha          = kwarg("a,alpha,learning_rate", "Determine the alpha of the agent learning rate for the q_learning").set_default(0.1f);
-    float   &gamma          = kwarg("g,gamma,future_reward_weight", "Determine the gamma of the agent future reward importance for the q_learning").set_default(0.3f);
-    std::string &import_path  = kwarg("import,import_path", "source path to import q_table values").set_default("");
-    std::string &export_path  = kwarg("export,export_path", "source path to export q_table values").set_default("");
-    std::string &state_strategy = kwarg("strat,state_strat,stat_strategy", "strategy").set_default("");
+    bool &verbose           = flag("v,verbose", "Flag to toggle verbose");
+    int &sessions           = kwarg("session", "Choose the number of game sessions to play/train (default : 1)").set_default(1);
+    int &snake_size         = kwarg("s,snake_size", "Snake size at start of session (default : 3)").set_default(3);
+    int &board_size         = kwarg("b,board_size", "Board size of the game, in square shape (default : 10)").set_default(10);
+    bool &no_learning       = flag("no_learning,no_learn", "Flag to desactivate learning, great to test/compare efficacity of specifics trained models");
+    bool &no_print          = flag("no_print", "Flag to desactivate printing snake informations in console, great for fast training");
+    float   &epsilon        = kwarg("e,epsilon,exploration_rate", "Agent exploration rate probability, min = 0, max = 1 (default : 0.005)").set_default(0.005f);
+    float   &alpha          = kwarg("a,alpha,learning_rate", "Agent significance of new actions for training, min = 0, max = 1 (default : 0.1)").set_default(0.1f);
+    float   &gamma          = kwarg("g,gamma,future_reward_weight", "Agent significance of future reward compare to instant reward for training, min = 0, max = 1 (default : 0.3)").set_default(0.3f);
+    bool &visual_mode       = flag("V,view,visual", "Flag to Display graphic interface of the snake game");
+    bool &step_by_step_mode = flag("step", "Flag to toggle step by step mode, for --visual mode only");
+    int &snake_speed        = kwarg("snake_speed,speed", "Game latency in miliseconds, for --visual mode only (default : 500)").set_default(500);
+    std::string &import_path  = kwarg("import,import_path", "Take a path to import q_table values").set_default("");
+    std::string &export_path  = kwarg("export,export_path", "Take a path to export q_table values").set_default("");
+    std::string &state_strategy = kwarg("strat,state_strat,stat_strategy", "choose the strategy to encode the Q_table with (default : intermediate)");
 
 };
 
