@@ -87,7 +87,7 @@ struct MyArgs : public argparse::Args {
     int &snake_speed        = kwarg("snake_speed,speed", "Game latency in miliseconds, for --visual mode only (default : 500)").set_default(500);
     std::string &import_path  = kwarg("import,import_path", "Take a path to import q_table values").set_default("");
     std::string &export_path  = kwarg("export,export_path", "Take a path to export q_table values").set_default("");
-    std::string &state_strategy = kwarg("strat,state_strat,stat_strategy", "choose the strategy to encode the Q_table with (default : intermediate)");
+    std::string &state_strategy = kwarg("strat,state_strat,stat_strategy", "choose the strategy to encode the Q_table with (default : intermediate)").set_default("intermediate");
 
 };
 
