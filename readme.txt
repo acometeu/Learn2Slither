@@ -56,3 +56,4 @@ ARGUMENTS :
 
 SOURCES:
 https://www.youtube.com/watch?v=0iqz4tcKN58
+https://www.geeksforgeeks.org/deep-learning/deep-q-learning
