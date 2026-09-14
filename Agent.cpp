@@ -1,6 +1,6 @@
 #include "include/Agent.hpp"
 
-Agent::Agent(float epsilon, float alpha, float gamma, int total_session, AStateStrategy *strat): epsilon(epsilon), alpha(alpha), gamma(gamma), _total_session(total_session), strategy(strat){
+Agent::Agent(float epsilon, float alpha, float gamma, int total_session, AStateStrategy *strat): epsilon(epsilon), alpha(alpha), gamma(gamma), _total_session(total_session), state(strat){
 
     return;
 }
@@ -9,7 +9,7 @@ Agent::~Agent(){
 
     if (_ofs.is_open())
         _ofs.close();
-    delete strategy;
+    delete state;
     return;
 }
 
@@ -142,7 +142,7 @@ int     Agent::get_best_q_values_direction(Snake &snake){
     //  get direction of higher q_value or if multiple best solutions, choose randomly between them
     
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
-    int key = strategy->encode(snake.get_snake_vision());
+    int key = state->encode(snake.get_snake_vision());
     
     std::unordered_map<int, std::array<float, 4>>::iterator    it = q_table.find(key);
     if (it == q_table.end())
@@ -165,8 +165,8 @@ int     Agent::get_best_q_values_direction(Snake &snake){
 
 void    Agent::update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir){
 
-    int old_key = strategy->encode(old_state);
-    int new_key = strategy->encode(snake.get_snake_vision());
+    int old_key = state->encode(old_state);
+    int new_key = state->encode(snake.get_snake_vision());
     // std::cout << "old q_value = " << q_table[old_key][old_dir] << std::endl;
     // q_table[old_key][old_dir] += alpha * (reward + (gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));
     q_table[old_key][old_dir] = q_table[old_key][old_dir] + (alpha * (reward + gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));

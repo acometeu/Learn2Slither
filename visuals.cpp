@@ -184,12 +184,12 @@ int sdl_update_snake_position_step_by_step_mode(Snake &snake, sdl_state &state, 
         }
 
         state.new_input = false;
-        if (snake.update_position_and_q_values(args, agent))
+        if (snake.update(args, agent))
             return(1);
         // snake.dir = agent.choose_direction(snake, state.sessions);
 
         //testsuppr to get q_values
-        auto keys = agent.strategy->encode(snake.get_snake_vision());
+        auto keys = agent.state->encode(snake.get_snake_vision());
         auto values = agent.q_table[keys];
         // std::cout << "values[LEFT] = " << values[LEFT] << std::endl;
         // std::cout << "values[RIGHT] = " << values[RIGHT] << std::endl;
@@ -234,7 +234,7 @@ int     sdl_update_snake_position_by_time(Snake &snake, sdl_state &state, MyArgs
     if (delta_time >= args.snake_speed || state.space_key == true)
     {
         state.space_key = false;
-        if (snake.update_position_and_q_values(args, agent))
+        if (snake.update(args, agent))
             return(1);
         snake.dir = agent.choose_direction(snake, args, state.sessions);
         state.prev_time = SDL_GetTicks();

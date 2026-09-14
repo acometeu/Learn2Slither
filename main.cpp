@@ -17,7 +17,7 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
         while(running)
         {
             snake.dir = agent.choose_direction(snake, args, i);
-            if (snake.update_position_and_q_values(args, agent))
+            if (snake.update(args, agent))
                 break;
         }
         snake.stats_add_session();
@@ -50,11 +50,11 @@ void    print_strategy(MyArgs &args, Agent &agent){
 
     if (args.verbose)
     {
-        if (dynamic_cast<SimpleStateStrategy*>(agent.strategy) != nullptr)
+        if (dynamic_cast<SimpleStateStrategy*>(agent.state) != nullptr)
             std::cout << "--strat selected : Simple strategy (fast learning, lowest space, worse results)" << std::endl;
-        else if (dynamic_cast<IntermediateStateStrategy*>(agent.strategy) != nullptr)
+        else if (dynamic_cast<IntermediateStateStrategy*>(agent.state) != nullptr)
             std::cout << "--strat selected : Intermediate strategy (medium speed learning, medium space, best results)" << std::endl;
-        else if (dynamic_cast<ComplexStateStrategy*>(agent.strategy) != nullptr)
+        else if (dynamic_cast<ComplexStateStrategy*>(agent.state) != nullptr)
             std::cout << "--strat selected : Complex strategy (slow learning, huge space, medium results, dependant of training board size used)" << std::endl;
         else
             std::cout << "--strat selected : Not recognised" << std::endl;

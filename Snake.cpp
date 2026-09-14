@@ -296,7 +296,7 @@ int Snake::update_position_and_vision(MyArgs &args){
     return(reward);
 }
 
-int     Snake::update_position_and_q_values(MyArgs &args, Agent &agent){
+int     Snake::update(MyArgs &args, Agent &agent){
 
     if (!args.no_learning)
     {

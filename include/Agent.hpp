@@ -19,7 +19,7 @@ public:
     float   epsilon; //exploration_rate
     float   alpha; //learning_rate
     float   gamma; //future_reward_significance
-    AStateStrategy  *strategy; //strategy used to define state of q_table
+    AStateStrategy  *state; //strategy used to define state of q_table
     
 
     std::unordered_map<int, std::array<float, 4>>  q_table;
