@@ -57,3 +57,4 @@ ARGUMENTS :
 SOURCES:
 https://www.youtube.com/watch?v=0iqz4tcKN58
 https://www.geeksforgeeks.org/deep-learning/deep-q-learning
+https://www.youtube.com/watch?v=YG15m2VwSjA (understanding how to get the derivative of complex loss function)

@@ -11,7 +11,15 @@ Bigger Tasks 🎯
 -faire Q_reseau de neurones
 -1v1 snake and more (1v1v1v1v1v1v1...)
 -peut-etre faire des threads
+-dans readme.txt marque les formules utilisees, dans DQN : mse et derivee, sigmoid ou relu et derive, z(L) = w(L) * a(L-1) + b(L) et derive, et backpropagation
 
+
+DQN (deep q-learning)
+-Once vanilla work, try puting/having more high value sample in the experience replay
+
+
+NOTES TO ADD TO README.TXT 🗒️
+-I used sigmoid but thought about using relu instead
 
 
 
