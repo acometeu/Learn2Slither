@@ -46,15 +46,15 @@ AStateStrategy  *choose_strategy(MyArgs &args){
         return (new IntermediateStateStrategy());
 }
 
-void    print_strategy(MyArgs &args, Agent &agent){
+void    print_strategy(MyArgs &args, AStateStrategy *state){
 
     if (args.verbose)
     {
-        if (dynamic_cast<SimpleStateStrategy*>(agent.state) != nullptr)
+        if (dynamic_cast<SimpleStateStrategy*>(state) != nullptr)
             std::cout << "--strat selected : Simple strategy (fast learning, lowest space, worse results)" << std::endl;
-        else if (dynamic_cast<IntermediateStateStrategy*>(agent.state) != nullptr)
+        else if (dynamic_cast<IntermediateStateStrategy*>(state) != nullptr)
             std::cout << "--strat selected : Intermediate strategy (medium speed learning, medium space, best results)" << std::endl;
-        else if (dynamic_cast<ComplexStateStrategy*>(agent.state) != nullptr)
+        else if (dynamic_cast<ComplexStateStrategy*>(state) != nullptr)
             std::cout << "--strat selected : Complex strategy (slow learning, huge space, medium results, dependant of training board size used)" << std::endl;
         else
             std::cout << "--strat selected : Not recognised" << std::endl;
@@ -65,8 +65,28 @@ void    print_strategy(MyArgs &args, Agent &agent){
 
 int learn2slither(Board &board, Snake &snake, MyArgs &args){
 
-    AStateStrategy *strat = choose_strategy(args);
-    Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions, strat);
+    AStateStrategy *state = choose_strategy(args);
+    //testtemp ajouteer un vrai parsing pour avoir la methode souhaitee (Q_table ou DQN)
+    AQMethod *method = new QTable(args.alpha, args.gamma, state);
+
+    //testsuppr
+    if (method == nullptr)
+    {
+        std::cout << "method == nullptr" << std::endl;
+        return(1);
+    }
+    if (method == NULL)
+    {
+        std::cout << "method == NULL" << std::endl;
+        return(1);
+    }
+    if (dynamic_cast<QTable*>(method) == nullptr)
+    {
+        std::cout << "method not QTable" << std::endl;
+        return(1);
+    }
+
+    Agent   agent(args.epsilon, args.alpha, args.gamma, args.sessions, method, state);
 
     if (!args.import_path.empty())
     {
@@ -74,13 +94,21 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
             return (1);
     }
 
+    //testsuppr
+    if (dynamic_cast<QTable*>(agent.q_method) == nullptr)
+    {
+        std::cout << "agent.q_method not QTable" << std::endl;
+        return(1);
+    }
+
+
     if (!args.export_path.empty())
     {
         if (agent.set_export_path(args.export_path))
             return (1);
     }
 
-    print_strategy(args, agent);
+    print_strategy(args, state);
     snake.update_vision();
     board.print_board();
 
