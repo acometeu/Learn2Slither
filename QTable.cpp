@@ -83,7 +83,7 @@ int     QTable::get_best_q_values_direction(Snake &snake) const{
     //  get direction of higher q_value or if multiple best solutions, choose randomly between them
     
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
-    int key = _state->encode(snake.get_snake_vision());
+    int key = _state->encode_q_table(snake.get_snake_vision());
     
     std::unordered_map<int, std::array<float, 4>>::const_iterator    it = q_table.find(key);
     if (it == q_table.end())
@@ -106,8 +106,8 @@ int     QTable::get_best_q_values_direction(Snake &snake) const{
 
 void    QTable::update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir){
 
-    int old_key = _state->encode(old_state);
-    int new_key = _state->encode(snake.get_snake_vision());
+    int old_key = _state->encode_q_table(old_state);
+    int new_key = _state->encode_q_table(snake.get_snake_vision());
     // std::cout << "old q_value = " << q_table[old_key][old_dir] << std::endl;
     // q_table[old_key][old_dir] += alpha * (reward + (gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));
     q_table[old_key][old_dir] = q_table[old_key][old_dir] + (_alpha * (reward + _gamma * q_table[new_key][get_best_q_values_direction(snake)] - q_table[old_key][old_dir]));

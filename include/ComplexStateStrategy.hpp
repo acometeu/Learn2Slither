@@ -17,7 +17,9 @@ public:
     ComplexStateStrategy();
     ~ComplexStateStrategy();
 
-    uint32_t    encode(std::array<std::string, 4> const &vision) const override;
+    uint32_t    encode_q_table(std::array<std::string, 4> const &vision) const override;
+
+private:
     uint32_t    get_complex_snake_pos(const std::array<std::string, 4> &vision) const;
     t_state_4_bools get_simple_state(const std::string &vision) const;
 };

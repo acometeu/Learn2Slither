@@ -12,7 +12,7 @@ SimpleStateStrategy::~SimpleStateStrategy(){
 
 
 
-uint32_t    SimpleStateStrategy::encode(std::array<std::string, 4> const &vision) const {
+uint32_t    SimpleStateStrategy::encode_q_table(std::array<std::string, 4> const &vision) const {
     
     uint32_t    hash = 0;
     for (int i = 0; i < 4; i++)

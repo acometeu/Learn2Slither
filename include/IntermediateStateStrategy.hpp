@@ -25,9 +25,14 @@ public:
     IntermediateStateStrategy();
     ~IntermediateStateStrategy();
 
-    uint32_t    encode(std::array<std::string, 4> const &vision) const override;
+    uint32_t    encode_q_table(std::array<std::string, 4> const &vision) const override;
+    const std::vector<int>         &encode_dqn(std::array<std::string, 4> const &vision) const override;
+    int         get_dqn_input_number(void) const override;
+
+private:
     uint32_t    get_intermediate_snake_pos(const std::array<std::string, 4> &vision) const;
     t_state_4_bools get_simple_state(const std::string &vision) const;
+    void    state_push_x_and_y(std::vector<int> &state, const std::array<std::string, 4> &vision) const;
 };
 
 

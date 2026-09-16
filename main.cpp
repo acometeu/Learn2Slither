@@ -36,14 +36,14 @@ int game_loop(Board &board, Snake &snake, MyArgs &args, Agent &agent){
 
 AStateStrategy  *choose_strategy(MyArgs &args){
 
-    if (args.state_strategy == "simple" || args.state_strategy == "simple_strategy")
-        return (new SimpleStateStrategy());
-    else if (args.state_strategy == "" || args.state_strategy == "intermediate" || args.state_strategy == "intermediate_strategy")
+    // if (args.state_strategy == "simple" || args.state_strategy == "simple_strategy")
+    //     return (new SimpleStateStrategy());
+    // else if (args.state_strategy == "" || args.state_strategy == "intermediate" || args.state_strategy == "intermediate_strategy")
         return(new IntermediateStateStrategy());
-    else if (args.state_strategy == "complex" || args.state_strategy == "complex_strategy")
-        return(new ComplexStateStrategy());
-    else
-        return (new IntermediateStateStrategy());
+    // else if (args.state_strategy == "complex" || args.state_strategy == "complex_strategy")
+    //     return(new ComplexStateStrategy());
+    // else
+    //     return (new IntermediateStateStrategy());
 }
 
 void    print_strategy(MyArgs &args, AStateStrategy *state){
@@ -67,7 +67,10 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
 
     AStateStrategy *state = choose_strategy(args);
     //testtemp ajouteer un vrai parsing pour avoir la methode souhaitee (Q_table ou DQN)
-    AQMethod *method = new QTable(args.alpha, args.gamma, state);
+    // AQMethod *method = new QTable(args.alpha, args.gamma, state);
+    AQMethod *method = new DQN(args.alpha, args.gamma, state);
+    return(0);
+
 
     //testsuppr
     if (method == nullptr)

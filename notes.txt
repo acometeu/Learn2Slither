@@ -5,6 +5,8 @@ TASK 📝
 -check bucket collision hash table (voir si ameliorer la hash table (voir Boost hash_combine))
 -crash en complexstatestrategy board size 3 ou lorsque tableau trop petit (ou c'est juste un throw pas catch)
 -un peu mieux ranger les fonctions (dans utils par ex)
+-tester si chaque state strat marche bien avec DQN
+-faire un sorte que le DQN minimise les cach miss (passer de 2D array to 1D array (weights of all nodes in the same array))
 
 
 Bigger Tasks 🎯

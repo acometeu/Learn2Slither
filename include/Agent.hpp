@@ -5,6 +5,7 @@
 #include "Snake.hpp"
 #include "AQMethod.hpp"
 #include "QTable.hpp"
+#include "DQN.hpp"
 // #include "AStateStrategy.hpp"
 // #include "SimpleStateStrategy.hpp"
 // #include "IntermediateStateStrategy.hpp"

@@ -18,7 +18,9 @@ public:
     SimpleStateStrategy();
     ~SimpleStateStrategy();
 
-    uint32_t encode(std::array<std::string, 4> const &vision) const override;
+    uint32_t encode_q_table(std::array<std::string, 4> const &vision) const override;
+
+private:
     t_simple_state  get_simple_state(const std::string &vision) const;
 };
 

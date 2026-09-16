@@ -12,7 +12,7 @@ ComplexStateStrategy::~ComplexStateStrategy(){
 
 
 
-uint32_t ComplexStateStrategy::encode(std::array<std::string, 4> const &vision) const {
+uint32_t ComplexStateStrategy::encode_q_table(std::array<std::string, 4> const &vision) const {
     
     t_complex_state state;
     state.pos = get_complex_snake_pos(vision);
