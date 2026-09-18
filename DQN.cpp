@@ -1,6 +1,6 @@
 #include "include/DQN.hpp"
 
-DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), hidden_layer_nbr(2), node_per_hidden_layer(8){
+DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(2), _node_per_hidden_layer(8){
 
     initialize_neural_network();
     return;
@@ -15,56 +15,44 @@ DQN::~DQN(){
 void    DQN::initialize_neural_network(void){
 
     //initialize first layer
-    int first_layer_node_number;
-    if (hidden_layer_nbr == 0)
-        first_layer_node_number = OUTPUT_NBR;
+    if (_hidden_layer_nbr == 0)
+        _first_layer_node_number = OUTPUT_NBR;
     else
-        first_layer_node_number = node_per_hidden_layer;
+        _first_layer_node_number = _node_per_hidden_layer;
 
-    std::vector< std::vector<float> >   first_layer;
-    for (int i = 0; i < first_layer_node_number; i++)
+    Eigen::MatrixXf first_weights_layer = Eigen::MatrixXf::Random(_first_layer_node_number, _state->get_dqn_input_number()) * 10;
+    dqn_weights.push_back(first_weights_layer);
+    Eigen::MatrixXf first_bias_layer = Eigen::MatrixXf::Constant(_first_layer_node_number, _state->get_dqn_input_number(), 0);
+    dqn_bias.push_back(first_bias_layer);
+
+
+    //initialize hidden layers
+    for (int i = 1; i < _hidden_layer_nbr; i++)
     {
-        std::vector<float>  node_weights;
-        int weight_nbr_per_node = _state->get_dqn_input_number();
-        for (int j = 0; j < weight_nbr_per_node; j++)
-            node_weights.push_back(get_random_float(-10, 10));
-        first_layer.push_back(node_weights);
-    }
-    dqn_weights.push_back(first_layer);
-
-
-    //initialize hidden layer
-    for (int i = 1; i < hidden_layer_nbr; i++)
-    {
-        std::vector< std::vector<float> >   hidden_layer;
-        for (int j = 0; j < node_per_hidden_layer; j++)
-        {
-            std::vector<float>  node;
-            for (int k = 0; k < node_per_hidden_layer; k++)
-                node.push_back(get_random_float(-10, 10));
-            hidden_layer.push_back(node);
-        }
-        dqn_weights.push_back(hidden_layer);
+        Eigen::MatrixXf hidden_weights_layer = Eigen::MatrixXf::Random(_node_per_hidden_layer, _node_per_hidden_layer) * 10;
+        dqn_weights.push_back(hidden_weights_layer);
+        Eigen::MatrixXf hidden_bias_layer = Eigen::MatrixXf::Constant(_node_per_hidden_layer, _node_per_hidden_layer, 0);
+        dqn_bias.push_back(hidden_bias_layer);
     }
 
 
     //initialize last layer
-    if (hidden_layer_nbr == 0)
-        return;
-
-    std::vector< std::vector<float> >   last_layer;
-    for (int i = 0; i < OUTPUT_NBR; i++)
+    if (_hidden_layer_nbr == 0)
     {
-        std::vector<float>  node;
-        for (int j = 0; j < node_per_hidden_layer; j++)
-            node.push_back(get_random_float(-10, 10));
-        last_layer.push_back(node);
+        //testsuppr
+        print_dqn_weights();
+        print_dqn_bias();
+        return;
     }
-    dqn_weights.push_back(last_layer);
 
+    Eigen::MatrixXf last_weights_layer = Eigen::MatrixXf::Random(OUTPUT_NBR, _node_per_hidden_layer) * 10;
+    dqn_weights.push_back(last_weights_layer);
+    Eigen::MatrixXf last_bias_layer = Eigen::MatrixXf::Constant(OUTPUT_NBR, _node_per_hidden_layer, 0);
+    dqn_bias.push_back(last_bias_layer);
 
     //testsuppr
-    print_dqn();
+    print_dqn_weights();
+    print_dqn_bias();
 }
 
 int DQN::set_q_values(std::ifstream &ifs){
@@ -139,28 +127,41 @@ int     DQN::save_q_values(std::ofstream &ofs) const{
 int     DQN::get_best_q_values_direction(Snake &snake) const{
     //  get direction of higher q_value or if multiple best solutions, choose randomly between them
     
-    // std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
-    // int key = _state->encode(snake.get_snake_vision());
+    std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
+    const std::vector<int>  key = _state->encode_dqn(snake.get_snake_vision());
     
-    // std::unordered_map<int, std::array<float, 4>>::const_iterator    it = q_table.find(key);
-    // if (it == q_table.end())
-    //     return (get_random_int(0, 3));
+    // const std::array<int, 4>  output = get_dqn_output(key);
 
-    // std::array<float, 4> q_values = (*it).second;
-    // int best_dir = get_random_int(0, 3);
-    // float max = q_values[best_dir];
 
-    // for (int i = 0; i < all_dirs.size(); i++)
-    // {
-    //     if (q_values[i] > q_values[best_dir])
-    //     {
-    //         best_dir = i;
-    //         max = q_values[best_dir];
-    //     }
-    // }
-    // return (best_dir);
+
+
+
+
+//     std::unordered_map<int, std::array<float, 4>>::const_iterator    it = q_table.find(key);
+//     if (it == q_table.end())
+//         return (get_random_int(0, 3));
+
+//     std::array<float, 4> q_values = (*it).second;
+//     int best_dir = get_random_int(0, 3);
+//     float max = q_values[best_dir];
+
+//     for (int i = 0; i < all_dirs.size(); i++)
+//     {
+//         if (q_values[i] > q_values[best_dir])
+//         {
+//             best_dir = i;
+//             max = q_values[best_dir];
+//         }
+//     }
+//     return (best_dir);
     return(0);
 }
+
+// const std::array<int, 4>    DQN::get_dqn_output(const std::vector<int> key) const{
+
+
+// }
+
 
 void    DQN::update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir){
 
@@ -173,16 +174,22 @@ void    DQN::update_q_value(Snake &snake, int reward, const std::array<std::stri
     
 }
 
-void    DQN::print_dqn(void){
+void    DQN::print_dqn_weights(void){
 
+    std::cout << "DQN Weights : " << std::endl;
     for (int i = 0; i < dqn_weights.size(); i++)
     {
-        for (int j = 0; j < dqn_weights[i].size(); j++)
-        {
-            for(int k = 0; k < dqn_weights[i][j].size(); k++)
-                std::cout << dqn_weights[i][j][k] << ' ';
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
+        std::cout << "Cols = " << dqn_weights[i].cols() << ", Rows = " << dqn_weights[i].rows() << ", Size " << dqn_weights[i].size() << std::endl;
+        std::cout << dqn_weights[i] << std::endl;
+    }
+}
+
+void    DQN::print_dqn_bias(void){
+
+    std::cout << "DQN Bias : " << std::endl;
+    for (int i = 0; i < dqn_bias.size(); i++)
+    {
+        std::cout << "Cols = " << dqn_bias[i].cols() << ", Rows = " << dqn_bias[i].rows() << ", Size " << dqn_bias[i].size() << std::endl;
+        std::cout << dqn_bias[i] << std::endl;
     }
 }

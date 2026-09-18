@@ -68,7 +68,10 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     AStateStrategy *state = choose_strategy(args);
     //testtemp ajouteer un vrai parsing pour avoir la methode souhaitee (Q_table ou DQN)
     // AQMethod *method = new QTable(args.alpha, args.gamma, state);
+    
+    //testsuppr
     AQMethod *method = new DQN(args.alpha, args.gamma, state);
+    delete method;
     return(0);
 
 

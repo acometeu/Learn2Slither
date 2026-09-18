@@ -10,8 +10,8 @@ class DQN : public AQMethod
 {
 public:
     //variables
-    std::vector< std::vector< std::vector<float> > >   dqn_weights;
-    std::vector< std::vector< std::vector<float> > >   dqn_bias;
+    std::vector<Eigen::MatrixXf>   dqn_weights;
+    std::vector<Eigen::MatrixXf>   dqn_bias;
 
 
     // functions
@@ -25,16 +25,19 @@ public:
 
 private:
     // variables
-    int hidden_layer_nbr;
-    int node_per_hidden_layer;
+    int _hidden_layer_nbr;
+    int _node_per_hidden_layer;
+    int _first_layer_node_number;
 
     // functions
     void    initialize_neural_network(void);
     std::array<float, 4>        parse_q_table_values(const std::string &values_line);
+    // const std::array<int, 4>    get_dqn_output(const std::vector<int> key) const;
 
 
     // debug
-    void    print_dqn(void);
+    void    print_dqn_weights(void);
+    void    print_dqn_bias(void);
 
 };
 

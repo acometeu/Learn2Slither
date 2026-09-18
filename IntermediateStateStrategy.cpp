@@ -68,7 +68,7 @@ t_state_4_bools  IntermediateStateStrategy::get_simple_state(const std::string &
     return(state);
 }
 
-const std::vector<int>         &IntermediateStateStrategy::encode_dqn(std::array<std::string, 4> const &visions) const{
+std::vector<int>         IntermediateStateStrategy::encode_dqn(std::array<std::string, 4> const &visions) const{
     
     std::vector<int>    state;
 

@@ -3,6 +3,7 @@
 
 #include "AStateStrategy.hpp"
 
+
 typedef struct state_4_bools
 {
     bool    green_apple;
@@ -26,7 +27,7 @@ public:
     ~IntermediateStateStrategy();
 
     uint32_t    encode_q_table(std::array<std::string, 4> const &vision) const override;
-    const std::vector<int>         &encode_dqn(std::array<std::string, 4> const &vision) const override;
+    std::vector<int>         encode_dqn(std::array<std::string, 4> const &vision) const override;
     int         get_dqn_input_number(void) const override;
 
 private:

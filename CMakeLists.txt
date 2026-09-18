@@ -15,6 +15,11 @@ add_subdirectory(SDL EXCLUDE_FROM_ALL)
 # Create your game executable target as usual
 add_executable(Learn2Slither main.cpp Board.cpp Snake.cpp utils.cpp visuals.cpp Agent.cpp QTable.cpp DQN.cpp SimpleStateStrategy.cpp IntermediateStateStrategy.cpp ComplexStateStrategy.cpp)
 
+
+# Eigen (header-only)
+target_include_directories(Learn2Slither SYSTEM PRIVATE ${CMAKE_SOURCE_DIR}/include/eigen)
+target_compile_options(Learn2Slither PRIVATE -O3)
+
 # Debug option
 # target_compile_options(Learn2Slither PRIVATE -g)
 
