@@ -38,6 +38,30 @@ std::vector<std::string>    ft_split(std::string str, char delim){
     return (table);
 }
 
+std::vector<std::string>    ft_tokenize(std::string str, char delim){
+
+    std::vector<std::string>    table;
+    size_t  pos = 0;
+    while(pos != str.size() && str[pos] == delim)
+        pos++;
+    if (pos)
+    {
+        str = str.substr(pos);
+        pos = 0;
+    }
+    size_t  end = str.find_first_of(delim);
+    while (end != std::string::npos)
+    {
+        table.push_back(str.substr(pos, end - pos));
+        pos = end + 1;
+        while (str[pos] == delim)
+            pos++;
+        end = str.find_first_of(delim, pos);
+    }
+    table.push_back(str.substr(pos));
+    return (table);
+}
+
 void    print_padding(int size){
 
     for (int i = 0; i < size; i++)
@@ -74,4 +98,10 @@ void    loading_bar(int current, int max){
     int pourcentage = current * 100 / max;
     std::cout << "] " << pourcentage << "%";
     std::cout.flush();
+}
+
+int     return_error_msg(std::string error){
+
+    std::cerr << error << std::endl;
+    return(1);
 }

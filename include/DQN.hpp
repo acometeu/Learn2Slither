@@ -31,8 +31,16 @@ private:
 
     // functions
     void    initialize_neural_network(void);
+    void    initialize_first_layer(void);
+    void    initialize_hidden_layers(void);
+    void    initialize_last_layer(void);
+    int     set_q_values_params(const std::string &line);
+    int     set_q_values_first_layer(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn);
+    int     set_q_values_hidden_layers(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn);
+    int     set_q_values_last_layer(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn);
     std::array<float, 4>        parse_q_table_values(const std::string &values_line);
     // const std::array<int, 4>    get_dqn_output(const std::vector<int> key) const;
+
 
 
     // debug

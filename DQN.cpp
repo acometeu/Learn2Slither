@@ -12,31 +12,54 @@ DQN::~DQN(){
     return;
 }
 
+
 void    DQN::initialize_neural_network(void){
 
-    //initialize first layer
+    initialize_first_layer();
+    initialize_hidden_layers();
+    initialize_last_layer();
+
+    //testsuppr
+    print_dqn_weights();
+    print_dqn_bias();
+}
+
+void    DQN::initialize_first_layer(void){
+
     if (_hidden_layer_nbr == 0)
         _first_layer_node_number = OUTPUT_NBR;
     else
         _first_layer_node_number = _node_per_hidden_layer;
 
-    Eigen::MatrixXf first_weights_layer = Eigen::MatrixXf::Random(_first_layer_node_number, _state->get_dqn_input_number()) * 10;
+    Eigen::MatrixXf first_weights_layer(_first_layer_node_number, _state->get_dqn_input_number());
+    for (int i = 0; i < _first_layer_node_number; i++)
+    {
+        for (int j = 0; j < _state->get_dqn_input_number(); j++)
+            first_weights_layer(i, j) = get_random_float(-10, 10);
+    }
     dqn_weights.push_back(first_weights_layer);
     Eigen::MatrixXf first_bias_layer = Eigen::MatrixXf::Constant(_first_layer_node_number, _state->get_dqn_input_number(), 0);
     dqn_bias.push_back(first_bias_layer);
+}
 
+void    DQN::initialize_hidden_layers(){
 
-    //initialize hidden layers
     for (int i = 1; i < _hidden_layer_nbr; i++)
     {
-        Eigen::MatrixXf hidden_weights_layer = Eigen::MatrixXf::Random(_node_per_hidden_layer, _node_per_hidden_layer) * 10;
+        Eigen::MatrixXf hidden_weights_layer(_node_per_hidden_layer, _node_per_hidden_layer);
+        for (int i = 0; i < _node_per_hidden_layer; i++)
+        {
+            for (int j = 0; j < _node_per_hidden_layer; j++)
+                hidden_weights_layer(i, j) = get_random_float(-10, 10);
+        }
         dqn_weights.push_back(hidden_weights_layer);
         Eigen::MatrixXf hidden_bias_layer = Eigen::MatrixXf::Constant(_node_per_hidden_layer, _node_per_hidden_layer, 0);
         dqn_bias.push_back(hidden_bias_layer);
     }
+}
 
+void    DQN::initialize_last_layer(void){
 
-    //initialize last layer
     if (_hidden_layer_nbr == 0)
     {
         //testsuppr
@@ -45,30 +68,123 @@ void    DQN::initialize_neural_network(void){
         return;
     }
 
-    Eigen::MatrixXf last_weights_layer = Eigen::MatrixXf::Random(OUTPUT_NBR, _node_per_hidden_layer) * 10;
+    Eigen::MatrixXf last_weights_layer(OUTPUT_NBR, _node_per_hidden_layer);
+    for (int i = 0; i < OUTPUT_NBR; i++)
+    {
+        for (int j = 0; j < _node_per_hidden_layer; j++)
+            last_weights_layer(i, j) = get_random_float(-10, 10);
+    }
     dqn_weights.push_back(last_weights_layer);
     Eigen::MatrixXf last_bias_layer = Eigen::MatrixXf::Constant(OUTPUT_NBR, _node_per_hidden_layer, 0);
     dqn_bias.push_back(last_bias_layer);
-
-    //testsuppr
-    print_dqn_weights();
-    print_dqn_bias();
 }
 
 int DQN::set_q_values(std::ifstream &ifs){
 
-    // std::string line;
-    // while (std::getline(ifs, line))
-    // {
-    //     size_t delim = line.find_first_of(':');
-    //     if (delim == std::string::npos)
-    //         return (1);
-    //     int  key = std::stoi(line.substr(0, delim));
-    //     std::array<float, 4>        values = parse_q_table_values(line.substr(delim + 1));
-    //     q_table[key] = values;
-    // }
+    std::string line;
+    if (!std::getline(ifs, line))
+        std::cerr << "Error: import file empty !" << std::endl;
+
+    if (set_q_values_params(line))
+        return(1);
+    
+    if (set_q_values_first_layer(ifs, line, dqn_weights))
+        return(1);
+    if (set_q_values_first_layer(ifs, line, dqn_bias))
+        return(1);
+    if (set_q_values_hidden_layers(ifs, line, dqn_weights))
+        return(1);
+    if (set_q_values_hidden_layers(ifs, line, dqn_bias))
+        return(1);
+    if (set_q_values_last_layer(ifs, line, dqn_weights))
+        return(1);
+    if (set_q_values_last_layer(ifs, line, dqn_bias))
+        return(1);
+
     return(0);
 }
+
+int DQN::set_q_values_params(const std::string &line){
+
+    std::vector<std::string>    params = ft_split(line, ',');
+    if (params.size() != 3)
+        return (return_error_msg("Error: import file wrong params"));
+
+    int first_param = std::stoi(params[0].substr(0));
+    if (first_param != _state->get_dqn_input_number())
+        return (return_error_msg("Error: import file wrong state strategy input nbr"));
+
+    int second_param = std::stoi(params[1].substr(0));
+    if (second_param != _hidden_layer_nbr)
+        return (return_error_msg("Error: import file wrong hidden layer nbr"));
+
+    int third_param = std::stoi(params[2].substr(0));
+    if (third_param != _node_per_hidden_layer)
+        return (return_error_msg("Error: import file wrong node per layer nbr"));
+
+    return(0);
+}
+
+int     DQN::set_q_values_first_layer(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn){
+
+    // discard weights matrice size line
+    if (!std::getline(ifs, line))
+        return (return_error_msg("Error: import file wrong format1"));
+
+    for (int i = 0; i < _first_layer_node_number; i++)
+    {
+        if (!std::getline(ifs, line))
+            return (return_error_msg("Error: import file wrong format2"));
+
+        std::vector<std::string> matrice_row = ft_tokenize(line, ' ');
+        for (int j = 0; j < _state->get_dqn_input_number(); j++)
+            dqn[0](i, j) = std::stof(matrice_row[j]); 
+    }
+    return(0);
+}
+
+int     DQN::set_q_values_hidden_layers(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn){
+
+    // discard weights matrice size line
+    if (!std::getline(ifs, line))
+        return (return_error_msg("Error: import file wrong format3"));
+
+    for (int k = 1; k < _hidden_layer_nbr; k++)
+    {
+        for (int i = 0; i < _node_per_hidden_layer; i++)
+        {
+            if (!std::getline(ifs, line))
+                return (return_error_msg("Error: import file wrong format4"));
+    
+            std::vector<std::string> matrice_row = ft_tokenize(line, ' ');
+            for (int j = 0; j < _node_per_hidden_layer; j++)
+                dqn[k](i, j) = std::stof(matrice_row[j]); 
+        }
+    }
+    return(0);
+}
+
+int     DQN::set_q_values_last_layer(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn){
+
+    if (_hidden_layer_nbr == 0)
+        return (0);
+
+    // discard weights matrice size line
+    if (!std::getline(ifs, line))
+        return (return_error_msg("Error: import file wrong format5"));
+
+    for (int i = 0; i < OUTPUT_NBR; i++)
+    {
+        if (!std::getline(ifs, line))
+            return (return_error_msg("Error: import file wrong format6"));
+
+        std::vector<std::string> matrice_row = ft_tokenize(line, ' ');
+        for (int j = 0; j < _node_per_hidden_layer; j++)
+            dqn[_hidden_layer_nbr](i, j) = std::stof(matrice_row[j]); 
+    }
+    return(0);
+}
+
 
 
 std::array<float, 4>    DQN::parse_q_table_values(const std::string &values_line){
@@ -104,23 +220,20 @@ std::array<float, 4>    DQN::parse_q_table_values(const std::string &values_line
 
 int     DQN::save_q_values(std::ofstream &ofs) const{
 
-    // std::unordered_map<int, std::array<float, 4>>::const_iterator q_table_end = q_table.end();
-    // for (std::unordered_map<int, std::array<float, 4>>::const_iterator it = q_table.begin(); it != q_table_end; it++)
-    // {
-    //     int                     key = (*it).first;
-    //     std::array<float, 4>    values = (*it).second;
-    //     ofs << key << ':';
-    //     if (values[LEFT])
-    //         ofs << LEFT << values[LEFT] << ',';
-    //     if (values[RIGHT])
-    //         ofs << RIGHT << values[RIGHT] << ',';
-    //     if (values[UP])
-    //         ofs << UP << values[UP] << ',';
-    //     if (values[DOWN])
-    //         ofs << DOWN << values[DOWN];
-    //     ofs << std::endl;
-    // }
+    //save DQN size
+    ofs << _state->get_dqn_input_number() << ',';
+    ofs << _hidden_layer_nbr << ',';
+    ofs << _node_per_hidden_layer << std::endl;
 
+    //save DQN values
+    for (int i = 0; i <= _hidden_layer_nbr; i++)
+    {
+        //rows, cols size
+        ofs << dqn_weights[i].rows() << "," << dqn_weights[i].cols() << std::endl;
+        ofs << dqn_weights[i] << std::endl; 
+        ofs << dqn_bias[i].rows() << "," << dqn_bias[i].cols() << std::endl;
+        ofs << dqn_bias[i] << std::endl; 
+    }
     return(0);
 }
 

@@ -95,9 +95,11 @@ void    print_vector(std::vector<char> &vector);
 int     get_random_int(int min, int max);
 float   get_random_float(int min, int max);
 std::vector<std::string>    ft_split(std::string str, char delim);
+std::vector<std::string>    ft_tokenize(std::string str, char delim);
 void    print_padding(int size);
 int     get_terminal_width(void);
 void    loading_bar(int current, int max);
+int     return_error_msg(std::string error);
 
 
 
