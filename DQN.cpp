@@ -1,6 +1,6 @@
 #include "include/DQN.hpp"
 
-DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(2), _node_per_hidden_layer(8), _replay_memory(500){
+DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(0), _node_per_hidden_layer(8), _replay_memory(500){
 
     initialize_neural_network();
     return;
@@ -38,7 +38,7 @@ void    DQN::initialize_first_layer(void){
             first_weights_layer(i, j) = get_random_float(-10, 10);
     }
     dqn_weights.push_back(first_weights_layer);
-    Eigen::VectorXf first_bias_layer = Eigen::VectorXf::Constant(_first_layer_node_number, 1);
+    Eigen::VectorXf first_bias_layer = Eigen::VectorXf::Constant(_first_layer_node_number, 0);
     dqn_bias.push_back(first_bias_layer);
 }
 
@@ -53,7 +53,7 @@ void    DQN::initialize_hidden_layers(){
                 hidden_weights_layer(i, j) = get_random_float(-10, 10);
         }
         dqn_weights.push_back(hidden_weights_layer);
-        Eigen::VectorXf hidden_bias_layer = Eigen::VectorXf::Constant(_node_per_hidden_layer, 2);
+        Eigen::VectorXf hidden_bias_layer = Eigen::VectorXf::Constant(_node_per_hidden_layer,0);
         dqn_bias.push_back(hidden_bias_layer);
     }
 }
@@ -75,13 +75,12 @@ void    DQN::initialize_last_layer(void){
             last_weights_layer(i, j) = get_random_float(-10, 10);
     }
     dqn_weights.push_back(last_weights_layer);
-    Eigen::VectorXf last_bias_layer = Eigen::VectorXf::Constant(OUTPUT_NBR, 3);
+    Eigen::VectorXf last_bias_layer = Eigen::VectorXf::Constant(OUTPUT_NBR, 0);
     dqn_bias.push_back(last_bias_layer);
 }
 
 int DQN::set_q_values(std::ifstream &ifs){
 
-    std::cout << "TESTTTTTT" << std::endl;
     std::string line;
     if (!std::getline(ifs, line))
         std::cerr << "Error: import file empty !" << std::endl;
@@ -246,19 +245,10 @@ int     DQN::get_best_q_values_direction(Snake &snake) const{
     
     std::vector<int>    all_dirs{LEFT, RIGHT, UP, DOWN};
     Eigen::VectorXf  key = _state->encode_dqn(snake.get_snake_vision());
-    std::cout << "key = " << key << std::endl;
 
-    
     std::array<int, 4>  q_values = get_q_values(key);
-        //testsuppr
-    std::cout <<"QVALUES" << std::endl;
-    for (int i = 0; i < 4; i++)
-    {
-        std::cout << q_values[i] << ", ";
-    }
-    
     int best_dir = get_random_int(0, 3);
-
+    
     for (int i = 0; i < all_dirs.size(); i++)
     {
         if (q_values[i] > q_values[best_dir])
@@ -278,39 +268,6 @@ std::array<int, 4>    DQN::get_q_values(Eigen::VectorXf &node) const{
         node = dqn_weights[i] * node;// + dqn_bias[i];
     }
     return (eigen_vectorXf_to_output(node));
-
-
-
-
-
-    // Eigen::VectorXf     first_node(dqn_weights[0].rows());
-    // std::cout << "first node cols = " << dqn_weights[0].cols() << ", rows = " << dqn_weights[0].rows() << std::endl;
-    // std::cout << "first vector cols = " << first_node.cols() << ", rows = " << first_node.rows() << std::endl;
-    // //node after first dqn layer
-    // first_node = dqn_weights[0] * key;// + dqn_bias[0];
-    // std::cout << "test0" << std::endl;
-
-    // if (_hidden_layer_nbr == 0)
-    //     return (eigen_vectorXi_to_output(first_node));
-
-    // // //node after hidden layers
-    // Eigen::VectorXf hidden_layer_node(dqn_weights[1].rows());
-    // for (int i = 1; i < _hidden_layer_nbr; i++)
-    // {
-    // std::cout << "test" << i << std::endl;
-    // std::cout << "hidden node cols = " << dqn_weights[i].cols() << ", rows = " << dqn_weights[i].rows() << std::endl;
-    // std::cout << "hidden vector cols = " << hidden_layer_node.cols() << ", rows = " << hidden_layer_node.rows() << std::endl;
-        
-    //     hidden_layer_node = dqn_weights[i] * hidden_layer_node;// + dqn_bias[i];
-    // }
-
-    // //node after last layer
-    // Eigen::VectorXf last_node(dqn_weights[1].cols());
-    //     std::cout << "testlast" << std::endl;
-        
-    //     last_node = dqn_weights[1] * key;// + dqn_bias[1];
-    //     std::cout << "testlast+1" << std::endl;
-    // return(eigen_vectorXi_to_output(last_node));
 }
 
 std::array<int, 4>  DQN::eigen_vectorXf_to_output(const Eigen::VectorXf &node) const{

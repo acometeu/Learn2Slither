@@ -71,28 +71,6 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     
     //testsuppr
     AQMethod *method = new DQN(args.alpha, args.gamma, state);
-    // delete method;
-    // Eigen::MatrixXf test1_8(1, 8);
-    // test1_8 << 1, 2, 3, 4, 5, 6, 7, 8;
-    // std::cout << "test1_8 : " << std::endl;
-    // std::cout << test1_8 << std::endl; 
-    // Eigen::MatrixXf test8_4(8, 4);
-    // test8_4.row(0).setConstant(1);
-    // test8_4.row(1).setConstant(2);
-    // test8_4.row(2).setConstant(3);
-    // test8_4.row(3).setConstant(4);
-    // test8_4.row(4).setConstant(1);
-    // test8_4.row(5).setConstant(2);
-    // test8_4.row(6).setConstant(3);
-    // test8_4.row(7).setConstant(4);
-    // std::cout << "test8_4 : " << std::endl;
-    // std::cout << test8_4 << std::endl;
-    
-    // Eigen::MatrixXf test = test1_8 * test8_4;
-    // std::cout << "test : " << std::endl;
-    // std::cout << test << std::endl;
-    // return(0);
-
 
     //testsuppr
     if (method == nullptr)
