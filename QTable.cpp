@@ -91,15 +91,11 @@ int     QTable::get_best_q_values_direction(Snake &snake) const{
 
     std::array<float, 4> q_values = (*it).second;
     int best_dir = get_random_int(0, 3);
-    float max = q_values[best_dir];
 
     for (int i = 0; i < all_dirs.size(); i++)
     {
         if (q_values[i] > q_values[best_dir])
-        {
             best_dir = i;
-            max = q_values[best_dir];
-        }
     }
     return (best_dir);
 }

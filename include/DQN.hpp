@@ -11,7 +11,7 @@ class DQN : public AQMethod
 public:
     //variables
     std::vector<Eigen::MatrixXf>   dqn_weights;
-    std::vector<Eigen::MatrixXf>   dqn_bias;
+    std::vector<Eigen::VectorXf>   dqn_bias;
 
 
     // functions
@@ -28,6 +28,7 @@ private:
     int _hidden_layer_nbr;
     int _node_per_hidden_layer;
     int _first_layer_node_number;
+    int _replay_memory;
 
     // functions
     void    initialize_neural_network(void);
@@ -35,10 +36,13 @@ private:
     void    initialize_hidden_layers(void);
     void    initialize_last_layer(void);
     int     set_q_values_params(const std::string &line);
-    int     set_q_values_first_layer(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn);
-    int     set_q_values_hidden_layers(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn);
-    int     set_q_values_last_layer(std::ifstream &ifs, std::string &line, std::vector<Eigen::MatrixXf> &dqn);
-    std::array<float, 4>        parse_q_table_values(const std::string &values_line);
+    int     set_q_values_first_layer(std::ifstream &ifs, std::string &line);
+    int     set_q_values_hidden_layers(std::ifstream &ifs, std::string &line);
+    int     set_q_values_last_layer(std::ifstream &ifs, std::string &line);
+    std::array<int, 4>      get_q_values(Eigen::VectorXf &key) const;
+    std::array<int, 4>      eigen_vectorXf_to_output(const Eigen::VectorXf &node) const;
+
+
     // const std::array<int, 4>    get_dqn_output(const std::vector<int> key) const;
 
 

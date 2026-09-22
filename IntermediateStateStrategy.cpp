@@ -68,29 +68,31 @@ t_state_4_bools  IntermediateStateStrategy::get_simple_state(const std::string &
     return(state);
 }
 
-std::vector<int>         IntermediateStateStrategy::encode_dqn(std::array<std::string, 4> const &visions) const{
+Eigen::VectorXf         IntermediateStateStrategy::encode_dqn(std::array<std::string, 4> const &visions) const{
     
-    std::vector<int>    state;
+    Eigen::VectorXf state(get_dqn_input_number());
 
-    state_push_x_and_y(state, visions);
+    int index = state_push_x_and_y(state, visions);
 
     for (int i = 0; i < 4; i++)
     {
         t_state_4_bools vision = get_simple_state(visions[i]);
         // state.visions[i] = get_simple_state(vision[i]);
-        state.push_back(vision.green_apple);
-        state.push_back(vision.red_apple);
-        state.push_back(vision.body);
-        state.push_back(vision.wall);
+        state(index) = vision.green_apple;
+        state(index + 1) = vision.red_apple;
+        state(index + 2) = vision.body;
+        state(index + 3) = vision.wall;
+        index += 4;
     }
     return(state);
 }
 
-void    IntermediateStateStrategy::state_push_x_and_y(std::vector<int> &state, const std::array<std::string, 4> &vision) const{
+int IntermediateStateStrategy::state_push_x_and_y(Eigen::VectorXf &state, const std::array<std::string, 4> &vision) const{
 
     float size = vision[0].size() + vision[1].size() + 1; //equivalent of get_board_size
-    state.push_back(vision[2].size() / (size/4));
-    state.push_back(vision[0].size() / (size/4));
+    state(0) = vision[2].size() / (size/4);
+    state(1) = vision[0].size() / (size/4);
+    return(2);
 }
 
 
