@@ -1,8 +1,9 @@
 #include "include/DQN.hpp"
 
-DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(0), _node_per_hidden_layer(8), _replay_memory(500){
+DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(2), _node_per_hidden_layer(8), _replay_memory(500){
 
     initialize_neural_network();
+    initialize_neural_network_minus();
     return;
 }
 
@@ -53,7 +54,7 @@ void    DQN::initialize_hidden_layers(){
                 hidden_weights_layer(i, j) = get_random_float(-10, 10);
         }
         dqn_weights.push_back(hidden_weights_layer);
-        Eigen::VectorXf hidden_bias_layer = Eigen::VectorXf::Constant(_node_per_hidden_layer,0);
+        Eigen::VectorXf hidden_bias_layer = Eigen::VectorXf::Constant(_node_per_hidden_layer, 0);
         dqn_bias.push_back(hidden_bias_layer);
     }
 }
@@ -61,12 +62,7 @@ void    DQN::initialize_hidden_layers(){
 void    DQN::initialize_last_layer(void){
 
     if (_hidden_layer_nbr == 0)
-    {
-        //testsuppr
-        print_dqn_weights();
-        print_dqn_bias();
         return;
-    }
 
     Eigen::MatrixXf last_weights_layer(OUTPUT_NBR, _node_per_hidden_layer);
     for (int i = 0; i < OUTPUT_NBR; i++)
@@ -78,6 +74,25 @@ void    DQN::initialize_last_layer(void){
     Eigen::VectorXf last_bias_layer = Eigen::VectorXf::Constant(OUTPUT_NBR, 0);
     dqn_bias.push_back(last_bias_layer);
 }
+
+void    DQN::initialize_neural_network_minus(void){
+
+    for (int i = 0; i < dqn_weights.size(); i++)
+    {
+        Eigen::MatrixXf weights_minus_layer = dqn_weights[i];
+        dqn_weights_minus.push_back(weights_minus_layer);
+    }
+    
+    for (int i = 0; i < dqn_bias.size(); i++)
+    {
+        Eigen::VectorXf bias_minus_layer = dqn_bias[i];
+        dqn_bias_minus.push_back(bias_minus_layer);
+    }
+
+    print_dqn_weights_minus();
+    print_dqn_bias_minus();
+}
+
 
 int DQN::set_q_values(std::ifstream &ifs){
 
@@ -94,6 +109,10 @@ int DQN::set_q_values(std::ifstream &ifs){
         return(1);
     if (set_q_values_last_layer(ifs, line))
         return(1);
+    
+    dqn_weights_minus.clear();
+    dqn_bias_minus.clear();
+    initialize_neural_network_minus();
 
     return(0);
 }
@@ -295,7 +314,7 @@ void    DQN::print_dqn_weights(void){
     std::cout << "DQN Weights : " << std::endl;
     for (int i = 0; i < dqn_weights.size(); i++)
     {
-        std::cout << "Cols = " << dqn_weights[i].cols() << ", Rows = " << dqn_weights[i].rows() << ", Size " << dqn_weights[i].size() << std::endl;
+        std::cout << "Rows = " << dqn_weights[i].rows() << ", Cols = " << dqn_weights[i].cols() << ", Size " << dqn_weights[i].size() << std::endl;
         std::cout << dqn_weights[i] << std::endl;
     }
 }
@@ -305,7 +324,26 @@ void    DQN::print_dqn_bias(void){
     std::cout << "DQN Bias : " << std::endl;
     for (int i = 0; i < dqn_bias.size(); i++)
     {
-        std::cout << "Cols = " << dqn_bias[i].cols() << ", Rows = " << dqn_bias[i].rows() << ", Size " << dqn_bias[i].size() << std::endl;
+        std::cout << "Rows = " << dqn_bias[i].rows() << ", Cols = " << dqn_bias[i].cols() << ", Size " << dqn_bias[i].size() << std::endl;
         std::cout << dqn_bias[i] << std::endl;
+    }
+}
+void    DQN::print_dqn_weights_minus(void){
+
+    std::cout << "DQN Weights minus : " << std::endl;
+    for (int i = 0; i < dqn_weights_minus.size(); i++)
+    {
+        std::cout << "Rows = " << dqn_weights_minus[i].rows() << ", Cols = " << dqn_weights_minus[i].cols() << ", Size " << dqn_weights_minus[i].size() << std::endl;
+        std::cout << dqn_weights_minus[i] << std::endl;
+    }
+}
+
+void    DQN::print_dqn_bias_minus(void){
+
+    std::cout << "DQN Bias minus : " << std::endl;
+    for (int i = 0; i < dqn_bias_minus.size(); i++)
+    {
+        std::cout << "Rows = " << dqn_bias_minus[i].rows() << ", Cols = " << dqn_bias_minus[i].cols() << ", Size " << dqn_bias_minus[i].size() << std::endl;
+        std::cout << dqn_bias_minus[i] << std::endl;
     }
 }

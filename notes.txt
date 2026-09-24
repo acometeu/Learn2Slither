@@ -12,7 +12,6 @@ TASK 📝
 Bigger Tasks 🎯
 -faire Q_reseau de neurones
 -1v1 snake and more (1v1v1v1v1v1v1...)
--peut-etre faire des threads
 -dans readme.txt marque les formules utilisees, dans DQN : mse et derivee, sigmoid ou relu et derive, z(L) = w(L) * a(L-1) + b(L) et derive, et backpropagation
 
 

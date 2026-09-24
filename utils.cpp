@@ -71,7 +71,7 @@ void    print_padding(int size){
 int get_terminal_width(){
 
     struct winsize window_size;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size) == 0);
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size) == 0)
         return(window_size.ws_col);
     return(-1);
 }

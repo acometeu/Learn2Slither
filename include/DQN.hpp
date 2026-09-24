@@ -12,6 +12,8 @@ public:
     //variables
     std::vector<Eigen::MatrixXf>   dqn_weights;
     std::vector<Eigen::VectorXf>   dqn_bias;
+    std::vector<Eigen::MatrixXf>   dqn_weights_minus;
+    std::vector<Eigen::VectorXf>   dqn_bias_minus;
 
 
     // functions
@@ -35,6 +37,7 @@ private:
     void    initialize_first_layer(void);
     void    initialize_hidden_layers(void);
     void    initialize_last_layer(void);
+    void    initialize_neural_network_minus(void);
     int     set_q_values_params(const std::string &line);
     int     set_q_values_first_layer(std::ifstream &ifs, std::string &line);
     int     set_q_values_hidden_layers(std::ifstream &ifs, std::string &line);
@@ -50,6 +53,8 @@ private:
     // debug
     void    print_dqn_weights(void);
     void    print_dqn_bias(void);
+    void    print_dqn_weights_minus(void);
+    void    print_dqn_bias_minus(void);
 
 };
 

@@ -98,7 +98,7 @@ int learn2slither(Board &board, Snake &snake, MyArgs &args){
     }
 
     //testsuppr
-    std::cout << "bestdir = " << agent.q_method->get_best_q_values_direction(snake) << std::endl;
+    // std::cout << "bestdir = " << agent.q_method->get_best_q_values_direction(snake) << std::endl;
     // if (dynamic_cast<QTable*>(agent.q_method) == nullptr)
     // {
     //     std::cout << "agent.q_method not QTable" << std::endl;
