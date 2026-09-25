@@ -6,15 +6,23 @@
 
 #define OUTPUT_NBR 4
 
+typedef struct s_experience
+{
+    const std::array<std::string, 4>    state;
+    int                                 action;
+    int                                 reward;
+    bool                                final_action;
+}   t_experience;
+
 class DQN : public AQMethod
 {
 public:
     //variables
-    std::vector<Eigen::MatrixXf>   dqn_weights;
-    std::vector<Eigen::VectorXf>   dqn_bias;
-    std::vector<Eigen::MatrixXf>   dqn_weights_minus;
-    std::vector<Eigen::VectorXf>   dqn_bias_minus;
-
+    std::vector<Eigen::MatrixXf>    dqn_weights;
+    std::vector<Eigen::VectorXf>    dqn_bias;
+    std::vector<Eigen::MatrixXf>    dqn_weights_minus;
+    std::vector<Eigen::VectorXf>    dqn_bias_minus;
+    std::deque<t_experience>        replay_memory;
 
     // functions
     DQN(float alpha, float gamma, AStateStrategy *state);
@@ -30,7 +38,9 @@ private:
     int _hidden_layer_nbr;
     int _node_per_hidden_layer;
     int _first_layer_node_number;
-    int _replay_memory;
+    int _replay_memory_capacity;
+    int _replay_memory_min_required;
+    int _sample_size;
 
     // functions
     void    initialize_neural_network(void);

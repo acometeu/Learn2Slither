@@ -1,6 +1,6 @@
 #include "include/DQN.hpp"
 
-DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(2), _node_per_hidden_layer(8), _replay_memory(500){
+DQN::DQN(float alpha, float gamma, AStateStrategy *state): AQMethod(alpha, gamma, state), _hidden_layer_nbr(0), _node_per_hidden_layer(8), _replay_memory_capacity(500), _replay_memory_min_required(50), _sample_size(10){
 
     initialize_neural_network();
     initialize_neural_network_minus();
@@ -21,8 +21,8 @@ void    DQN::initialize_neural_network(void){
     initialize_last_layer();
 
     //testsuppr
-    print_dqn_weights();
-    print_dqn_bias();
+    // print_dqn_weights();
+    // print_dqn_bias();
 }
 
 void    DQN::initialize_first_layer(void){
@@ -89,8 +89,8 @@ void    DQN::initialize_neural_network_minus(void){
         dqn_bias_minus.push_back(bias_minus_layer);
     }
 
-    print_dqn_weights_minus();
-    print_dqn_bias_minus();
+    // print_dqn_weights_minus();
+    // print_dqn_bias_minus();
 }
 
 
@@ -281,10 +281,9 @@ std::array<int, 4>    DQN::get_q_values(Eigen::VectorXf &node) const{
     // Eigen::VectorXf     node = dqn_weights[0] * key + dqn_bias[0];
     for (int i = 0; i <= _hidden_layer_nbr; i++)
     {
-        std::cout << "dqn_weights cols = " << dqn_weights[i].cols() << ", rows = " << dqn_weights[i].rows() << std::endl;
-        std::cout << "vector cols = " << node.cols() << ", rows = " << node.rows() << std::endl;
-
-        node = dqn_weights[i] * node;// + dqn_bias[i];
+        node = dqn_weights[i] * node + dqn_bias[i];
+        node = node.cwiseMax(-20.0f).cwiseMin(20.0f); // clip range
+        node = 1.0f / (1.0f + (-node.array()).exp()); // sigmoid
     }
     return (eigen_vectorXf_to_output(node));
 }
@@ -299,6 +298,24 @@ std::array<int, 4>  DQN::eigen_vectorXf_to_output(const Eigen::VectorXf &node) c
 
 
 void    DQN::update_q_value(Snake &snake, int reward, const std::array<std::string, 4> &old_state, int old_dir){
+
+    
+    bool    final_action = false;
+    if (reward == DEATH_REWARD || reward == END_REWARD)
+        final_action = true;
+
+    t_experience experience = {old_state, old_dir, reward, final_action};
+    replay_memory.push_back(experience);
+
+    int replay_memory_size = replay_memory.size();
+    if (replay_memory_size < _replay_memory_min_required)
+        return;
+    if (replay_memory_size > _replay_memory_capacity)
+        replay_memory.pop_front();
+
+        
+
+       
 
     // int old_key = _state->encode(old_state);
     // int new_key = _state->encode(snake.get_snake_vision());
